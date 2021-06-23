@@ -11,6 +11,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.w3c.dom.Text;
+
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -28,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText email, password;
     Button submit;
     private FirebaseAuth mAuth;
+    TextView forgPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,14 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         submit = findViewById(R.id.submit);
         mAuth=FirebaseAuth.getInstance();
+        forgPass=findViewById(R.id.forgotPass);
 
+        forgPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),ForgotPassword.class));
+            }
+        });
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
