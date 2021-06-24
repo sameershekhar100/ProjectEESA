@@ -10,13 +10,21 @@ import android.widget.Button;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileFeed extends AppCompatActivity {
-Button logout;
+Button logout ,b2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_feed);
 
         logout=findViewById(R.id.logout);
+        b2=findViewById(R.id.profileVisit);
+
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),UserProfile.class));
+            }
+        });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -20,6 +20,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -110,10 +112,19 @@ public class SignUpActivity extends AppCompatActivity {
                 public void onSuccess(AuthResult authResult) {
                     progressDialog.setMessage("Adding Data...");
                     FirebaseUser user=authResult.getUser();
+                    HashMap<Object,String> userData=new HashMap<>();
+                    userData.put("name",name);
+                    userData.put("uid",user.getUid());
+                    userData.put("email",email);
+                    userData.put("PhoneNo",phoneNum);
+                    FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+                    DatabaseReference databaseReference=firebaseDatabase.getReference("Users");
+                    databaseReference.child(user.getUid()).setValue(userData);
                     user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(SignUpActivity.this,"Verification E-mail has been sent. Please verify!",Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

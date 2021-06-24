@@ -139,7 +139,6 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser user=mAuth.getCurrentUser();
         if(user!=null){
             Intent transfer=new Intent(this,ProfileFeed.class);
-            transfer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(transfer);
             finish();
         }
