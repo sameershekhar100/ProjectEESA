@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectEESA">
-        <activity android:name=".ForgotPassword"></activity>
+        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".ForgotPassword" />
         <activity android:name=".ProfileFeed" />
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -18,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
