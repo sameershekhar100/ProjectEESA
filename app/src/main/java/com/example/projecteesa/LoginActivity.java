@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     Button submit;
     private FirebaseAuth mAuth;
     TextView forgPass;
-
+    TextView createAccount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         submit = findViewById(R.id.submit);
         mAuth=FirebaseAuth.getInstance();
         forgPass=findViewById(R.id.forgotPass);
-
+        createAccount=findViewById(R.id.create_account);
         forgPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +54,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 login();
+            }
+        });
+        createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this,SignUpActivity.class));
             }
         });
 
