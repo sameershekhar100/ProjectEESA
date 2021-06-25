@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(task.isSuccessful()) {
 
                         Toast.makeText(getApplicationContext(), "correct Credentials!!!", Toast.LENGTH_SHORT).show();
-                        Intent transfer=new Intent(LoginActivity.this,ProfileFeed.class);
+                        Intent transfer=new Intent(LoginActivity.this,MainActivity.class);
                         transfer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(transfer);
                         finish();
@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
 
         FirebaseUser user=mAuth.getCurrentUser();
         if(user!=null){
-            Intent transfer=new Intent(this,ProfileFeed.class);
+            Intent transfer=new Intent(this,MainActivity.class);
             startActivity(transfer);
             finish();
         }

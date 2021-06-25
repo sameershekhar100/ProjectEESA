@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:diagonal="http://schemas.android.com/apk/res-auto"
-    tools:context=".UserProfile">
+    tools:context=".Fragment.ProfileFragment">
 
     <ImageView
         android:layout_width="match_parent"

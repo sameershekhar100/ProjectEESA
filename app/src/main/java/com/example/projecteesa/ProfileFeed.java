@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.projecteesa.Fragment.ProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileFeed extends AppCompatActivity {
@@ -22,7 +23,7 @@ Button logout ,b2;
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),UserProfile.class));
+                startActivity(new Intent(ProfileFeed.this, ProfileFragment.class));
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
@@ -30,7 +31,7 @@ Button logout ,b2;
             public void onClick(View v) {
 
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 finish();
             }
         });
