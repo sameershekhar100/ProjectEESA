@@ -69,7 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void registerUser() {
         final String name=mName.getText().toString().trim();
-        String email=mEmail.getText().toString().trim();
+        final String email=mEmail.getText().toString().trim();
         String password=mPassword.getText().toString().trim();
         final String phoneNum=mPhoneNum.getText().toString().trim();
         if(name.equals(""))
