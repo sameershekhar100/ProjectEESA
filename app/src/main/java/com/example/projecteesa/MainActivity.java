@@ -6,54 +6,55 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.projecteesa.Fragment.FeedFragment;
 import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.Fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "BottomNavigation";
     BottomNavigationView bottomNavigationView;
+    FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(savedInstanceState==null)
-        {
-            HomeFragment fragment=new HomeFragment();
-            FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.main_frame,fragment).commit();
+        ChipNavigationBar navbar =findViewById(R.id.bottom_nav);
+        if(savedInstanceState==null){
+            navbar.setItemSelected(R.id.home,true);
+            fragmentManager=getSupportFragmentManager();
+            HomeFragment home=new HomeFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_frame,home).commit();
         }
-        bottomNavigationView=findViewById(R.id.bottom_nav);
-        bottomNavigationView.setOnNavigationItemSelectedListener(navListner);
-    }
-    BottomNavigationView.OnNavigationItemSelectedListener navListner=new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+        navbar.setOnItemSelectedListener(i -> {
             Fragment fragment=null;
-            switch (item.getItemId())
-            {
+            switch (i){
                 case R.id.home:
-                {
                     fragment=new HomeFragment();
                     break;
-                }
-                case R.id.feed:
-                {
-                    fragment=new FeedFragment();
-                    break;
-                }
                 case R.id.profile:
-                {
                     fragment=new ProfileFragment();
                     break;
-                }
+                case R.id.feed:
+                    fragment=new FeedFragment();
+                    break;
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,fragment).commit();
-            return true;
-        }
-    };
+            if(fragment!=null){
+                fragmentManager=getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.main_frame,fragment)
+                        .commit();
+            }
+            else {
+                Log.e(TAG,"ERROR");
+            }
+        });
+    }
+
 }
