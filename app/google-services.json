@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "314055550864",
+    "firebase_url": "https://projecteesa-default-rtdb.firebaseio.com",
+    "project_id": "projecteesa",
+    "storage_bucket": "projecteesa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314055550864:android:08fcdc3cd8be9ed7863515",
+        "android_client_info": {
+          "package_name": "com.example.projecteesa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "314055550864-ch6l9fr0sca447s615srjv4p9dfoivv1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0Z21E7WvqiRNy_m5oItJFYJQX8yZo0Bs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "314055550864-ch6l9fr0sca447s615srjv4p9dfoivv1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
