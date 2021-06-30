@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.projecteesa.EditProfile;
 import com.example.projecteesa.LoginActivity;
+import com.example.projecteesa.Profile;
 import com.example.projecteesa.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,6 +32,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,8 +45,8 @@ public class ProfileFragment extends Fragment {
     FloatingActionButton fab;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
+    FirebaseFirestore firestore=FirebaseFirestore.getInstance();
+    CollectionReference db=firestore.collection("Users");
     TextView name,email;
     ImageView profile;
     Button b1;
@@ -57,40 +62,20 @@ public class ProfileFragment extends Fragment {
         fab=view.findViewById(R.id.edit_profile_fab);
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseUser=firebaseAuth.getCurrentUser();
-        firebaseDatabase=FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference();
+
 
         b1=view.findViewById(R.id.finish);
         name=view.findViewById(R.id.name);
         email=view.findViewById(R.id.email);
         profile=view.findViewById(R.id.profile_image);
         Log.i("Hello:","Profile fragment");
+        fetchData();
         fab.setOnClickListener(v->
         {
             startActivity(new Intent(getContext(), EditProfile.class));
         });
-        Query query= databaseReference.child("Users").orderByChild("email").equalTo(firebaseUser.getEmail());
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot ds:snapshot.getChildren()) {
-                    Log.i("Hello:","inside for loop");
-                    String mname = ""+ds.child("name").getValue();
-                    String memail = ""+ds.child("email").getValue();
-                    String phoneNo = ""+ds.child("phoneNo").getValue();
-                    Toast.makeText(getContext(), memail+mname, Toast.LENGTH_SHORT).show();
-                    name.setText(mname);
-                    email.setText(memail);
-
-                }
-            }
 
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                Toast.makeText(getActivity(), error+"", Toast.LENGTH_SHORT).show();
-            }
-        });
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +86,19 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
+    }
+    void fetchData(){
+        DocumentReference doc=db.document("User2");
+        doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    Profile profile=documentSnapshot.toObject(Profile.class);
+                    name.setText(profile.getName());
+                    email.setText(profile.getEmail());
+                }
+            }
+        });
     }
 
 }

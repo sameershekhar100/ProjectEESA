@@ -6,7 +6,6 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.example.projecteesa"
@@ -41,6 +40,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-database:20.0.0'
     implementation 'org.jetbrains:annotations:21.0.1'
+    implementation 'com.google.firebase:firebase-firestore:23.0.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -48,7 +48,7 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
     def nav_version = '2.3.0'
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
     implementation 'com.ismaeldivita.chipnavigation:chip-navigation-bar:1.3.4'
 
     implementation 'com.github.santalu:diagonal-imageview:1.1.1'
