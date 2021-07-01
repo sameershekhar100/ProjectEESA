@@ -1,6 +1,7 @@
 package com.example.projecteesa;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -15,13 +16,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projecteesa.ProfileSection.Profile;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,9 +37,7 @@ public class SignUpActivity extends AppCompatActivity {
     CheckBox visibleSignIn;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference users = db.collection("Users");
-    String KEY_NAME = "NAME";
-    String KEY_EMAIL = "EMAIL";
-    String KEY_PHONE = "PHONE_NO";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +104,11 @@ public class SignUpActivity extends AppCompatActivity {
                     user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            add(name,email,phoneNum);
+                            add(name,email,phoneNum,user);
+                            startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                             Toast.makeText(SignUpActivity.this, "Verification E-mail has been sent. Please verify!", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
+                            finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -121,16 +122,17 @@ public class SignUpActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     progressDialog.dismiss();
-                    Toast.makeText(SignUpActivity.this, "Unable to signup.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "Unable to signup."+e, Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             });
         }
 
     }
-    void add(String name, String email,String phoneNum) {
+    void add(String name, String email,String phoneNum,FirebaseUser user) {
         Profile profile = new Profile(name, email, phoneNum);
-        users.document("User2").set(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
+        String uid=user.getUid();
+        users.document(uid+"").set(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(SignUpActivity.this, "data added", Toast.LENGTH_SHORT).show();

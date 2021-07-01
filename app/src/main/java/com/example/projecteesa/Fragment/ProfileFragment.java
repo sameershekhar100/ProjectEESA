@@ -9,35 +9,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.projecteesa.EditProfile;
+import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.LoginActivity;
-import com.example.projecteesa.Profile;
+import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.behavior.SwipeDismissBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import org.jetbrains.annotations.NotNull;
 
 
 public class ProfileFragment extends Fragment {
@@ -48,8 +34,9 @@ public class ProfileFragment extends Fragment {
     FirebaseFirestore firestore=FirebaseFirestore.getInstance();
     CollectionReference db=firestore.collection("Users");
     TextView name,email;
-    ImageView profile;
+    ImageView imageView;
     Button b1;
+    Profile profilex;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -67,12 +54,14 @@ public class ProfileFragment extends Fragment {
         b1=view.findViewById(R.id.finish);
         name=view.findViewById(R.id.name);
         email=view.findViewById(R.id.email);
-        profile=view.findViewById(R.id.profile_image);
+        imageView=view.findViewById(R.id.profile_image);
         Log.i("Hello:","Profile fragment");
         fetchData();
         fab.setOnClickListener(v->
         {
-            startActivity(new Intent(getContext(), EditProfile.class));
+            Intent intent= new Intent(getContext(), EditProfile.class);
+            intent.putExtra("profile",profilex);
+            startActivity(intent);
         });
 
 
@@ -88,14 +77,15 @@ public class ProfileFragment extends Fragment {
         return view;
     }
     void fetchData(){
-        DocumentReference doc=db.document("User2");
+        DocumentReference doc=db.document(""+ firebaseUser.getUid());
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
-                    Profile profile=documentSnapshot.toObject(Profile.class);
+                    Profile profile =documentSnapshot.toObject(Profile.class);
                     name.setText(profile.getName());
                     email.setText(profile.getEmail());
+                    profilex=profile;
                 }
             }
         });
