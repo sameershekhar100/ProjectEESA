@@ -20,20 +20,12 @@ Button logout ,b2;
         logout=findViewById(R.id.logout);
         b2=findViewById(R.id.profileVisit);
 
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ProfileFeed.this, ProfileFragment.class));
-            }
-        });
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        b2.setOnClickListener(v -> startActivity(new Intent(ProfileFeed.this, ProfileFragment.class)));
+        logout.setOnClickListener(v -> {
 
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                finish();
-            }
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
         });
     }
 }

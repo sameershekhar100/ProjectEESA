@@ -3,20 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/home"
-        android:enabled="true"
         android:icon="@drawable/ic_home"
-        app:cnb_iconColor="@color/blue"
+        app:cnb_iconColor="#fff"
+        app:cnb_backgroundColor="#ff785b"
+        app:cnb_textColor="#fff"
         android:title="Home" />
     <item
+        app:cnb_textColor="#fff"
         android:id="@+id/feed"
-        android:enabled="true"
-        app:cnb_iconColor="@color/pink"
-        android:icon="@drawable/ic_feed"
-        android:title="Feed" />
+        app:cnb_iconColor="#fff"
+        app:cnb_backgroundColor="#ff785b"
+        android:icon="@drawable/ic_add"
+        android:title="Posts" />
     <item
+        app:cnb_textColor="#fff"
         android:id="@+id/profile"
-        android:enabled="true"
-        app:cnb_iconColor="@android:color/holo_green_light"
+        app:cnb_iconColor="#fff"
+        app:cnb_backgroundColor="#ff785b"
         android:icon="@drawable/ic_profile"
         android:title="Profile" />
 </menu>
