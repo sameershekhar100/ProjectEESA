@@ -5,20 +5,23 @@ import java.io.Serializable;
 
 public class Profile implements Serializable {
     private String name="";
-    private String email;
+    private String BIO;
     private String phoneNO;
+    private String image;
 
-    public Profile(String name, String email ,String phoneNO) {
+
+    public Profile(String name, String BIO, String phoneNO) {
         this.name = name;
-        this.email = email;
+        this.BIO = BIO;
         this.phoneNO=phoneNO;
+        image="";
     }
     public Profile(){
 
     }
 
-    public String getEmail() {
-        return email;
+    public String getBIO() {
+        return BIO;
     }
 
     public String getPhoneNO() {
@@ -33,8 +36,16 @@ public class Profile implements Serializable {
         this.name = name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setBIO(String BIO) {
+        this.BIO = BIO;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setPhoneNO(String phoneNO) {

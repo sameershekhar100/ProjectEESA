@@ -1,5 +1,6 @@
 package com.example.projecteesa.Fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,8 +13,9 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.projecteesa.ProfileSection.EditProfile;
+import com.bumptech.glide.Glide;
 import com.example.projecteesa.LoginActivity;
+import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,12 +33,14 @@ public class ProfileFragment extends Fragment {
     FloatingActionButton fab;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
-    FirebaseFirestore firestore=FirebaseFirestore.getInstance();
-    CollectionReference db=firestore.collection("Users");
-    TextView name,email;
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    CollectionReference db = firestore.collection("Users");
+    TextView name, email;
+    String img = "";
     ImageView imageView;
     Button b1;
     Profile profilex;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -46,21 +50,21 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
-        fab=view.findViewById(R.id.edit_profile_fab);
-        firebaseAuth=FirebaseAuth.getInstance();
-        firebaseUser=firebaseAuth.getCurrentUser();
+        fab = view.findViewById(R.id.edit_profile_fab);
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
 
 
-        b1=view.findViewById(R.id.finish);
-        name=view.findViewById(R.id.name);
-        email=view.findViewById(R.id.email);
-        imageView=view.findViewById(R.id.profile_image);
-        Log.i("Hello:","Profile fragment");
+        b1 = view.findViewById(R.id.finish);
+        name = view.findViewById(R.id.name);
+        email = view.findViewById(R.id.email);
+        imageView = view.findViewById(R.id.profile_image);
+        Log.i("Hello:", "Profile fragment");
         fetchData();
-        fab.setOnClickListener(v->
+        fab.setOnClickListener(v ->
         {
-            Intent intent= new Intent(getContext(), EditProfile.class);
-            intent.putExtra("profile",profilex);
+            Intent intent = new Intent(getContext(), EditProfile.class);
+            intent.putExtra("profile", profilex);
             startActivity(intent);
         });
 
@@ -76,19 +80,29 @@ public class ProfileFragment extends Fragment {
         });
         return view;
     }
-    void fetchData(){
-        DocumentReference doc=db.document(""+ firebaseUser.getUid());
+
+    void fetchData() {
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        DocumentReference doc = db.document("" + firebaseUser.getUid());
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    Profile profile =documentSnapshot.toObject(Profile.class);
+                if (documentSnapshot.exists()) {
+                    Profile profile = documentSnapshot.toObject(Profile.class);
                     name.setText(profile.getName());
-                    email.setText(profile.getEmail());
-                    profilex=profile;
+                    email.setText(profile.getBIO());
+                    img = profile.getImage();
+                    Glide.with(getContext()).load(img).into(imageView);
+                    profilex = profile;
                 }
             }
+
         });
+        progressDialog.dismiss();
     }
 
 }
