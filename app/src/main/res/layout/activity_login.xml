@@ -11,9 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:text="LOGIN"
-        android:textColor="#000"
+        android:fontFamily="@font/berkshire_swash"
         android:textSize="28sp"
         android:textStyle="bold"
+        style="@style/general_text_style"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,10 +23,10 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="49dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="165dp"
         android:text="Enter Email"
-        android:textColor="#000"
+        style="@style/general_text_style"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,36 +35,38 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
         android:text="Enter Password"
-        android:textColor="#000"
+        style="@style/general_text_style"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <EditText
         android:id="@+id/email"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="49dp"
         android:layout_marginTop="27dp"
+        android:layout_marginEnd="24dp"
         android:ems="10"
+        android:hint="Email"
         android:inputType="textEmailAddress"
-        android:hint="email"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="49dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
-        android:hint="password"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
     <TextView
         android:layout_width="wrap_content"
@@ -72,8 +75,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
         android:layout_margin="12dp"
-        android:text="ForgotPassword"
-        android:paddingRight="12dp"
+        android:text="Forgot Password?"
+        android:paddingEnd="12dp"
         android:paddingTop="18dp"
         android:id="@+id/forgotPass"/>
 
@@ -81,23 +84,18 @@
         android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="Submit"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.857" />
+        app:layout_constraintTop_toBottomOf="@+id/forgotPass" />
 
     <TextView
         android:id="@+id/create_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="177dp"
-        android:layout_marginBottom="38dp"
-        android:text="Create Account"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="24dp"
+        android:text="New User? Create Account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submit" />

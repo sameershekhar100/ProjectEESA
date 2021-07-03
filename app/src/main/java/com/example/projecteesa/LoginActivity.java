@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -28,6 +30,8 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private Context mContext = this;
+
     EditText email, password;
     Button submit;
     private FirebaseAuth mAuth;
@@ -37,6 +41,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //hiding the action bar
+        getSupportActionBar().hide();
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -70,15 +77,15 @@ public class LoginActivity extends AppCompatActivity {
 
         if(memail.isEmpty())
         {
-            Toast.makeText(this,"Enter your email!",Toast.LENGTH_SHORT).show();
+            MotionToastUtils.showErrorToast(mContext, "Email required", "Please enter your email address");
         }
         else if(!Patterns.EMAIL_ADDRESS.matcher(memail).matches())
         {
-            Toast.makeText(this,"Enter a valid email address!",Toast.LENGTH_SHORT).show();
+            MotionToastUtils.showErrorToast(mContext, "Invalid email", "Please enter a valid email address");
         }
         else if(mPassword.isEmpty())
         {
-            Toast.makeText(this,"Enter password",Toast.LENGTH_SHORT).show();
+            MotionToastUtils.showErrorToast(mContext, "Password is empty", "Please enter a valid password");
         }
         else {
             final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
@@ -94,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     if(task.isSuccessful()) {
 
-                        Toast.makeText(getApplicationContext(), "correct Credentials!!!", Toast.LENGTH_SHORT).show();
+                        MotionToastUtils.showSuccessToast(mContext, "Logged In", "Glad to see you");
                         Intent transfer=new Intent(LoginActivity.this,MainActivity.class);
                         transfer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(transfer);
@@ -114,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else
                         {
-                            Toast.makeText(LoginActivity.this,"Unable to login.",Toast.LENGTH_SHORT).show();
+                            MotionToastUtils.showErrorToast(mContext, "Unable to login", "We were to log you in, please check your credentials");
                             Objects.requireNonNull(task.getException()).printStackTrace();
 
                         }
