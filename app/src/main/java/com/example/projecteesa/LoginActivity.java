@@ -3,15 +3,19 @@ package com.example.projecteesa;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Patterns;
 import android.view.View;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +41,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     TextView forgPass;
     TextView createAccount;
+    private ImageView splashLogo;
+    private ConstraintLayout loginLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,17 +51,18 @@ public class LoginActivity extends AppCompatActivity {
 
         //hiding the action bar
         getSupportActionBar().hide();
-
+        splashLogo = findViewById(R.id.splash_logo);
+        loginLayout = findViewById(R.id.login_layout);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         submit = findViewById(R.id.submit);
-        mAuth=FirebaseAuth.getInstance();
-        forgPass=findViewById(R.id.forgotPass);
-        createAccount=findViewById(R.id.create_account);
+        mAuth = FirebaseAuth.getInstance();
+        forgPass = findViewById(R.id.forgotPass);
+        createAccount = findViewById(R.id.create_account);
         forgPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),ForgotPassword.class));
+                startActivity(new Intent(getApplicationContext(), ForgotPassword.class));
             }
         });
         submit.setOnClickListener(new View.OnClickListener() {
@@ -66,25 +74,38 @@ public class LoginActivity extends AppCompatActivity {
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this,SignUpActivity.class));
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }
         });
+        startSplashAnimation();
+    }
+
+    private void startSplashAnimation() {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            splashLogo.animate().scaleX(0.0f).scaleY(0.0f).withEndAction(() -> {
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    Intent transfer = new Intent(this, MainActivity.class);
+                    startActivity(transfer);
+                    finish();
+                } else {
+                    loginLayout.setVisibility(View.VISIBLE);
+                }
+            });
+        }, 2000);
 
     }
-    private void login(){
-        String memail= email.getText().toString();
-        String mPassword= password.getText().toString();
 
-        if(memail.isEmpty())
-        {
+    private void login() {
+        String memail = email.getText().toString();
+        String mPassword = password.getText().toString();
+
+        if (memail.isEmpty()) {
             MotionToastUtils.showErrorToast(mContext, "Email required", "Please enter your email address");
-        }
-        else if(!Patterns.EMAIL_ADDRESS.matcher(memail).matches())
-        {
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(memail).matches()) {
             MotionToastUtils.showErrorToast(mContext, "Invalid email", "Please enter a valid email address");
-        }
-        else if(mPassword.isEmpty())
-        {
+        } else if (mPassword.isEmpty()) {
             MotionToastUtils.showErrorToast(mContext, "Password is empty", "Please enter a valid password");
         }
         else {
@@ -139,15 +160,4 @@ public class LoginActivity extends AppCompatActivity {
                 .create().show();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        FirebaseUser user=mAuth.getCurrentUser();
-        if(user!=null){
-            Intent transfer=new Intent(this,MainActivity.class);
-            startActivity(transfer);
-            finish();
-        }
-    }
 }

@@ -26,5 +26,5 @@
         <item name="android:background">@drawable/light_gradient</item>
     </style>
 
-    <color name="wheat">#BFA678</color>
+    <color name="wheat">#F3CB82</color>
 </resources>
