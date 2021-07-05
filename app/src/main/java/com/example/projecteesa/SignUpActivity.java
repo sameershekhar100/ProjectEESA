@@ -1,6 +1,7 @@
 package com.example.projecteesa;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projecteesa.ProfileSection.Profile;
+import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -38,11 +40,14 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference users = db.collection("Users");
 
+    private Context mContext = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        getSupportActionBar().hide();
         mAuth = FirebaseAuth.getInstance();
         mName = (EditText) findViewById(R.id.create_name);
         mEmail = (EditText) findViewById(R.id.create_email);
@@ -75,19 +80,19 @@ public class SignUpActivity extends AppCompatActivity {
         String password = mPassword.getText().toString().trim();
         final String phoneNum = mPhoneNum.getText().toString().trim();
         if (name.equals("")) {
-            Toast.makeText(this, "Enter your name!", Toast.LENGTH_SHORT).show();
+            MotionToastUtils.showErrorToast(mContext, "Email required", "Please enter your email address");
         } else if (email.isEmpty()) {
-            Toast.makeText(this, "Please Enter your email", Toast.LENGTH_SHORT).show();
+            MotionToastUtils.showErrorToast(mContext, "Email required", "Please enter your email address");
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
+            MotionToastUtils.showErrorToast(mContext, "Invalid email", "Please enter a valid email address");
         } else if (password.isEmpty()) {
-            Toast.makeText(this, "Enter a password!", Toast.LENGTH_SHORT).show();
+            MotionToastUtils.showErrorToast(mContext, "Password is empty", "Please enter a valid password");
         } else if (password.length() < 6) {
-            Toast.makeText(this, "Password must be greater than equal to 6 characters", Toast.LENGTH_SHORT).show();
+            MotionToastUtils.showErrorToast(mContext, "Password too short", "Please enter a password of length greater than 6");
         } else if (phoneNum.isEmpty()) {
-            Toast.makeText(this, "Enter your phone number!", Toast.LENGTH_SHORT).show();
+            MotionToastUtils.showErrorToast(mContext, "Phone number empty", "Please enter your phone number");
         } else if (!Patterns.PHONE.matcher(phoneNum).matches()) {
-            Toast.makeText(this, "Please enter a valid phone number.", Toast.LENGTH_SHORT).show();
+            MotionToastUtils.showErrorToast(mContext, "Invalid phone number", "Please enter a valid phone number");
         } else {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setCancelable(false);
@@ -106,14 +111,14 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             add(name,email,phoneNum,user);
                             startActivity(new Intent(getApplicationContext(),LoginActivity.class));
-                            Toast.makeText(SignUpActivity.this, "Verification E-mail has been sent. Please verify!", Toast.LENGTH_SHORT).show();
+                            MotionToastUtils.showInfoToast(mContext, "Verify your email", "Signup was successful but please make sure to verify your email");
                             progressDialog.dismiss();
                             finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(SignUpActivity.this, "Error in sending verfication e-mail", Toast.LENGTH_SHORT).show();
+                            MotionToastUtils.showErrorToast(mContext, "Error occurred", "Some error occurred during signup");
                         }
                     });
 
@@ -122,7 +127,7 @@ public class SignUpActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     progressDialog.dismiss();
-                    Toast.makeText(SignUpActivity.this, "Unable to signup."+e, Toast.LENGTH_SHORT).show();
+                    MotionToastUtils.showErrorToast(mContext, "Error occured", "Some error occurred during signup");
                     e.printStackTrace();
                 }
             });

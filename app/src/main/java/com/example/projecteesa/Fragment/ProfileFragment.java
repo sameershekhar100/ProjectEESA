@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -30,7 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileFragment extends Fragment {
 
-    FloatingActionButton fab;
+    ImageButton fab;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -38,7 +40,7 @@ public class ProfileFragment extends Fragment {
     TextView name, email;
     String img = "";
     ImageView imageView;
-    Button b1;
+    CardView b1;
     Profile profilex;
 
     public ProfileFragment() {

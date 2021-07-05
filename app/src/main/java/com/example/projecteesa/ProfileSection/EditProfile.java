@@ -47,6 +47,7 @@ DocumentReference doc=firestore.document("Users/"+firebaseAuth);
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        getSupportActionBar().hide();
         name=findViewById(R.id.edit_name);
         BIO =findViewById(R.id.edit_email);
         phoneNo=findViewById(R.id.edit_Phone);
