@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.projecteesa.ProfileSection.EditProfile;
@@ -36,7 +37,7 @@ public class ProfileFragment extends Fragment {
     CollectionReference db=firestore.collection("Users");
     TextView name,email;
     ImageView imageView;
-    Button b1;
+    CardView b1;
     Profile profilex;
     public ProfileFragment() {
         // Required empty public constructor

@@ -18,5 +18,13 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="general_card_style">
+        <item name="android:background">@color/wheat</item>
+    </style>
+
+    <style name="gradient_finish">
+        <item name="android:background">@drawable/light_gradient</item>
+    </style>
+
     <color name="wheat">#BFA678</color>
 </resources>

@@ -18,4 +18,12 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="general_card_style">
+        <item name="android:background">@android:color/black</item>
+    </style>
+
+    <style name="gradient_finish">
+        <item name="android:background">@drawable/night_gradient</item>
+    </style>
+
 </resources>
