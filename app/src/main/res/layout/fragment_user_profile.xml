@@ -185,15 +185,26 @@
         android:layout_marginStart="158dp"
 
         android:layout_marginEnd="159dp"
-        android:layout_marginBottom="16dp"
         android:text="Add Post"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.922" />
+        app:layout_constraintVertical_bias="1.0" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="MY POSTS"
+        android:id="@+id/header_title"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12sp"
+        android:textColor="@color/ic_launcher_background"/>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -202,7 +213,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/header_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 
