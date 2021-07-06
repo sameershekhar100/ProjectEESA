@@ -31,41 +31,41 @@ import org.jetbrains.annotations.NotNull;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfile extends AppCompatActivity {
-public EditText name;
-public EditText BIO;
-public EditText phoneNo;
-public Button update;
-private static final int IMAGE_CODE=1;
-CircleImageView imageView;
-Uri downloadurl;
-FirebaseFirestore firestore=FirebaseFirestore.getInstance();
-StorageReference mstorageReference;
-String firebaseAuth=FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
-Profile profile;
-DocumentReference doc=firestore.document("Users/"+firebaseAuth);
+    private static final int IMAGE_CODE = 1;
+    public EditText name;
+    public EditText BIO;
+    public EditText phoneNo;
+    public Button update;
+    CircleImageView imageView;
+    Uri downloadurl;
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    StorageReference mstorageReference;
+    String firebaseAuth = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
+    Profile profile;
+    DocumentReference doc = firestore.document("Users/" + firebaseAuth);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         getSupportActionBar().hide();
-        name=findViewById(R.id.edit_name);
-        BIO =findViewById(R.id.edit_email);
-        phoneNo=findViewById(R.id.edit_Phone);
-        update=findViewById(R.id.update);
-        imageView=findViewById(R.id.image);
-        Intent intent=getIntent();
-        profile=(Profile)intent.getSerializableExtra("profile");
-        mstorageReference= FirebaseStorage.getInstance().getReference().child("images");
+        name = findViewById(R.id.edit_name);
+        BIO = findViewById(R.id.edit_bio);
+        phoneNo = findViewById(R.id.edit_Phone);
+        update = findViewById(R.id.update);
+        imageView = findViewById(R.id.image);
+        Intent intent = getIntent();
+        profile = (Profile) intent.getSerializableExtra("profile");
+        mstorageReference = FirebaseStorage.getInstance().getReference().child("images");
 
-        name.setText(profile.getName());
-        BIO.setText(profile.getBIO());
-        phoneNo.setText(profile.getPhoneNO());
+        setProfileData();
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent().setAction(Intent.ACTION_GET_CONTENT);
+                Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent,"Complete action using"), IMAGE_CODE);
+                startActivityForResult(Intent.createChooser(intent, "Complete action using"), IMAGE_CODE);
             }
         });
         update.setOnClickListener(new View.OnClickListener() {
@@ -75,10 +75,18 @@ DocumentReference doc=firestore.document("Users/"+firebaseAuth);
             }
         });
     }
-    void updateProfile(){
-        String namex=name.getText().toString();
-        String BIOx= BIO.getText().toString();
-        String phonex=phoneNo.getText().toString();
+
+    //function to set the existing profile data in the UI
+    private void setProfileData() {
+        name.setText(profile.getName());
+        BIO.setText(profile.getBIO() == null ? "" : profile.getBIO());
+        phoneNo.setText(profile.getPhoneNO() == null ? "" : profile.getPhoneNO());
+    }
+
+    void updateProfile() {
+        String namex = name.getText().toString();
+        String BIOx = BIO.getText().toString();
+        String phonex = phoneNo.getText().toString();
         profile.setName(namex);
         profile.setBIO(BIOx);
         profile.setPhoneNO(phonex);
@@ -100,6 +108,7 @@ DocumentReference doc=firestore.document("Users/"+firebaseAuth);
         });
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -116,13 +125,13 @@ DocumentReference doc=firestore.document("Users/"+firebaseAuth);
                 e.printStackTrace();
             }
             StorageReference photoRef = mstorageReference.child(selected.getLastPathSegment());
-            Toast.makeText(EditProfile.this,"Loading",Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditProfile.this, "Loading", Toast.LENGTH_SHORT).show();
 
             photoRef.putFile(selected).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!urlTask.isSuccessful());
+                    while (!urlTask.isSuccessful()) ;
                     downloadurl = urlTask.getResult();
 //                    Toast.makeText(EditProfile.this, downloadurl+"", Toast.LENGTH_SHORT).show();
 

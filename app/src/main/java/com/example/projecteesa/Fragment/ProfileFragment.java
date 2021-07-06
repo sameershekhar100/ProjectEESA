@@ -98,7 +98,8 @@ public class ProfileFragment extends Fragment {
                     name.setText(profile.getName());
                     email.setText(profile.getBIO());
                     img = profile.getImage();
-                    Glide.with(getContext()).load(img).into(imageView);
+                    if (img != null && !img.isEmpty())
+                        Glide.with(getContext()).load(img).into(imageView);
                     profilex = profile;
                 }
             }
