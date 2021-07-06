@@ -42,7 +42,6 @@ public class ProfileFragment extends Fragment {
     TextView name, email;
     String img = "";
     ImageView imageView;
-    CardView b1;
     Profile profilex;
 
     private ActivityProgressDialog progressDialog;
@@ -64,12 +63,10 @@ public class ProfileFragment extends Fragment {
         progressDialog = new ActivityProgressDialog(mContext);
         progressDialog.setCancelable(false);
 
-        b1 = view.findViewById(R.id.finish);
         name = view.findViewById(R.id.name);
         email = view.findViewById(R.id.email);
         imageView = view.findViewById(R.id.profile_image);
         Log.i("Hello:", "Profile fragment");
-        fetchData();
         fab.setOnClickListener(v ->
         {
             Intent intent = new Intent(getContext(), EditProfile.class);
@@ -77,17 +74,13 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
-
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().finish();
-            }
-        });
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        fetchData();
     }
 
     void fetchData() {

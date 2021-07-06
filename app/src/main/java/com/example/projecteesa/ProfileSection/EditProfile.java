@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -140,7 +142,8 @@ public class EditProfile extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            StorageReference photoRef = mstorageReference.child(selected.getLastPathSegment());
+            String fileType = getFileType(selected);
+            StorageReference photoRef = mstorageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + "." + fileType);
             progressDialog.setTitle("Uploading profile picture");
             progressDialog.setMessage("Please wait while we upload your latest profile picture");
             progressDialog.showDialog();
@@ -165,5 +168,11 @@ public class EditProfile extends AppCompatActivity {
 
 
         }
+    }
+
+    private String getFileType(Uri uri) {
+        ContentResolver resolver = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(resolver.getType(uri));
     }
 }

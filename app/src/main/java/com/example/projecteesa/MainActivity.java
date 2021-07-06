@@ -2,17 +2,22 @@ package com.example.projecteesa;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.projecteesa.Fragment.FeedFragment;
 import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.Fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,14 +25,18 @@ import org.jetbrains.annotations.NotNull;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "BottomNavigation";
     FragmentManager fragmentManager;
+    private Toolbar toolbar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-        ChipNavigationBar navbar =findViewById(R.id.bottom_nav);
-        if(savedInstanceState==null){
-            navbar.setItemSelected(R.id.home,true);
+        setupToolbar();
+        ChipNavigationBar navbar = findViewById(R.id.bottom_nav);
+        if (savedInstanceState == null) {
+            navbar.setItemSelected(R.id.home, true);
             fragmentManager=getSupportFragmentManager();
             HomeFragment home=new HomeFragment();
             fragmentManager.beginTransaction().replace(R.id.main_frame,home).commit();
@@ -48,11 +57,28 @@ public class MainActivity extends AppCompatActivity {
             if(fragment!=null){
                 fragmentManager=getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.main_frame,fragment)
+                        .replace(R.id.main_frame, fragment)
                         .commit();
+            } else {
+                Log.e(TAG, "ERROR");
             }
-            else {
-                Log.e(TAG,"ERROR");
+        });
+    }
+
+    private void setupToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.main_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.logout:
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                        return true;
+                }
+                return false;
             }
         });
     }
