@@ -1,6 +1,7 @@
 package com.example.projecteesa.Fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.example.projecteesa.LoginActivity;
 import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
+import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +45,9 @@ public class ProfileFragment extends Fragment {
     CardView b1;
     Profile profilex;
 
+    private ActivityProgressDialog progressDialog;
+    private Context mContext;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -52,10 +57,12 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        mContext = getContext();
         fab = view.findViewById(R.id.edit_profile_fab);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-
+        progressDialog = new ActivityProgressDialog(mContext);
+        progressDialog.setCancelable(false);
 
         b1 = view.findViewById(R.id.finish);
         name = view.findViewById(R.id.name);
@@ -84,15 +91,14 @@ public class ProfileFragment extends Fragment {
     }
 
     void fetchData() {
-        final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
+        progressDialog.setTitle("Fetching profile data");
+        progressDialog.setMessage("Please wait while we fetch your profile data");
+        progressDialog.showDialog();
         DocumentReference doc = db.document("" + firebaseUser.getUid());
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                progressDialog.hideDialog();
                 if (documentSnapshot.exists()) {
                     Profile profile = documentSnapshot.toObject(Profile.class);
                     name.setText(profile.getName());
@@ -105,7 +111,6 @@ public class ProfileFragment extends Fragment {
             }
 
         });
-        progressDialog.dismiss();
     }
 
 }

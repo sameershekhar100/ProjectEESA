@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,8 +15,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.projecteesa.MainActivity;
 import com.example.projecteesa.R;
+import com.example.projecteesa.utils.ActivityProgressDialog;
+import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -44,11 +48,15 @@ public class EditProfile extends AppCompatActivity {
     Profile profile;
     DocumentReference doc = firestore.document("Users/" + firebaseAuth);
 
+    private ActivityProgressDialog progressDialog;
+    private Context mContext = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         getSupportActionBar().hide();
+        progressDialog = new ActivityProgressDialog(mContext);
         name = findViewById(R.id.edit_name);
         BIO = findViewById(R.id.edit_bio);
         phoneNo = findViewById(R.id.edit_Phone);
@@ -81,6 +89,8 @@ public class EditProfile extends AppCompatActivity {
         name.setText(profile.getName());
         BIO.setText(profile.getBIO() == null ? "" : profile.getBIO());
         phoneNo.setText(profile.getPhoneNO() == null ? "" : profile.getPhoneNO());
+        if (profile.getImage() != null && !profile.getImage().isEmpty())
+            Glide.with(this).load(profile.getImage()).into(imageView);
     }
 
     void updateProfile() {
@@ -90,20 +100,26 @@ public class EditProfile extends AppCompatActivity {
         profile.setName(namex);
         profile.setBIO(BIOx);
         profile.setPhoneNO(phonex);
-        profile.setImage(downloadurl.toString());
+        if (downloadurl != null && !downloadurl.toString().isEmpty())
+            profile.setImage(downloadurl.toString());
 
-
+        progressDialog.setTitle("Updating profile data");
+        progressDialog.setMessage("Please wait while we update your profile data");
+        progressDialog.setCancelable(false);
+        progressDialog.showDialog();
         doc.set(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Toast.makeText(EditProfile.this, "updated!!!", Toast.LENGTH_SHORT).show();
+                progressDialog.hideDialog();
+                MotionToastUtils.showSuccessToast(mContext, "Profile updated", "Your profile data is successfully updated");
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
-                Toast.makeText(EditProfile.this, "some issue occured :|", Toast.LENGTH_SHORT).show();
+                progressDialog.hideDialog();
+                MotionToastUtils.showErrorToast(mContext, "Error", "Some error occurred while updating your profile data, try after some time");
             }
         });
 
@@ -125,13 +141,16 @@ public class EditProfile extends AppCompatActivity {
                 e.printStackTrace();
             }
             StorageReference photoRef = mstorageReference.child(selected.getLastPathSegment());
-            Toast.makeText(EditProfile.this, "Loading", Toast.LENGTH_SHORT).show();
+            progressDialog.setTitle("Uploading profile picture");
+            progressDialog.setMessage("Please wait while we upload your latest profile picture");
+            progressDialog.showDialog();
 
             photoRef.putFile(selected).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!urlTask.isSuccessful()) ;
+                    progressDialog.hideDialog();
                     downloadurl = urlTask.getResult();
 //                    Toast.makeText(EditProfile.this, downloadurl+"", Toast.LENGTH_SHORT).show();
 
@@ -139,7 +158,8 @@ public class EditProfile extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull @NotNull Exception e) {
-                    Toast.makeText(EditProfile.this, "error in uploading", Toast.LENGTH_SHORT).show();
+                    progressDialog.hideDialog();
+                    MotionToastUtils.showErrorToast(mContext, "Error", "Some error occurred while uploading your profile picture");
                 }
             });
 

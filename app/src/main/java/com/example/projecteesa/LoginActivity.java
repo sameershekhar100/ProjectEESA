@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView createAccount;
     private ImageView splashLogo;
     private ConstraintLayout loginLayout;
+    private ActivityProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
 
         //hiding the action bar
         getSupportActionBar().hide();
+        progressDialog = new ActivityProgressDialog(mContext);
+        progressDialog.setCancelable(false);
         splashLogo = findViewById(R.id.splash_logo);
         loginLayout = findViewById(R.id.login_layout);
         email = findViewById(R.id.email);
@@ -109,21 +113,19 @@ public class LoginActivity extends AppCompatActivity {
             MotionToastUtils.showErrorToast(mContext, "Password is empty", "Please enter a valid password");
         }
         else {
-            final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("Logging in...");
-            progressDialog.show();
+            progressDialog.setTitle("Logging in");
+            progressDialog.setMessage("Please wait while we log you in");
+            progressDialog.showDialog();
 
-            mAuth.signInWithEmailAndPassword(memail,mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuth.signInWithEmailAndPassword(memail, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    progressDialog.dismiss();
+                    progressDialog.hideDialog();
 
-                    if(task.isSuccessful()) {
+                    if (task.isSuccessful()) {
 
                         MotionToastUtils.showSuccessToast(mContext, "Logged In", "Glad to see you");
-                        Intent transfer=new Intent(LoginActivity.this,MainActivity.class);
+                        Intent transfer = new Intent(LoginActivity.this, MainActivity.class);
                         transfer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(transfer);
                         finish();
