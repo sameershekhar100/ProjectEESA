@@ -1,11 +1,14 @@
 package com.example.projecteesa.ProfileSection;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.app.ProgressDialog;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -17,7 +20,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import com.bumptech.glide.Glide;
+
+
+
+
 import com.example.projecteesa.MainActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.ActivityProgressDialog;
@@ -29,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -100,7 +109,7 @@ public class EditProfile extends AppCompatActivity {
         String BIOx = BIO.getText().toString();
         String phonex = phoneNo.getText().toString();
         profile.setName(namex);
-        profile.setBIO(BIOx);
+        profile.setBio(BIOx);
         profile.setPhoneNO(phonex);
         if (downloadurl != null && !downloadurl.toString().isEmpty())
             profile.setImage(downloadurl.toString());

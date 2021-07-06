@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.projecteesa.LoginActivity;
+import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
@@ -42,7 +43,10 @@ public class ProfileFragment extends Fragment {
     TextView name, email;
     String img = "";
     ImageView imageView;
+    Button createPost;
+    CardView b1;
     Profile profilex;
+    static Profile profileData;
 
     private ActivityProgressDialog progressDialog;
     private Context mContext;
@@ -63,10 +67,19 @@ public class ProfileFragment extends Fragment {
         progressDialog = new ActivityProgressDialog(mContext);
         progressDialog.setCancelable(false);
 
+        createPost=view.findViewById(R.id.add_post);
+        b1 = view.findViewById(R.id.finish);
+      
         name = view.findViewById(R.id.name);
         email = view.findViewById(R.id.email);
         imageView = view.findViewById(R.id.profile_image);
         Log.i("Hello:", "Profile fragment");
+
+        fetchData();
+        createPost.setOnClickListener(v->{
+            startActivity(new Intent(getContext(), CreatePostActivity.class));
+        });
+
         fab.setOnClickListener(v ->
         {
             Intent intent = new Intent(getContext(), EditProfile.class);
@@ -95,15 +108,20 @@ public class ProfileFragment extends Fragment {
                 if (documentSnapshot.exists()) {
                     Profile profile = documentSnapshot.toObject(Profile.class);
                     name.setText(profile.getName());
-                    email.setText(profile.getBIO());
+                    email.setText(profile.getBio());
                     img = profile.getImage();
                     if (img != null && !img.isEmpty())
                         Glide.with(getContext()).load(img).into(imageView);
                     profilex = profile;
+                    profileData=profilex;
                 }
             }
 
         });
+    }
+    public static Profile getProfileData()
+    {
+        return profileData;
     }
 
 }
