@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.app.ProgressDialog;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,6 +18,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 
 
 import com.bumptech.glide.Glide;
@@ -77,6 +77,9 @@ public class EditProfile extends AppCompatActivity {
         profile = (Profile) intent.getSerializableExtra("profile");
         mstorageReference = FirebaseStorage.getInstance().getReference().child("images");
 
+        name.setText(profile.getName());
+        BIO.setText(profile.getBio());
+        phoneNo.setText(profile.getPhoneNO());
         setProfileData();
 
         imageView.setOnClickListener(new View.OnClickListener() {
