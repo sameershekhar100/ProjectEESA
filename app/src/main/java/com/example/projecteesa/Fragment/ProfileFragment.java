@@ -44,7 +44,7 @@ public class ProfileFragment extends Fragment {
     String img = "";
     ImageView imageView;
     Button createPost;
-    CardView b1;
+
     Profile profilex;
     static Profile profileData;
 
@@ -68,7 +68,6 @@ public class ProfileFragment extends Fragment {
         progressDialog.setCancelable(false);
 
         createPost=view.findViewById(R.id.add_post);
-        b1 = view.findViewById(R.id.finish);
       
         name = view.findViewById(R.id.name);
         email = view.findViewById(R.id.email);
@@ -90,11 +89,6 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        fetchData();
-    }
 
     void fetchData() {
         progressDialog.setTitle("Fetching profile data");
