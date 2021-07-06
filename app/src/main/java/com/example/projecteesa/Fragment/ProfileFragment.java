@@ -139,11 +139,7 @@ public class ProfileFragment extends Fragment {
         fetchMyPosts();
 
     }
-    public static Profile getProfileData()
-    {
 
-        return profileData;
-    }
     void fetchMyPosts(){
         ArrayList<Post> myPostList=new ArrayList<>();
         db.document(firebaseUser.getUid()).collection("MyPosts").
