@@ -32,7 +32,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class ProfileFragment extends Fragment {
-    FloatingActionButton fab;
 
     ImageButton fab;
     FirebaseAuth firebaseAuth;
@@ -42,7 +41,7 @@ public class ProfileFragment extends Fragment {
     TextView name, email;
     String img = "";
     ImageView imageView;
-    Button b1,createPost;
+    Button createPost;
     CardView b1;
     Profile profilex;
     static Profile profileData;
