@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.projecteesa.Adapters.ProfilePostAdapter;
-import com.example.projecteesa.LoginActivity;
 import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.ProfileSection.EditProfile;
@@ -31,7 +30,6 @@ import com.example.projecteesa.R;
 import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -91,6 +89,7 @@ public class ProfileFragment extends Fragment {
 
         myPosts=view.findViewById(R.id.myPosts);
         layoutManager=new GridLayoutManager(getContext(),2);
+
         myPosts.setLayoutManager(layoutManager);
 
 //        getPosts();
@@ -136,7 +135,7 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-        progressDialog.dismiss();
+        progressDialog.hideDialog();
         fetchMyPosts();
 
     }

@@ -98,7 +98,7 @@ public class EditProfile extends AppCompatActivity {
     //function to set the existing profile data in the UI
     private void setProfileData() {
         name.setText(profile.getName());
-        BIO.setText(profile.getBIO() == null ? "" : profile.getBIO());
+        BIO.setText(profile.getBio() == null ? "" : profile.getBio());
         phoneNo.setText(profile.getPhoneNO() == null ? "" : profile.getPhoneNO());
         if (profile.getImage() != null && !profile.getImage().isEmpty())
             Glide.with(this).load(profile.getImage()).into(imageView);
