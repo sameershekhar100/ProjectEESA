@@ -11,4 +11,5 @@
     <color name="pink">#f70052</color>
 
     <color name="wheat_light">#FFFFFBF2</color>
+    <color name="shimmer_color">@color/wheat</color>
 </resources>
