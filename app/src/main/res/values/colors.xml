@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#1d95ee</color>
     <color name="pink">#f70052</color>
+
+    <color name="wheat_light">#FFFFFBF2</color>
 </resources>

@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
         ChipNavigationBar navbar =findViewById(R.id.bottom_nav);
         if(savedInstanceState==null){
             navbar.setItemSelected(R.id.home,true);
