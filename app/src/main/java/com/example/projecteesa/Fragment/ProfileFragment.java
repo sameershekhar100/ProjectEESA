@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.projecteesa.Adapters.ProfilePostAdapter;
 import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.Posts.Post;
+import com.example.projecteesa.LoginActivity;
 import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
@@ -56,11 +57,12 @@ public class ProfileFragment extends Fragment {
     ImageView imageView;
     Button createPost;
     CardView b1;
-    Profile profilex;
-    static Profile profileData;
     RecyclerView myPosts;
     RecyclerView.LayoutManager layoutManager;
     ProfilePostAdapter profilePostAdapter;
+
+    Profile profilex;
+    static Profile profileData;
 
     private ActivityProgressDialog progressDialog;
     private Context mContext;
@@ -83,6 +85,7 @@ public class ProfileFragment extends Fragment {
 
         createPost=view.findViewById(R.id.add_post);
         b1 = view.findViewById(R.id.finish);
+      
         name = view.findViewById(R.id.name);
         email = view.findViewById(R.id.email);
         imageView = view.findViewById(R.id.profile_image);
@@ -94,10 +97,12 @@ public class ProfileFragment extends Fragment {
 
 //        getPosts();
         Log.i("Hello:", "Profile fragment");
+
         fetchData();
         createPost.setOnClickListener(v->{
             startActivity(new Intent(getContext(), CreatePostActivity.class));
         });
+
         fab.setOnClickListener(v ->
         {
             Intent intent = new Intent(getContext(), EditProfile.class);
@@ -108,11 +113,6 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        fetchData();
-    }
 
     void fetchData() {
         progressDialog.setTitle("Fetching profile data");
@@ -166,6 +166,10 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+    }
+    public static Profile getProfileData()
+    {
+        return profileData;
     }
 
 }

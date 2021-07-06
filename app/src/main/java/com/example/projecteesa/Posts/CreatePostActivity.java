@@ -48,6 +48,7 @@ public class CreatePostActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
     String userID= FirebaseAuth.getInstance().getUid();
     CollectionReference postsCollection,UserCollection;
+  
     private static final int IMG_CODE=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,6 @@ public class CreatePostActivity extends AppCompatActivity {
         });
 
     }
-
     private void setView() {
         emptyImg=findViewById(R.id.empty_post);
         post=findViewById(R.id.create_post_btn);
@@ -141,6 +141,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 Toast.makeText(CreatePostActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
             }
         });
+
         UserCollection.document(userID+time).set(post);
 
     }
