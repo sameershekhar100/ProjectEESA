@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projecteesa.ProfileSection.Profile;
+import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
     private final CollectionReference users = db.collection("Users");
 
     private Context mContext = this;
+    private ActivityProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         getSupportActionBar().hide();
+        progressDialog = new ActivityProgressDialog(mContext);
+        progressDialog.setCancelable(false);
         mAuth = FirebaseAuth.getInstance();
         mName = (EditText) findViewById(R.id.create_name);
         mEmail = (EditText) findViewById(R.id.create_email);
@@ -94,25 +98,24 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (!Patterns.PHONE.matcher(phoneNum).matches()) {
             MotionToastUtils.showErrorToast(mContext, "Invalid phone number", "Please enter a valid phone number");
         } else {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(false);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage("Registering...");
-            progressDialog.show();
+            progressDialog.setTitle("Creating account");
+            progressDialog.setMessage("Please wait while we sign you up");
+            progressDialog.showDialog();
             mAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(AuthResult authResult) {
-                    progressDialog.setMessage("Adding Data...");
+                    progressDialog.setTitle("Saving data");
+                    progressDialog.setMessage("Please wait while we upload your data");
                     FirebaseUser user = authResult.getUser();
 
 
                     user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            add(name,email,phoneNum,user);
-                            startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                            add(name, email, phoneNum, user);
+                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                            progressDialog.hideDialog();
                             MotionToastUtils.showInfoToast(mContext, "Verify your email", "Signup was successful but please make sure to verify your email");
-                            progressDialog.dismiss();
                             finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -126,8 +129,8 @@ public class SignUpActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    progressDialog.dismiss();
-                    MotionToastUtils.showErrorToast(mContext, "Error occured", "Some error occurred during signup");
+                    progressDialog.hideDialog();
+                    MotionToastUtils.showErrorToast(mContext, "Error occurred", "Some error occurred during signup");
                     e.printStackTrace();
                 }
             });

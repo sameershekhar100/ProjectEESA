@@ -1,6 +1,7 @@
 package com.example.projecteesa.Fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
+import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,6 +48,9 @@ public class ProfileFragment extends Fragment {
     Profile profilex;
     static Profile profileData;
 
+    private ActivityProgressDialog progressDialog;
+    private Context mContext;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -55,20 +60,26 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        mContext = getContext();
         fab = view.findViewById(R.id.edit_profile_fab);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        progressDialog = new ActivityProgressDialog(mContext);
+        progressDialog.setCancelable(false);
 
         createPost=view.findViewById(R.id.add_post);
         b1 = view.findViewById(R.id.finish);
+      
         name = view.findViewById(R.id.name);
         email = view.findViewById(R.id.email);
         imageView = view.findViewById(R.id.profile_image);
         Log.i("Hello:", "Profile fragment");
+
         fetchData();
         createPost.setOnClickListener(v->{
             startActivity(new Intent(getContext(), CreatePostActivity.class));
         });
+
         fab.setOnClickListener(v ->
         {
             Intent intent = new Intent(getContext(), EditProfile.class);
@@ -76,42 +87,37 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
-
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().finish();
-            }
-        });
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        fetchData();
+    }
+
     void fetchData() {
-        final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
+        progressDialog.setTitle("Fetching profile data");
+        progressDialog.setMessage("Please wait while we fetch your profile data");
+        progressDialog.showDialog();
         DocumentReference doc = db.document("" + firebaseUser.getUid());
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                progressDialog.hideDialog();
                 if (documentSnapshot.exists()) {
                     Profile profile = documentSnapshot.toObject(Profile.class);
                     name.setText(profile.getName());
                     email.setText(profile.getBio());
                     img = profile.getImage();
-                    Glide.with(getContext()).load(img).into(imageView);
+                    if (img != null && !img.isEmpty())
+                        Glide.with(getContext()).load(img).into(imageView);
                     profilex = profile;
                     profileData=profilex;
                 }
             }
 
         });
-        progressDialog.dismiss();
     }
     public static Profile getProfileData()
     {

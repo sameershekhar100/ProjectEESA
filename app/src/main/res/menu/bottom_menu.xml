@@ -14,7 +14,7 @@
         app:cnb_iconColor="#fff"
         app:cnb_backgroundColor="#ff785b"
         android:icon="@drawable/ic_add"
-        android:title="Posts" />
+        android:title="Add Post" />
     <item
         app:cnb_textColor="#fff"
         android:id="@+id/profile"
