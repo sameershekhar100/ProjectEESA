@@ -3,18 +3,23 @@ package com.example.projecteesa;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Patterns;
 import android.view.View;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +42,10 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     TextView forgPass;
     TextView createAccount;
+    private ImageView splashLogo;
+    private ConstraintLayout loginLayout;
+    private ActivityProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,17 +53,20 @@ public class LoginActivity extends AppCompatActivity {
 
         //hiding the action bar
         getSupportActionBar().hide();
-
+        progressDialog = new ActivityProgressDialog(mContext);
+        progressDialog.setCancelable(false);
+        splashLogo = findViewById(R.id.splash_logo);
+        loginLayout = findViewById(R.id.login_layout);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         submit = findViewById(R.id.submit);
-        mAuth=FirebaseAuth.getInstance();
-        forgPass=findViewById(R.id.forgotPass);
-        createAccount=findViewById(R.id.create_account);
+        mAuth = FirebaseAuth.getInstance();
+        forgPass = findViewById(R.id.forgotPass);
+        createAccount = findViewById(R.id.create_account);
         forgPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),ForgotPassword.class));
+                startActivity(new Intent(getApplicationContext(), ForgotPassword.class));
             }
         });
         submit.setOnClickListener(new View.OnClickListener() {
@@ -66,43 +78,54 @@ public class LoginActivity extends AppCompatActivity {
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this,SignUpActivity.class));
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }
         });
+        startSplashAnimation();
+    }
+
+    private void startSplashAnimation() {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            splashLogo.animate().scaleX(0.0f).scaleY(0.0f).withEndAction(() -> {
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    Intent transfer = new Intent(this, MainActivity.class);
+                    startActivity(transfer);
+                    finish();
+                } else {
+                    loginLayout.setVisibility(View.VISIBLE);
+                }
+            });
+        }, 2000);
 
     }
-    private void login(){
-        String memail= email.getText().toString();
-        String mPassword= password.getText().toString();
 
-        if(memail.isEmpty())
-        {
+    private void login() {
+        String memail = email.getText().toString();
+        String mPassword = password.getText().toString();
+
+        if (memail.isEmpty()) {
             MotionToastUtils.showErrorToast(mContext, "Email required", "Please enter your email address");
-        }
-        else if(!Patterns.EMAIL_ADDRESS.matcher(memail).matches())
-        {
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(memail).matches()) {
             MotionToastUtils.showErrorToast(mContext, "Invalid email", "Please enter a valid email address");
-        }
-        else if(mPassword.isEmpty())
-        {
+        } else if (mPassword.isEmpty()) {
             MotionToastUtils.showErrorToast(mContext, "Password is empty", "Please enter a valid password");
         }
         else {
-            final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("Logging in...");
-            progressDialog.show();
+            progressDialog.setTitle("Logging in");
+            progressDialog.setMessage("Please wait while we log you in");
+            progressDialog.showDialog();
 
-            mAuth.signInWithEmailAndPassword(memail,mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuth.signInWithEmailAndPassword(memail, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    progressDialog.dismiss();
+                    progressDialog.hideDialog();
 
-                    if(task.isSuccessful()) {
+                    if (task.isSuccessful()) {
 
                         MotionToastUtils.showSuccessToast(mContext, "Logged In", "Glad to see you");
-                        Intent transfer=new Intent(LoginActivity.this,MainActivity.class);
+                        Intent transfer = new Intent(LoginActivity.this, MainActivity.class);
                         transfer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(transfer);
                         finish();
@@ -139,15 +162,4 @@ public class LoginActivity extends AppCompatActivity {
                 .create().show();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        FirebaseUser user=mAuth.getCurrentUser();
-        if(user!=null){
-            Intent transfer=new Intent(this,MainActivity.class);
-            startActivity(transfer);
-            finish();
-        }
-    }
 }

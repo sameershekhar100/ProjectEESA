@@ -1,5 +1,11 @@
 package com.example.projecteesa.ProfileSection;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.ContentResolver;
+import android.content.Context;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,8 +22,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.projecteesa.MainActivity;
 import com.example.projecteesa.R;
+import com.example.projecteesa.utils.ActivityProgressDialog;
+import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -33,41 +43,48 @@ import org.jetbrains.annotations.NotNull;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfile extends AppCompatActivity {
-public EditText name;
-public EditText BIO;
-public EditText phoneNo;
-public Button update;
-private static final int IMAGE_CODE=1;
-CircleImageView imageView;
-Uri downloadurl;
-FirebaseFirestore firestore=FirebaseFirestore.getInstance();
-StorageReference mstorageReference;
-String firebaseAuth=FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
-Profile profile;
-DocumentReference doc=firestore.document("Users/"+firebaseAuth);
+    private static final int IMAGE_CODE = 1;
+    public EditText name;
+    public EditText BIO;
+    public EditText phoneNo;
+    public Button update;
+    CircleImageView imageView;
+    Uri downloadurl;
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    StorageReference mstorageReference;
+    String firebaseAuth = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
+    Profile profile;
+    DocumentReference doc = firestore.document("Users/" + firebaseAuth);
+
+    private ActivityProgressDialog progressDialog;
+    private Context mContext = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         getSupportActionBar().hide();
-        name=findViewById(R.id.edit_name);
-        BIO =findViewById(R.id.edit_email);
-        phoneNo=findViewById(R.id.edit_Phone);
-        update=findViewById(R.id.update);
-        imageView=findViewById(R.id.image);
-        Intent intent=getIntent();
-        profile=(Profile)intent.getSerializableExtra("profile");
-        mstorageReference= FirebaseStorage.getInstance().getReference().child("images");
+        progressDialog = new ActivityProgressDialog(mContext);
+        name = findViewById(R.id.edit_name);
+        BIO = findViewById(R.id.edit_bio);
+        phoneNo = findViewById(R.id.edit_Phone);
+        update = findViewById(R.id.update);
+        imageView = findViewById(R.id.image);
+        Intent intent = getIntent();
+        profile = (Profile) intent.getSerializableExtra("profile");
+        mstorageReference = FirebaseStorage.getInstance().getReference().child("images");
 
         name.setText(profile.getName());
         BIO.setText(profile.getBio());
         phoneNo.setText(profile.getPhoneNO());
+        setProfileData();
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent().setAction(Intent.ACTION_GET_CONTENT);
+                Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent,"Complete action using"), IMAGE_CODE);
+                startActivityForResult(Intent.createChooser(intent, "Complete action using"), IMAGE_CODE);
             }
         });
         update.setOnClickListener(new View.OnClickListener() {
@@ -77,31 +94,48 @@ DocumentReference doc=firestore.document("Users/"+firebaseAuth);
             }
         });
     }
-    void updateProfile(){
-        String namex=name.getText().toString();
-        String BIOx= BIO.getText().toString();
-        String phonex=phoneNo.getText().toString();
+
+    //function to set the existing profile data in the UI
+    private void setProfileData() {
+        name.setText(profile.getName());
+        BIO.setText(profile.getBIO() == null ? "" : profile.getBIO());
+        phoneNo.setText(profile.getPhoneNO() == null ? "" : profile.getPhoneNO());
+        if (profile.getImage() != null && !profile.getImage().isEmpty())
+            Glide.with(this).load(profile.getImage()).into(imageView);
+    }
+
+    void updateProfile() {
+        String namex = name.getText().toString();
+        String BIOx = BIO.getText().toString();
+        String phonex = phoneNo.getText().toString();
         profile.setName(namex);
         profile.setBio(BIOx);
         profile.setPhoneNO(phonex);
-        profile.setImage(downloadurl.toString());
+        if (downloadurl != null && !downloadurl.toString().isEmpty())
+            profile.setImage(downloadurl.toString());
 
-
+        progressDialog.setTitle("Updating profile data");
+        progressDialog.setMessage("Please wait while we update your profile data");
+        progressDialog.setCancelable(false);
+        progressDialog.showDialog();
         doc.set(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Toast.makeText(EditProfile.this, "updated!!!", Toast.LENGTH_SHORT).show();
+                progressDialog.hideDialog();
+                MotionToastUtils.showSuccessToast(mContext, "Profile updated", "Your profile data is successfully updated");
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
-                Toast.makeText(EditProfile.this, "some issue occured :|", Toast.LENGTH_SHORT).show();
+                progressDialog.hideDialog();
+                MotionToastUtils.showErrorToast(mContext, "Error", "Some error occurred while updating your profile data, try after some time");
             }
         });
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -117,14 +151,18 @@ DocumentReference doc=firestore.document("Users/"+firebaseAuth);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            StorageReference photoRef = mstorageReference.child(selected.getLastPathSegment());
-            Toast.makeText(EditProfile.this,"Loading",Toast.LENGTH_SHORT).show();
+            String fileType = getFileType(selected);
+            StorageReference photoRef = mstorageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + "." + fileType);
+            progressDialog.setTitle("Uploading profile picture");
+            progressDialog.setMessage("Please wait while we upload your latest profile picture");
+            progressDialog.showDialog();
 
             photoRef.putFile(selected).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!urlTask.isSuccessful());
+                    while (!urlTask.isSuccessful()) ;
+                    progressDialog.hideDialog();
                     downloadurl = urlTask.getResult();
 //                    Toast.makeText(EditProfile.this, downloadurl+"", Toast.LENGTH_SHORT).show();
 
@@ -132,11 +170,18 @@ DocumentReference doc=firestore.document("Users/"+firebaseAuth);
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull @NotNull Exception e) {
-                    Toast.makeText(EditProfile.this, "error in uploading", Toast.LENGTH_SHORT).show();
+                    progressDialog.hideDialog();
+                    MotionToastUtils.showErrorToast(mContext, "Error", "Some error occurred while uploading your profile picture");
                 }
             });
 
 
         }
+    }
+
+    private String getFileType(Uri uri) {
+        ContentResolver resolver = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(resolver.getType(uri));
     }
 }
