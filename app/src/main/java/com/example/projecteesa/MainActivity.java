@@ -1,21 +1,16 @@
 package com.example.projecteesa;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 
-import com.example.projecteesa.Fragment.FeedFragment;
+import com.example.projecteesa.Fragment.PostsFragment;
 import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.Fragment.ProfileFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
-
-import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "BottomNavigation";
@@ -41,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment=new ProfileFragment();
                     break;
                 case R.id.feed:
-                    fragment=new FeedFragment();
+                    fragment=new PostsFragment();
                     break;
             }
             if(fragment!=null){

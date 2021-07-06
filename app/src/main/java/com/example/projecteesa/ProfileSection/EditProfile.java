@@ -57,7 +57,7 @@ DocumentReference doc=firestore.document("Users/"+firebaseAuth);
         mstorageReference= FirebaseStorage.getInstance().getReference().child("images");
 
         name.setText(profile.getName());
-        BIO.setText(profile.getBIO());
+        BIO.setText(profile.getBio());
         phoneNo.setText(profile.getPhoneNO());
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +79,7 @@ DocumentReference doc=firestore.document("Users/"+firebaseAuth);
         String BIOx= BIO.getText().toString();
         String phonex=phoneNo.getText().toString();
         profile.setName(namex);
-        profile.setBIO(BIOx);
+        profile.setBio(BIOx);
         profile.setPhoneNO(phonex);
         profile.setImage(downloadurl.toString());
 
