@@ -4,15 +4,15 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 
 public class Profile implements Serializable {
-    private String name="";
-    private String BIO;
+    private String name;
+    private String bio;
     private String phoneNO;
     private String image;
 
 
-    public Profile(String name, String BIO, String phoneNO) {
+    public Profile(String name, String bio, String phoneNO) {
         this.name = name;
-        this.BIO = BIO;
+        this.bio = bio;
         this.phoneNO=phoneNO;
         image="";
     }
@@ -20,8 +20,8 @@ public class Profile implements Serializable {
 
     }
 
-    public String getBIO() {
-        return BIO;
+    public String getBio() {
+        return bio;
     }
 
     public String getPhoneNO() {
@@ -36,8 +36,8 @@ public class Profile implements Serializable {
         this.name = name;
     }
 
-    public void setBIO(String BIO) {
-        this.BIO = BIO;
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public String getImage() {
