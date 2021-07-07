@@ -12,6 +12,7 @@
         android:orientation="vertical"
         android:padding="16dp"
         android:elevation="32dp"
+        style="@style/general_card_style"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,11 +31,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                style="@style/general_text_style"
                 android:gravity="center_vertical"
                 android:text="Socilliant"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/darker_gray"
                 />
         </LinearLayout>
         <ImageView
