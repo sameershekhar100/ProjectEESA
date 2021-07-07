@@ -46,7 +46,9 @@ public class CreatePostActivity extends AppCompatActivity {
     Uri downloadUrl;
     StorageReference storageReference;
     FirebaseFirestore firestore;
-    CollectionReference postsCollection;
+    String userID= FirebaseAuth.getInstance().getUid();
+    CollectionReference postsCollection,UserCollection;
+  
     private static final int IMG_CODE=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,6 @@ public class CreatePostActivity extends AppCompatActivity {
         });
 
     }
-
     private void setView() {
         emptyImg=findViewById(R.id.empty_post);
         post=findViewById(R.id.create_post_btn);
@@ -76,6 +77,7 @@ public class CreatePostActivity extends AppCompatActivity {
         storageReference= FirebaseStorage.getInstance().getReference().child("posts");
         firestore=FirebaseFirestore.getInstance();
         postsCollection=firestore.collection("AllPost");
+        UserCollection=firestore.collection("Users/"+userID+"/MyPosts");
     }
 
     @Override
@@ -123,7 +125,6 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void addDataToFirestore() {
         String url=downloadUrl.toString();
-        String userID= FirebaseAuth.getInstance().getUid();
         long time=System.currentTimeMillis();
         ArrayList<String> likes=new ArrayList<>();
         String name= ProfileFragment.getProfileData().getName();
@@ -140,6 +141,8 @@ public class CreatePostActivity extends AppCompatActivity {
                 Toast.makeText(CreatePostActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        UserCollection.document(userID+time).set(post);
 
     }
 
