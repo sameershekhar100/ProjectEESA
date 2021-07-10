@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.projecteesa.Adapters.PostAdapter;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.R;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -37,11 +38,14 @@ RecyclerView.LayoutManager manager;
 FirebaseFirestore firestore;
 CollectionReference postRefrence;
 PostAdapter postAdapter;
+private ShimmerFrameLayout shimmerLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_posts, container, false);
+        shimmerLayout = view.findViewById(R.id.shimmerLayout);
+        shimmerLayout.startShimmerAnimation();
         recyclerView=view.findViewById(R.id.recyclerView);
         firestore=FirebaseFirestore.getInstance();
         postRefrence=firestore.collection("AllPost");
@@ -57,6 +61,8 @@ PostAdapter postAdapter;
         postRefrence.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                shimmerLayout.stopShimmerAnimation();
+                shimmerLayout.setVisibility(View.GONE);
                 for(DocumentSnapshot documentSnapshot:queryDocumentSnapshots)
                 {
                     Post post=documentSnapshot.toObject(Post.class);

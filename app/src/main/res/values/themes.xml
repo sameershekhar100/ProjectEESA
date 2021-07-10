@@ -19,7 +19,7 @@
     </style>
 
     <style name="general_card_style">
-        <item name="android:background">@color/wheat</item>
+        <item name="android:background">#FAF6EE</item>
     </style>
 
     <style name="gradient_finish">

@@ -19,7 +19,7 @@
     </style>
 
     <style name="general_card_style">
-        <item name="android:background">@android:color/black</item>
+        <item name="android:background">#4E350F</item>
     </style>
 
     <style name="gradient_finish">

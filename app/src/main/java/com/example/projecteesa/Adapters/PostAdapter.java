@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -40,6 +42,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull PostAdapter.PostHolder holder, int position) {
+        holder.mainCard.setAnimation(AnimationUtils.loadAnimation(context, R.anim.post_animation));
         Post post=posts.get(position);
         holder.postHeader.setText(post.getName());
         Glide.with(context).load(post.getImageURL()).into(holder.postImg);
@@ -56,6 +59,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     public class PostHolder extends RecyclerView.ViewHolder {
         ImageView postImg,postProfileHeader,likeBtn,commentBtn;
         TextView caption,likes,captionHeader,postHeader;
+        CardView mainCard;
         public PostHolder(@NonNull @NotNull View itemView) {
             super(itemView);
 /*
@@ -68,7 +72,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             likes=itemView.findViewById(R.id.like_number_text);
             captionHeader=itemView.findViewById(R.id.caption_header);
             caption=itemView.findViewById(R.id.post_caption);
-
+            mainCard = itemView.findViewById(R.id.mainCard);
         }
     }
 }
