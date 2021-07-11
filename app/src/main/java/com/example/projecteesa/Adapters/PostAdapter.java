@@ -88,6 +88,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             public void onClick(View v) {
                 assert AccountsUtil.fetchData() != null;
                 String path="AllPost/"+posts.get(holder.getAdapterPosition()).getPostID();
+                if (savedPosts == null){
+                    savedPosts = new ArrayList<>();
+                    savedPosts.add(path);
+                    holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_black);
+                    listener.onBookmarkClicked(savedPosts,AccountsUtil.getUID());
+                    return;
+                }
                 if(savedPosts.contains(path))
                 {
                     savedPosts.remove(path);

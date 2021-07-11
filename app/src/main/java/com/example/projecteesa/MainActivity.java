@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.accounts.Account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.example.projecteesa.Fragment.PostsFragment;
 import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.Fragment.ProfileFragment;
 
+import com.example.projecteesa.utils.AccountsUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "ERROR");
             }
         });
+        AccountsUtil util = new AccountsUtil();
     }
 
     private void setupToolbar() {

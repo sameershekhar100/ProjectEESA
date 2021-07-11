@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="wrap_content">
 
-    <ImageView
+    <View
         android:id="@+id/imageAvatar"
         android:layout_width="60dp"
-        android:layout_height="0dp"
+        android:layout_height="60dp"
         android:layout_margin="4dp"
         android:background="@color/shimmer_color"
         android:padding="4dp"
@@ -16,25 +17,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/nameAvatar"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:background="@color/shimmer_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageAvatar"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="4dp"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/commentsAvatar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/shimmer_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/nameAvatar"
-        app:layout_constraintTop_toBottomOf="@+id/nameAvatar" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
