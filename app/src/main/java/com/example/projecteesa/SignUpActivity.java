@@ -30,6 +30,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class SignUpActivity extends AppCompatActivity {
     EditText mName;
     EditText mPassword;
@@ -138,7 +140,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
     void add(String name, String email,String phoneNum,FirebaseUser user) {
-        Profile profile = new Profile(name, email, phoneNum);
+        ArrayList<String> savedPosts=new ArrayList<>();
+        Profile profile = new Profile(name, email, phoneNum,savedPosts);
         String uid=user.getUid();
         users.document(uid+"").set(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

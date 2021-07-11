@@ -19,13 +19,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-            <!--<de.hdodenhof.circleimageview.CircleImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/post_header_img"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_margin="5dp"
-                android:background="@color/pink"
-                />-->
+                />
             <TextView
                 android:id="@+id/post_header"
                 android:layout_width="fill_parent"
@@ -46,7 +45,7 @@
             android:background="@drawable/border_bg"
             android:src="@drawable/ic_add"
             />
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -63,10 +62,20 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
+                android:layout_toRightOf="@id/post_like_btn"
                 android:src="@drawable/ic_comment"
                 />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/post_save_btn"
+                android:layout_width="38dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_bookmark_border" />
+
+
+        </RelativeLayout>
         <TextView
             android:id="@+id/like_number_text"
             android:layout_width="wrap_content"

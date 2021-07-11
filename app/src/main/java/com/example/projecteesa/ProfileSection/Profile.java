@@ -1,5 +1,6 @@
 package com.example.projecteesa.ProfileSection;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 
@@ -8,16 +9,27 @@ public class Profile implements Serializable {
     private String bio;
     private String phoneNO;
     private String image;
+    private ArrayList<String> savedPost;
 
 
-    public Profile(String name, String bio, String phoneNO) {
+    public Profile(String name, String bio, String phoneNO,ArrayList<String> savedPost) {
         this.name = name;
         this.bio = bio;
         this.phoneNO=phoneNO;
+        this.savedPost=savedPost;
         image="";
     }
+
     public Profile(){
 
+    }
+
+    public ArrayList<String> getSavedPost() {
+        return savedPost;
+    }
+
+    public void setSavedPost(ArrayList<String> savedPost) {
+        this.savedPost = savedPost;
     }
 
     public String getBio() {

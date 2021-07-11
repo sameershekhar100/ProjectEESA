@@ -3,20 +3,45 @@ package com.example.projecteesa.Posts;
 import java.util.ArrayList;
 
 public class Post {
+    private String postID;
     private String UserID;
     private String caption;
     private String imageURL;
     private String name;
+    private String userProfile;
     private long timestamp;
     private ArrayList<String> likes;
 
-    public Post(String userID,String name, String caption, String imageURL, long timestamp, ArrayList<String> likes) {
+    public Post(String postID, String userID,String name, String userProfile, String caption, String imageURL, long timestamp, ArrayList<String> likes) {
         UserID = userID;
+        this.postID=postID;
         this.caption = caption;
         this.imageURL = imageURL;
+        this.userProfile=userProfile;
         this.timestamp = timestamp;
         this.likes = likes;
         this.name=name;
+    }
+
+    public Post()
+    {
+        //Required because of firestore
+    }
+
+    public String getPostID() {
+        return postID;
+    }
+
+    public void setPostID(String postID) {
+        this.postID = postID;
+    }
+
+    public String getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(String userProfile) {
+        this.userProfile = userProfile;
     }
 
     public String getName() {
@@ -25,9 +50,6 @@ public class Post {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Post() {
     }
 
     public String getUserID() {
