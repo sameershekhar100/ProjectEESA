@@ -19,6 +19,7 @@ import com.example.projecteesa.Adapters.PostItemClicked;
 import com.example.projecteesa.MainActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.R;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +42,7 @@ public class HomeFragment extends Fragment implements PostItemClicked {
     CollectionReference postRefrence;
     PostAdapter postAdapter;
     DocumentReference userRefrence;
+    private ShimmerFrameLayout shimmerLayout;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -54,6 +56,8 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         postRefrence=firestore.collection("AllPost");
         String uid= FirebaseAuth.getInstance().getUid();
         userRefrence=firestore.collection("Users").document(uid);
+        shimmerLayout = view.findViewById(R.id.shimmerLayout);
+        shimmerLayout.startShimmerAnimation();
         manager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         posts=fetchPosts();
@@ -65,6 +69,8 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         postRefrence.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                shimmerLayout.startShimmerAnimation();
+                shimmerLayout.setVisibility(View.GONE);
                 for(DocumentSnapshot documentSnapshot:queryDocumentSnapshots)
                 {
                     Post post=documentSnapshot.toObject(Post.class);
