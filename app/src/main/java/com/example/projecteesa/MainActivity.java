@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        AccountsUtil util = new AccountsUtil();
         setupToolbar();
         ChipNavigationBar navbar = findViewById(R.id.bottom_nav);
         if (savedInstanceState == null) {
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "ERROR");
             }
         });
-        AccountsUtil util = new AccountsUtil();
     }
 
     private void setupToolbar() {

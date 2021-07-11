@@ -2,12 +2,14 @@ package com.example.projecteesa.ProfileSection;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.projecteesa.Adapters.PostAdapter;
@@ -32,11 +34,16 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
     RecyclerView.LayoutManager manager;
     PostAdapter adapter;
     FirebaseFirestore firestore;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_posts);
+        getSupportActionBar().hide();
         savedPostsRecycler=findViewById(R.id.savedpost_recycler);
+        toolbar = findViewById(R.id.toolbar);
+        TextView titleTv = toolbar.findViewById(R.id.titleTv);
+        titleTv.setText("Saved Posts");
         savedPostList= AccountsUtil.fetchData().getSavedPost();
         manager= new LinearLayoutManager(this);
         firestore=FirebaseFirestore.getInstance();
