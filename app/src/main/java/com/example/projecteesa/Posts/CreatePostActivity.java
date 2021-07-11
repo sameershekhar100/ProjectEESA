@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,8 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.projecteesa.AccountsUtil;
+import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.Fragment.ProfileFragment;
+import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.ArrayList;
 
 public class CreatePostActivity extends AppCompatActivity {
@@ -127,9 +126,13 @@ public class CreatePostActivity extends AppCompatActivity {
         String url=downloadUrl.toString();
         long time=System.currentTimeMillis();
         ArrayList<String> likes=new ArrayList<>();
+        AccountsUtil util=new AccountsUtil();
+        Profile item=util.fetchData();
+        String userProfileImg=item.getImage();
         String name= ProfileFragment.getProfileData().getName();
-        Post post=new Post(userID,name,caption,url,time,likes);
-        postsCollection.document(userID+time).set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+        String postID=userID+time;
+        Post post=new Post(postID,userID,name,userProfileImg,caption,url,time,likes);
+        postsCollection.document(postID).set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(CreatePostActivity.this, "Uploaded Successfully", Toast.LENGTH_SHORT).show();
