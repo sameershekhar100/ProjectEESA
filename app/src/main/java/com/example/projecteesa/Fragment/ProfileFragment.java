@@ -1,6 +1,5 @@
 package com.example.projecteesa.Fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,9 +23,9 @@ import com.bumptech.glide.Glide;
 import com.example.projecteesa.Adapters.ProfilePostAdapter;
 import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.Posts.Post;
-import com.example.projecteesa.LoginActivity;
 import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
+import com.example.projecteesa.ProfileSection.SavedPostsActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -56,11 +55,10 @@ public class ProfileFragment extends Fragment {
     String img = "";
     ImageView imageView;
     Button createPost;
-    CardView b1;
+    CardView b1,savedpostBtn;
     RecyclerView myPosts;
     RecyclerView.LayoutManager layoutManager;
     ProfilePostAdapter profilePostAdapter;
-
     Profile profilex;
     static Profile profileData;
 
@@ -89,7 +87,7 @@ public class ProfileFragment extends Fragment {
         name = view.findViewById(R.id.name);
         email = view.findViewById(R.id.email);
         imageView = view.findViewById(R.id.profile_image);
-
+        savedpostBtn= view.findViewById(R.id.savedPostsBtn);
         myPosts=view.findViewById(R.id.myPosts);
         layoutManager=new GridLayoutManager(getContext(),2);
 
@@ -110,6 +108,10 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
+        savedpostBtn.setOnClickListener(v->
+        {
+            startActivity(new Intent(getContext(), SavedPostsActivity.class));
+        });
         return view;
     }
 

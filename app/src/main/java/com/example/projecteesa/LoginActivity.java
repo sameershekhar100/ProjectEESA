@@ -5,20 +5,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Patterns;
 import android.view.View;
-import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,8 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.w3c.dom.Text;
 
 import java.util.Objects;
 
@@ -90,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
             splashLogo.animate().scaleX(0.0f).scaleY(0.0f).withEndAction(() -> {
                 FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null) {
+                    AccountsUtil util=new AccountsUtil();
                     Intent transfer = new Intent(this, MainActivity.class);
                     startActivity(transfer);
                     finish();
@@ -123,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.hideDialog();
 
                     if (task.isSuccessful()) {
-
+                        AccountsUtil util=new AccountsUtil();
                         MotionToastUtils.showSuccessToast(mContext, "Logged In", "Glad to see you");
                         Intent transfer = new Intent(LoginActivity.this, MainActivity.class);
                         transfer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
