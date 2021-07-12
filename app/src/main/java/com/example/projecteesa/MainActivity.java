@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.accounts.Account;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.example.projecteesa.Fragment.PostsFragment;
 import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.Fragment.ProfileFragment;
 
+import com.example.projecteesa.ProfileSection.SavedPostsActivity;
 import com.example.projecteesa.utils.AccountsUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
     private Toolbar toolbar;
 
-
+    private Context mContext = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
                         FirebaseAuth.getInstance().signOut();
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         finish();
+                        return true;
+
+                    case R.id.savedPosts:
+                        startActivity(new Intent(mContext, SavedPostsActivity.class));
                         return true;
                 }
                 return false;

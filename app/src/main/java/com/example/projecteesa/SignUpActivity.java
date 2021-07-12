@@ -8,10 +8,12 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,8 +42,10 @@ public class SignUpActivity extends AppCompatActivity {
     Button mCreate;
     FirebaseAuth mAuth;
     CheckBox visibleSignIn;
+    private Spinner branchSpinner;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference users = db.collection("Users");
+    private final String[] branchArray = {"CS/IT", "ECE", "EE", "ME", "CE", "Imsc", "Arch"};
 
     private Context mContext = this;
     private ActivityProgressDialog progressDialog;
@@ -61,6 +65,10 @@ public class SignUpActivity extends AppCompatActivity {
         mPassword = (EditText) findViewById(R.id.create_password);
         mPhoneNum = (EditText) findViewById(R.id.create_phone_num);
         mCreate = (Button) findViewById(R.id.create);
+        branchSpinner = findViewById(R.id.branch_spinner);
+        ArrayAdapter<String> branchAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, branchArray);
+        branchAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        branchSpinner.setAdapter(branchAdapter);
         visibleSignIn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

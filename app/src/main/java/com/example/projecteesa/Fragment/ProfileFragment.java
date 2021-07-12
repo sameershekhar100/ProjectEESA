@@ -55,7 +55,6 @@ public class ProfileFragment extends Fragment {
     String img = "";
     ImageView imageView;
     Button createPost;
-    CardView b1,savedpostBtn;
     RecyclerView myPosts;
     RecyclerView.LayoutManager layoutManager;
     ProfilePostAdapter profilePostAdapter;
@@ -64,6 +63,7 @@ public class ProfileFragment extends Fragment {
 
     private ActivityProgressDialog progressDialog;
     private Context mContext;
+    private TextView bioTv;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -82,14 +82,13 @@ public class ProfileFragment extends Fragment {
         progressDialog.setCancelable(false);
 
         createPost=view.findViewById(R.id.add_post);
-        b1 = view.findViewById(R.id.finish);
       
         name = view.findViewById(R.id.name);
         email = view.findViewById(R.id.email);
         imageView = view.findViewById(R.id.profile_image);
-        savedpostBtn= view.findViewById(R.id.savedPostsBtn);
         myPosts=view.findViewById(R.id.myPosts);
         layoutManager=new GridLayoutManager(getContext(),2);
+        bioTv = view.findViewById(R.id.bioTv);
 
         myPosts.setLayoutManager(layoutManager);
 
@@ -108,10 +107,6 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
-        savedpostBtn.setOnClickListener(v->
-        {
-            startActivity(new Intent(getContext(), SavedPostsActivity.class));
-        });
         return view;
     }
 
@@ -128,8 +123,9 @@ public class ProfileFragment extends Fragment {
                 if (documentSnapshot.exists()) {
                     Profile profile = documentSnapshot.toObject(Profile.class);
                     name.setText(profile.getName());
-                    email.setText(profile.getBio());
+                    bioTv.setText(profile.getBio());
                     img = profile.getImage();
+
                     if (img != null && !img.isEmpty())
                         Glide.with(getContext()).load(img).into(imageView);
                     profilex = profile;

@@ -10,14 +10,44 @@ public class Profile implements Serializable {
     private String phoneNO;
     private String image;
     private ArrayList<String> savedPost;
+    private int passingYear;
+    private String branch;
+    private String linkedinUrl;
+
+    public String getLinkedinUrl() {
+        return linkedinUrl;
+    }
+
+    public void setLinkedinUrl(String linkedinUrl) {
+        this.linkedinUrl = linkedinUrl;
+    }
+
+    public int getPassingYear() {
+        return passingYear;
+    }
+
+    public void setPassingYear(int passingYear) {
+        this.passingYear = passingYear;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
 
 
-    public Profile(String name, String bio, String phoneNO,ArrayList<String> savedPost) {
+    public Profile(String name, String bio, String phoneNO, ArrayList<String> savedPost) {
         this.name = name;
         this.bio = bio;
         this.phoneNO=phoneNO;
         this.savedPost=savedPost;
         image="";
+        this.branch = "";
+        this.passingYear=0;
+        this.linkedinUrl = "";
     }
 
     public Profile(){
