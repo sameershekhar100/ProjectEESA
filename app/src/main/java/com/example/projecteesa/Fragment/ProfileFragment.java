@@ -2,6 +2,7 @@ package com.example.projecteesa.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.ActivityProgressDialog;
+import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,6 +64,8 @@ public class ProfileFragment extends Fragment {
     private ActivityProgressDialog progressDialog;
     private Context mContext;
     private TextView bioTv;
+    private ImageButton linkedinBtn;
+    private ImageButton emailBtn;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -87,7 +91,8 @@ public class ProfileFragment extends Fragment {
         myPostHeaderTitle = view.findViewById(R.id.header_title);
         layoutManager=new GridLayoutManager(getContext(),2);
         bioTv = view.findViewById(R.id.bioTv);
-
+        emailBtn = view.findViewById(R.id.emailBtn);
+        linkedinBtn = view.findViewById(R.id.linkedinBtn);
         myPosts.setLayoutManager(layoutManager);
 
 //        getPosts();
@@ -102,7 +107,30 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
+        setListeners();
+
         return view;
+    }
+
+    private void setListeners() {
+        linkedinBtn.setOnClickListener(v -> {
+            if (profilex != null){
+                String linkedinProfileUrl = profilex.getLinkedinUrl();
+                if (linkedinProfileUrl != null && !(linkedinProfileUrl.isEmpty())){
+                    Intent linkedinIntent = new Intent(Intent.ACTION_VIEW);
+                    linkedinIntent.setData(Uri.parse("https://"+linkedinProfileUrl));
+                    startActivity(linkedinIntent);
+                }else
+                    MotionToastUtils.showInfoToast(getContext(), "Linkedin profile unavailable", "User does not have linkedin profile");
+            }
+        });
+        emailBtn.setOnClickListener(v -> {
+            String email = firebaseUser.getEmail();
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setData(Uri.parse("mailto:"));
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+            startActivity(emailIntent);
+        });
     }
 
 
