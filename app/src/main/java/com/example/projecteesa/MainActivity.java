@@ -20,6 +20,7 @@ import com.example.projecteesa.Fragment.PostsFragment;
 import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.Fragment.ProfileFragment;
 
+import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.ProfileSection.SavedPostsActivity;
 import com.example.projecteesa.utils.AccountsUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment=new ProfileFragment();
                     break;
                 case R.id.feed:
-                    fragment=new PostsFragment();
+                    startActivity(new Intent(mContext, CreatePostActivity.class));
                     break;
             }
             if(fragment!=null){

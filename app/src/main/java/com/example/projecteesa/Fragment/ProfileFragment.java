@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +24,6 @@ import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
-import com.example.projecteesa.ProfileSection.SavedPostsActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,6 +40,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class ProfileFragment extends Fragment {
@@ -51,10 +50,9 @@ public class ProfileFragment extends Fragment {
     FirebaseUser firebaseUser;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     CollectionReference db = firestore.collection("Users");
-    TextView name, email;
+    TextView name, statusTv, myPostHeaderTitle;
     String img = "";
     ImageView imageView;
-    Button createPost;
     RecyclerView myPosts;
     RecyclerView.LayoutManager layoutManager;
     ProfilePostAdapter profilePostAdapter;
@@ -81,12 +79,12 @@ public class ProfileFragment extends Fragment {
         progressDialog = new ActivityProgressDialog(mContext);
         progressDialog.setCancelable(false);
 
-        createPost=view.findViewById(R.id.add_post);
       
         name = view.findViewById(R.id.name);
-        email = view.findViewById(R.id.email);
+        statusTv = view.findViewById(R.id.statusTv);
         imageView = view.findViewById(R.id.profile_image);
         myPosts=view.findViewById(R.id.myPosts);
+        myPostHeaderTitle = view.findViewById(R.id.header_title);
         layoutManager=new GridLayoutManager(getContext(),2);
         bioTv = view.findViewById(R.id.bioTv);
 
@@ -96,9 +94,6 @@ public class ProfileFragment extends Fragment {
         Log.i("Hello:", "Profile fragment");
 
         fetchData();
-        createPost.setOnClickListener(v->{
-            startActivity(new Intent(getContext(), CreatePostActivity.class));
-        });
 
         fab.setOnClickListener(v ->
         {
@@ -125,7 +120,16 @@ public class ProfileFragment extends Fragment {
                     name.setText(profile.getName());
                     bioTv.setText(profile.getBio());
                     img = profile.getImage();
-
+                    int passingYear = profile.getPassingYear();
+                    if(passingYear != 0){
+                            String statusText = "";
+                            Date date = new Date();
+                            int currentYear = date.getYear()+1900;
+                            if(currentYear>passingYear) statusText += "Alumni ";
+                            else statusText += "Student ";
+                            statusText += passingYear;
+                            statusTv.setText(statusText);
+                    }
                     if (img != null && !img.isEmpty())
                         Glide.with(getContext()).load(img).into(imageView);
                     profilex = profile;
@@ -144,6 +148,10 @@ public class ProfileFragment extends Fragment {
                 orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (queryDocumentSnapshots.isEmpty()){
+                    myPostHeaderTitle.setVisibility(View.GONE);
+                    return;
+                }
                 for(DocumentSnapshot documentSnapshot:queryDocumentSnapshots)
                 {
                     Post post=documentSnapshot.toObject(Post.class);

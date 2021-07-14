@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.Fragment.ProfileFragment;
@@ -47,13 +48,17 @@ public class CreatePostActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
     String userID= FirebaseAuth.getInstance().getUid();
     CollectionReference postsCollection,UserCollection;
-  
+    private Toolbar toolbar;
     private static final int IMG_CODE=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
         setView();
+        getSupportActionBar().hide();
+        toolbar = findViewById(R.id.toolbar);
+        TextView titleTv = toolbar.findViewById(R.id.titleTv);
+        titleTv.setText("Create a new post");
         postImg.setOnClickListener(v->{
             Intent post=new Intent();
             post.setType("image/*");

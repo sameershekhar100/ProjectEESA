@@ -135,6 +135,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         }
         holder.captionHeader.setText(post.getName()+": ");
         holder.caption.setText(post.getCaption());
+        if (post.getUserProfile() != null && !(post.getUserProfile().isEmpty()))
         Glide.with(context).load(post.getUserProfile()).into(holder.postProfileHeader);
         if(post.getLikes().contains(AccountsUtil.getUID()))
         {

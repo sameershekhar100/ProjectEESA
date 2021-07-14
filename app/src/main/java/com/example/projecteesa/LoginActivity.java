@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         splashLogo = findViewById(R.id.splash_logo);
         loginLayout = findViewById(R.id.login_layout);
-        email = findViewById(R.id.email);
+        email = findViewById(R.id.statusTv);
         password = findViewById(R.id.password);
         submit = findViewById(R.id.submit);
         mAuth = FirebaseAuth.getInstance();

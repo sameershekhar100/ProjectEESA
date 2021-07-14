@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
     PostAdapter adapter;
     FirebaseFirestore firestore;
     private Toolbar toolbar;
+    private TextView noSavedPostsTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,9 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
         TextView titleTv = toolbar.findViewById(R.id.titleTv);
         titleTv.setText("Saved Posts");
         savedPostList= AccountsUtil.fetchData().getSavedPost();
+        noSavedPostsTv = findViewById(R.id.no_post_tv);
+        if (savedPostList == null || savedPostList.size() == 0)
+            noSavedPostsTv.setVisibility(View.VISIBLE);
         manager= new LinearLayoutManager(this);
         firestore=FirebaseFirestore.getInstance();
         savedPostsRecycler.setLayoutManager(manager);
