@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.utils.ActivityProgressDialog;
+import com.example.projecteesa.utils.Constants;
 import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SignUpActivity extends AppCompatActivity {
     EditText mName;
@@ -45,10 +48,12 @@ public class SignUpActivity extends AppCompatActivity {
     private Spinner branchSpinner;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference users = db.collection("Users");
-    private final String[] branchArray = {"CS/IT", "ECE", "EE", "ME", "CE", "Imsc", "Arch"};
 
     private Context mContext = this;
     private ActivityProgressDialog progressDialog;
+
+    private EditText linkedinProfileEdit;
+    private EditText passingYearEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +71,9 @@ public class SignUpActivity extends AppCompatActivity {
         mPhoneNum = (EditText) findViewById(R.id.create_phone_num);
         mCreate = (Button) findViewById(R.id.create);
         branchSpinner = findViewById(R.id.branch_spinner);
-        ArrayAdapter<String> branchAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, branchArray);
+        linkedinProfileEdit = findViewById(R.id.linkedin_profile_url_edit);
+        passingYearEdit = findViewById(R.id.passing_year_edit);
+        ArrayAdapter<String> branchAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Constants.BRANCH_ARRAY);
         branchAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         branchSpinner.setAdapter(branchAdapter);
         visibleSignIn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -93,6 +100,10 @@ public class SignUpActivity extends AppCompatActivity {
         final String email = mEmail.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         final String phoneNum = mPhoneNum.getText().toString().trim();
+        final String linkedinUrl = linkedinProfileEdit.getText().toString().trim();
+        final String passingYear = passingYearEdit.getText().toString().trim();
+        Date date = new Date();
+        int currentYear = date.getYear()+1900;
         if (name.equals("")) {
             MotionToastUtils.showErrorToast(mContext, "Email required", "Please enter your email address");
         } else if (email.isEmpty()) {
@@ -107,7 +118,12 @@ public class SignUpActivity extends AppCompatActivity {
             MotionToastUtils.showErrorToast(mContext, "Phone number empty", "Please enter your phone number");
         } else if (!Patterns.PHONE.matcher(phoneNum).matches()) {
             MotionToastUtils.showErrorToast(mContext, "Invalid phone number", "Please enter a valid phone number");
-        } else {
+        } else if(passingYear.length()<4){
+            MotionToastUtils.showErrorToast(mContext, "Invalid passing year", "Please enter a passing year");
+        }else if (currentYear+4 < Integer.parseInt(passingYear)){
+            MotionToastUtils.showErrorToast(mContext, "Invalid passing year", "Please enter a valid passing year");
+        }
+        else {
             progressDialog.setTitle("Creating account");
             progressDialog.setMessage("Please wait while we sign you up");
             progressDialog.showDialog();
@@ -122,7 +138,7 @@ public class SignUpActivity extends AppCompatActivity {
                     user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            add(name, email, phoneNum, user);
+                            add(name, email, phoneNum, user, passingYear, linkedinUrl);
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             progressDialog.hideDialog();
                             MotionToastUtils.showInfoToast(mContext, "Verify your email", "Signup was successful but please make sure to verify your email");
@@ -147,9 +163,10 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
     }
-    void add(String name, String email,String phoneNum,FirebaseUser user) {
+    void add(String name, String email,String phoneNum,FirebaseUser user, String passingYear, String linkedinUrl) {
         ArrayList<String> savedPosts=new ArrayList<>();
-        Profile profile = new Profile(name, email, phoneNum,savedPosts);
+        String branch = Constants.BRANCH_ARRAY[branchSpinner.getSelectedItemPosition()];
+        Profile profile = new Profile(name, "Member of NITP Family", phoneNum,savedPosts, Integer.parseInt(passingYear), branch, linkedinUrl);
         String uid=user.getUid();
         users.document(uid+"").set(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

@@ -50,6 +50,17 @@ public class Profile implements Serializable {
         this.linkedinUrl = "";
     }
 
+    public Profile(String name, String bio, String phoneNO, ArrayList<String> savedPost, int passingYear, String branch, String linkedinUrl) {
+        this.name = name;
+        this.bio = bio;
+        this.phoneNO = phoneNO;
+        this.savedPost = savedPost;
+        this.passingYear = passingYear;
+        this.branch = branch;
+        this.linkedinUrl = linkedinUrl;
+        this.image = "";
+    }
+
     public Profile(){
 
     }

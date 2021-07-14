@@ -145,7 +145,7 @@
             app:layout_constraintVertical_bias="0.364">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/linkedin_profile_url"
+                android:id="@+id/linkedin_profile_url_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
