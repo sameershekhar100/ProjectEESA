@@ -15,8 +15,10 @@
         style="@style/general_card_style"
         >
         <LinearLayout
+            android:id="@+id/post_header_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
             android:orientation="horizontal"
             >
             <de.hdodenhof.circleimageview.CircleImageView

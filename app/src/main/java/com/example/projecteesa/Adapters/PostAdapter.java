@@ -1,12 +1,14 @@
 package com.example.projecteesa.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,9 +20,11 @@ import com.bumptech.glide.Glide;
 import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.ProfileSection.Profile;
+import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
@@ -157,6 +161,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         else {
             holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_border);
         }
+        holder.postHeaderLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onOwnerProfileClicked(post.getUserID());
+            }
+        });
     }
 
     @Override
@@ -168,6 +178,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         ImageView postImg,postProfileHeader,likeBtn,commentBtn,bookmarkBtn;
         TextView caption,likes,captionHeader,postHeader;
         CardView mainCard;
+        LinearLayout postHeaderLayout;
         public PostHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             postProfileHeader=itemView.findViewById(R.id.post_header_img);
@@ -180,7 +191,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             caption=itemView.findViewById(R.id.post_caption);
             mainCard = itemView.findViewById(R.id.mainCard);
             bookmarkBtn=itemView.findViewById(R.id.post_save_btn);
-
+            postHeaderLayout = itemView.findViewById(R.id.post_header_layout);
         }
     }
 }

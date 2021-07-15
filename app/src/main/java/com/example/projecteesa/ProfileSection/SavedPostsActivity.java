@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -84,6 +85,13 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
                 Log.i("SavedPost","Failed!");
             }
         });    }
+
+    @Override
+    public void onOwnerProfileClicked(String uid) {
+        Intent intent = new Intent(this, UserProfileActivity.class);
+        startActivity(intent);
+    }
+
     public class FetchAsync extends AsyncTask<ArrayList<String>,Void,Void>{
 
         FirebaseFirestore firestore=FirebaseFirestore.getInstance();

@@ -1,6 +1,7 @@
 package com.example.projecteesa.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,7 +19,9 @@ import com.example.projecteesa.Adapters.PostAdapter;
 import com.example.projecteesa.Adapters.PostItemClicked;
 import com.example.projecteesa.MainActivity;
 import com.example.projecteesa.Posts.Post;
+import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
+import com.example.projecteesa.utils.Constants;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -117,5 +120,12 @@ public class HomeFragment extends Fragment implements PostItemClicked {
                 Log.i("SavedPost","Failed!");
             }
         });
+    }
+
+    @Override
+    public void onOwnerProfileClicked(String uid) {
+        Intent intent = new Intent(getContext(), UserProfileActivity.class);
+        intent.putExtra(Constants.USER_UID_KEY, uid);
+        startActivity(intent);
     }
 }

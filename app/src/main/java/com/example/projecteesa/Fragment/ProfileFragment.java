@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -67,9 +68,15 @@ public class ProfileFragment extends Fragment {
     private TextView bioTv;
     private ImageButton linkedinBtn;
     private ImageButton emailBtn;
+    private String userUid = "";
+    private String currentUserUid = "";
 
     public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    public ProfileFragment(String uid){
+        userUid = uid;
     }
 
     @Override
@@ -81,6 +88,8 @@ public class ProfileFragment extends Fragment {
         fab = view.findViewById(R.id.edit_profile_fab);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        currentUserUid =  firebaseUser.getUid();
+        if (userUid.isEmpty()) userUid = currentUserUid;
         progressDialog = new ActivityProgressDialog(mContext);
         progressDialog.setCancelable(false);
 
@@ -95,6 +104,7 @@ public class ProfileFragment extends Fragment {
         emailBtn = view.findViewById(R.id.emailBtn);
         linkedinBtn = view.findViewById(R.id.linkedinBtn);
         myPosts.setLayoutManager(layoutManager);
+        if(!userUid.equals(currentUserUid)) fab.setVisibility(View.GONE);
 
 //        getPosts();
         Log.i("Hello:", "Profile fragment");
@@ -141,7 +151,7 @@ public class ProfileFragment extends Fragment {
         progressDialog.setTitle("Fetching profile data");
         progressDialog.setMessage("Please wait while we fetch your profile data");
         progressDialog.showDialog();
-        DocumentReference doc = db.document("" + firebaseUser.getUid());
+        DocumentReference doc = db.document("" + userUid);
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -163,8 +173,9 @@ public class ProfileFragment extends Fragment {
                     }
                     if (img != null && !img.isEmpty())
                         Glide.with(getContext()).load(img).into(imageView);
-                    profilex = profile;
-                    profileData=profilex;
+                        profilex = profile;
+                    if (userUid.equals(currentUserUid))
+                        profileData = profilex;
                 }
             }
         });
@@ -175,7 +186,7 @@ public class ProfileFragment extends Fragment {
 
     void fetchMyPosts(){
         ArrayList<Post> myPostList=new ArrayList<>();
-        db.document(firebaseUser.getUid()).collection("MyPosts").
+        db.document(userUid).collection("MyPosts").
                 orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
