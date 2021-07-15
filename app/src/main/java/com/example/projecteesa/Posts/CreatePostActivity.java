@@ -32,6 +32,7 @@ import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -109,20 +110,30 @@ public class CreatePostActivity extends AppCompatActivity {
             caption="";
         }
         StorageReference photoRef=storageReference.child(selected.getLastPathSegment());
-        photoRef.putFile(selected).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> taskresult=taskSnapshot.getStorage().getDownloadUrl();
-                while (!taskresult.isSuccessful());
-                downloadUrl=taskresult.getResult();
-                addDataToFirestore();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull @NotNull Exception e) {
-                Toast.makeText(CreatePostActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        byte[] data;
+        try {
+            //compression of selected image to 10% of the actual size
+            Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), selected);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 10, baos);
+            data = baos.toByteArray();
+            photoRef.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> taskresult=taskSnapshot.getStorage().getDownloadUrl();
+                    while (!taskresult.isSuccessful());
+                    downloadUrl=taskresult.getResult();
+                    addDataToFirestore();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception e) {
+                    Toast.makeText(CreatePostActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -134,7 +145,7 @@ public class CreatePostActivity extends AppCompatActivity {
         AccountsUtil util=new AccountsUtil();
         Profile item=util.fetchData();
         String userProfileImg=item.getImage();
-        String name= ProfileFragment.getProfileData().getName();
+        String name= AccountsUtil.fetchData().getName();
         String postID=userID+time;
         Post post=new Post(postID,userID,name,userProfileImg,caption,url,time,likes);
         postsCollection.document(postID).set(post).addOnSuccessListener(new OnSuccessListener<Void>() {

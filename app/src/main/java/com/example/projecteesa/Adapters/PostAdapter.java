@@ -137,6 +137,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.caption.setText(post.getCaption());
         if (post.getUserProfile() != null && !(post.getUserProfile().isEmpty()))
         Glide.with(context).load(post.getUserProfile()).into(holder.postProfileHeader);
+        else holder.postProfileHeader.setImageResource(R.drawable.user_profile_placeholder);
         if(post.getLikes().contains(AccountsUtil.getUID()))
         {
             holder.likeBtn.setImageResource(R.drawable.ic_like);
