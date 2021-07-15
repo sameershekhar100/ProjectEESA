@@ -109,13 +109,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="BMC"
+            android:text=""
             android:padding="8dp"
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="bhadwa madharchod"
+            android:text=""
             android:padding="8dp"
             />
     </LinearLayout>
