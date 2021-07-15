@@ -1,6 +1,7 @@
 package com.example.projecteesa.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.example.projecteesa.Adapters.PostAdapter;
 import com.example.projecteesa.Adapters.PostItemClicked;
 import com.example.projecteesa.MainActivity;
+import com.example.projecteesa.Posts.CommentActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.R;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -117,5 +119,13 @@ public class HomeFragment extends Fragment implements PostItemClicked {
                 Log.i("SavedPost","Failed!");
             }
         });
+    }
+
+    @Override
+    public void onCommentClicked(String postID) {
+        Intent intent=new Intent(getContext(), CommentActivity.class);
+        intent.putExtra("postID",postID);
+        startActivity(intent);
+        Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
     }
 }

@@ -110,6 +110,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
             }
         });
+        holder.commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String postID=posts.get(holder.getAdapterPosition()).getPostID();
+                listener.onCommentClicked(postID);
+            }
+        });
 
         return holder;
     }
@@ -151,6 +158,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         else {
             holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_border);
         }
+
     }
 
     @Override

@@ -6,6 +6,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.projecteesa.Adapters.PostAdapter;
 import com.example.projecteesa.Adapters.PostItemClicked;
+import com.example.projecteesa.Posts.CommentActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
@@ -35,6 +38,7 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
     PostAdapter adapter;
     FirebaseFirestore firestore;
     private Toolbar toolbar;
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +83,14 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
                 Log.i("SavedPost","Failed!");
             }
         });    }
+
+    @Override
+    public void onCommentClicked(String postID) {
+        Intent intent=new Intent(getApplicationContext(), CommentActivity.class);
+        intent.putExtra("postID",postID+"");
+        startActivity(intent);
+    }
+
     public class FetchAsync extends AsyncTask<ArrayList<String>,Void,Void>{
 
         FirebaseFirestore firestore=FirebaseFirestore.getInstance();
