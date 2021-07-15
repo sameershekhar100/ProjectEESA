@@ -129,6 +129,7 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         Intent intent = new Intent(getContext(), UserProfileActivity.class);
         intent.putExtra(Constants.USER_UID_KEY, uid);
         startActivity(intent);
+    }
     
     @Override 
     public void onCommentClicked(String postID) {
