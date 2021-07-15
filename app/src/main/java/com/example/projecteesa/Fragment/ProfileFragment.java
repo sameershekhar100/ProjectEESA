@@ -2,6 +2,7 @@ package com.example.projecteesa.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,9 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,9 +27,9 @@ import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
-import com.example.projecteesa.ProfileSection.SavedPostsActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.ActivityProgressDialog;
+import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +44,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class ProfileFragment extends Fragment {
@@ -51,11 +54,9 @@ public class ProfileFragment extends Fragment {
     FirebaseUser firebaseUser;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     CollectionReference db = firestore.collection("Users");
-    TextView name, email;
+    TextView name, statusTv, myPostHeaderTitle;
     String img = "";
     ImageView imageView;
-    Button createPost;
-    CardView b1,savedpostBtn;
     RecyclerView myPosts;
     RecyclerView.LayoutManager layoutManager;
     ProfilePostAdapter profilePostAdapter;
@@ -64,9 +65,18 @@ public class ProfileFragment extends Fragment {
 
     private ActivityProgressDialog progressDialog;
     private Context mContext;
+    private TextView bioTv;
+    private ImageButton linkedinBtn;
+    private ImageButton emailBtn;
+    private String userUid = "";
+    private String currentUserUid = "";
 
     public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    public ProfileFragment(String uid){
+        userUid = uid;
     }
 
     @Override
@@ -78,28 +88,28 @@ public class ProfileFragment extends Fragment {
         fab = view.findViewById(R.id.edit_profile_fab);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        currentUserUid =  firebaseUser.getUid();
+        if (userUid.isEmpty()) userUid = currentUserUid;
         progressDialog = new ActivityProgressDialog(mContext);
         progressDialog.setCancelable(false);
 
-        createPost=view.findViewById(R.id.add_post);
-        b1 = view.findViewById(R.id.finish);
       
         name = view.findViewById(R.id.name);
-        email = view.findViewById(R.id.email);
+        statusTv = view.findViewById(R.id.statusTv);
         imageView = view.findViewById(R.id.profile_image);
-        savedpostBtn= view.findViewById(R.id.savedPostsBtn);
         myPosts=view.findViewById(R.id.myPosts);
-        layoutManager=new GridLayoutManager(getContext(),2);
-
+        myPostHeaderTitle = view.findViewById(R.id.header_title);
+        layoutManager=new LinearLayoutManager(getContext());
+        bioTv = view.findViewById(R.id.bioTv);
+        emailBtn = view.findViewById(R.id.emailBtn);
+        linkedinBtn = view.findViewById(R.id.linkedinBtn);
         myPosts.setLayoutManager(layoutManager);
+        if(!userUid.equals(currentUserUid)) fab.setVisibility(View.GONE);
 
 //        getPosts();
         Log.i("Hello:", "Profile fragment");
 
         fetchData();
-        createPost.setOnClickListener(v->{
-            startActivity(new Intent(getContext(), CreatePostActivity.class));
-        });
 
         fab.setOnClickListener(v ->
         {
@@ -108,11 +118,32 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
-        savedpostBtn.setOnClickListener(v->
-        {
-            startActivity(new Intent(getContext(), SavedPostsActivity.class));
-        });
+        setListeners();
+
         return view;
+    }
+
+    private void setListeners() {
+        linkedinBtn.setOnClickListener(v -> {
+            if (profilex != null){
+                String linkedinProfileUrl = profilex.getLinkedinUrl();
+                if (linkedinProfileUrl != null && !(linkedinProfileUrl.isEmpty())){
+                    Intent linkedinIntent = new Intent(Intent.ACTION_VIEW);
+                    if (!linkedinProfileUrl.contains("https://"))
+                        linkedinProfileUrl = "https://"+linkedinProfileUrl;
+                    linkedinIntent.setData(Uri.parse(linkedinProfileUrl));
+                    startActivity(linkedinIntent);
+                }else
+                    MotionToastUtils.showInfoToast(getContext(), "Linkedin profile unavailable", "User does not have linkedin profile");
+            }
+        });
+        emailBtn.setOnClickListener(v -> {
+            String email = firebaseUser.getEmail();
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setData(Uri.parse("mailto:"));
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+            startActivity(emailIntent);
+        });
     }
 
 
@@ -120,7 +151,7 @@ public class ProfileFragment extends Fragment {
         progressDialog.setTitle("Fetching profile data");
         progressDialog.setMessage("Please wait while we fetch your profile data");
         progressDialog.showDialog();
-        DocumentReference doc = db.document("" + firebaseUser.getUid());
+        DocumentReference doc = db.document("" + userUid);
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -128,12 +159,23 @@ public class ProfileFragment extends Fragment {
                 if (documentSnapshot.exists()) {
                     Profile profile = documentSnapshot.toObject(Profile.class);
                     name.setText(profile.getName());
-                    email.setText(profile.getBio());
+                    bioTv.setText(profile.getBio());
                     img = profile.getImage();
+                    int passingYear = profile.getPassingYear();
+                    if(passingYear != 0){
+                            String statusText = "";
+                            Date date = new Date();
+                            int currentYear = date.getYear()+1900;
+                            if(currentYear>passingYear) statusText += "Alumni ";
+                            else statusText += "Student ";
+                            statusText += passingYear;
+                            statusTv.setText(statusText);
+                    }
                     if (img != null && !img.isEmpty())
                         Glide.with(getContext()).load(img).into(imageView);
-                    profilex = profile;
-                    profileData=profilex;
+                        profilex = profile;
+                    if (userUid.equals(currentUserUid))
+                        profileData = profilex;
                 }
             }
         });
@@ -144,10 +186,14 @@ public class ProfileFragment extends Fragment {
 
     void fetchMyPosts(){
         ArrayList<Post> myPostList=new ArrayList<>();
-        db.document(firebaseUser.getUid()).collection("MyPosts").
+        db.document(userUid).collection("MyPosts").
                 orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (queryDocumentSnapshots.isEmpty()){
+                    myPostHeaderTitle.setVisibility(View.GONE);
+                    return;
+                }
                 for(DocumentSnapshot documentSnapshot:queryDocumentSnapshots)
                 {
                     Post post=documentSnapshot.toObject(Post.class);

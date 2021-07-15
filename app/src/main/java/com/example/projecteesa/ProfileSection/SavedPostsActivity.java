@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
     PostAdapter adapter;
     FirebaseFirestore firestore;
     private Toolbar toolbar;
+    private TextView noSavedPostsTv;
     @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,9 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
         TextView titleTv = toolbar.findViewById(R.id.titleTv);
         titleTv.setText("Saved Posts");
         savedPostList= AccountsUtil.fetchData().getSavedPost();
+        noSavedPostsTv = findViewById(R.id.no_post_tv);
+        if (savedPostList == null || savedPostList.size() == 0)
+            noSavedPostsTv.setVisibility(View.VISIBLE);
         manager= new LinearLayoutManager(this);
         firestore=FirebaseFirestore.getInstance();
         savedPostsRecycler.setLayoutManager(manager);
@@ -85,6 +90,11 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
         });    }
 
     @Override
+    public void onOwnerProfileClicked(String uid) {
+        Intent intent = new Intent(this, UserProfileActivity.class);
+    }
+    
+   @Override
     public void onCommentClicked(String postID) {
         Intent intent=new Intent(getApplicationContext(), CommentActivity.class);
         intent.putExtra("postID",postID+"");

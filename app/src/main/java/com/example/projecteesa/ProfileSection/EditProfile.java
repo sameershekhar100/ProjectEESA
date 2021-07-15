@@ -43,6 +43,8 @@ import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfile extends AppCompatActivity {
@@ -149,42 +151,41 @@ public class EditProfile extends AppCompatActivity {
                 Bitmap currentImage = MediaStore.Images.Media.getBitmap
                         (this.getContentResolver(), selected);
 
+                //compression of selected image to 10% of the actual size
+                Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), selected);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 10, baos);
+                byte[] imageData = baos.toByteArray();
+                StorageReference photoRef = mstorageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                progressDialog.setTitle("Uploading profile picture");
+                progressDialog.setMessage("Please wait while we upload your latest profile picture");
+                progressDialog.showDialog();
+
+                photoRef.putBytes(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!urlTask.isSuccessful()) ;
+                        progressDialog.hideDialog();
+                        downloadurl = urlTask.getResult();
+//                    Toast.makeText(EditProfile.this, downloadurl+"", Toast.LENGTH_SHORT).show();
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull @NotNull Exception e) {
+                        progressDialog.hideDialog();
+                        MotionToastUtils.showErrorToast(mContext, "Error", "Some error occurred while uploading your profile picture");
+                    }
+                });
 
                 imageView.setImageBitmap(currentImage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            String fileType = getFileType(selected);
-            StorageReference photoRef = mstorageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + "." + fileType);
-            progressDialog.setTitle("Uploading profile picture");
-            progressDialog.setMessage("Please wait while we upload your latest profile picture");
-            progressDialog.showDialog();
 
-            photoRef.putFile(selected).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!urlTask.isSuccessful()) ;
-                    progressDialog.hideDialog();
-                    downloadurl = urlTask.getResult();
-//                    Toast.makeText(EditProfile.this, downloadurl+"", Toast.LENGTH_SHORT).show();
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull @NotNull Exception e) {
-                    progressDialog.hideDialog();
-                    MotionToastUtils.showErrorToast(mContext, "Error", "Some error occurred while uploading your profile picture");
-                }
-            });
 
 
         }
-    }
-
-    private String getFileType(Uri uri) {
-        ContentResolver resolver = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(resolver.getType(uri));
     }
 }

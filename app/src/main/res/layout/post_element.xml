@@ -15,14 +15,17 @@
         style="@style/general_card_style"
         >
         <LinearLayout
+            android:id="@+id/post_header_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
             android:orientation="horizontal"
             >
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/post_header_img"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:src="@drawable/user_profile_placeholder"
                 android:layout_margin="5dp"
                 />
             <TextView
@@ -39,7 +42,7 @@
         </LinearLayout>
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:scaleType="fitCenter"
             android:id="@+id/post_image"
             android:background="@drawable/border_bg"
