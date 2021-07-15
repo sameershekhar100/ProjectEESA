@@ -156,8 +156,7 @@ public class EditProfile extends AppCompatActivity {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.JPEG, 10, baos);
                 byte[] imageData = baos.toByteArray();
-                String fileType = getFileType(selected);
-                StorageReference photoRef = mstorageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid() + "." + fileType);
+                StorageReference photoRef = mstorageReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 progressDialog.setTitle("Uploading profile picture");
                 progressDialog.setMessage("Please wait while we upload your latest profile picture");
                 progressDialog.showDialog();
@@ -188,11 +187,5 @@ public class EditProfile extends AppCompatActivity {
 
 
         }
-    }
-
-    private String getFileType(Uri uri) {
-        ContentResolver resolver = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(resolver.getType(uri));
     }
 }

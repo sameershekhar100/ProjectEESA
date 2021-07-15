@@ -123,7 +123,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.mainCard.setAnimation(AnimationUtils.loadAnimation(context, R.anim.post_animation));
         Post post=posts.get(position);
         ArrayList<String> likes= post.getLikes();
-        ArrayList<String> saved= AccountsUtil.fetchData().getSavedPost();
+        ArrayList<String> saved;
+        if (AccountsUtil.fetchData() !=null)
+        saved= AccountsUtil.fetchData().getSavedPost();
+        else
+            saved = new ArrayList<>();
         holder.postHeader.setText(post.getName());
         Glide.with(context).load(post.getImageURL()).into(holder.postImg);
         if(likes.size()<2)

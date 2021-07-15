@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -89,7 +90,7 @@ public class ProfileFragment extends Fragment {
         imageView = view.findViewById(R.id.profile_image);
         myPosts=view.findViewById(R.id.myPosts);
         myPostHeaderTitle = view.findViewById(R.id.header_title);
-        layoutManager=new GridLayoutManager(getContext(),2);
+        layoutManager=new LinearLayoutManager(getContext());
         bioTv = view.findViewById(R.id.bioTv);
         emailBtn = view.findViewById(R.id.emailBtn);
         linkedinBtn = view.findViewById(R.id.linkedinBtn);
@@ -118,7 +119,9 @@ public class ProfileFragment extends Fragment {
                 String linkedinProfileUrl = profilex.getLinkedinUrl();
                 if (linkedinProfileUrl != null && !(linkedinProfileUrl.isEmpty())){
                     Intent linkedinIntent = new Intent(Intent.ACTION_VIEW);
-                    linkedinIntent.setData(Uri.parse("https://"+linkedinProfileUrl));
+                    if (!linkedinProfileUrl.contains("https://"))
+                        linkedinProfileUrl = "https://"+linkedinProfileUrl;
+                    linkedinIntent.setData(Uri.parse(linkedinProfileUrl));
                     startActivity(linkedinIntent);
                 }else
                     MotionToastUtils.showInfoToast(getContext(), "Linkedin profile unavailable", "User does not have linkedin profile");
