@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.projecteesa.Adapters.PostAdapter;
 import com.example.projecteesa.Adapters.PostItemClicked;
 import com.example.projecteesa.MainActivity;
+import com.example.projecteesa.Posts.CommentActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
@@ -122,10 +123,18 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         });
     }
 
+    
     @Override
     public void onOwnerProfileClicked(String uid) {
         Intent intent = new Intent(getContext(), UserProfileActivity.class);
         intent.putExtra(Constants.USER_UID_KEY, uid);
         startActivity(intent);
+    
+    @Override 
+    public void onCommentClicked(String postID) {
+        Intent intent=new Intent(getContext(), CommentActivity.class);
+        intent.putExtra("postID",postID);
+        startActivity(intent);
+        Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
     }
 }

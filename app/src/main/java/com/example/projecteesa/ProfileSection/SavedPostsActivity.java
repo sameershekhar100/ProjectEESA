@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.projecteesa.Adapters.PostAdapter;
 import com.example.projecteesa.Adapters.PostItemClicked;
+import com.example.projecteesa.Posts.CommentActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
@@ -38,6 +40,7 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
     FirebaseFirestore firestore;
     private Toolbar toolbar;
     private TextView noSavedPostsTv;
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +92,12 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
     @Override
     public void onOwnerProfileClicked(String uid) {
         Intent intent = new Intent(this, UserProfileActivity.class);
+    }
+    
+   @Override
+    public void onCommentClicked(String postID) {
+        Intent intent=new Intent(getApplicationContext(), CommentActivity.class);
+        intent.putExtra("postID",postID+"");
         startActivity(intent);
     }
 

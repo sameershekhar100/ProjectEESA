@@ -109,10 +109,17 @@
                 android:textSize="17sp"
                 />
         </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/post_comment_recycerView"
+            android:text=""
+            android:padding="8dp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:padding="8dp"
             />
     </LinearLayout>
 
