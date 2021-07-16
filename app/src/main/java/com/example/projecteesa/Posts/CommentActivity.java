@@ -114,7 +114,7 @@ public class CommentActivity extends AppCompatActivity {
                 String img=documentSnapshot.get("image").toString();
 
                 long time = System.currentTimeMillis() ;
-                Comment comment = new Comment(name, cmt,time,img);
+                Comment comment = new Comment(user.getUid(), cmt,time);
                 commentsRef.document(user.getUid() + "+" + time).set(comment);
                 Toast.makeText(CommentActivity.this, "posted", Toast.LENGTH_SHORT).show();
 

@@ -15,6 +15,10 @@ import com.example.projecteesa.R;
 import com.example.projecteesa.utils.TimeUtils;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,11 +42,19 @@ public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment,Rec
 
     @Override
     protected void onBindViewHolder(@NonNull @NotNull RecyclerCommentAdapter.CommentHolder holder, int position, @NonNull @NotNull Comment model) {
-
+         FirebaseFirestore.getInstance().document("Users/"+model.getUserID()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+             @Override
+             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                 String s=documentSnapshot.getString("name");
+                 String s2=documentSnapshot.getString("image");
+                 holder.userName.setText(s);
+                 Glide.with(context).load(s2).into(holder.comment_pic);
+             }
+         });
         holder.cMsg.setText(model.getMessage());
-        holder.userName.setText(model.getUserID());
+//        holder.userName.setText(model.getUserID());
         holder.cTime.setText(TimeUtils.getTime(model.getTime()));
-        Glide.with(context).load(model.getImageURL()).into(holder.comment_pic);
+
     }
 
     @NonNull
