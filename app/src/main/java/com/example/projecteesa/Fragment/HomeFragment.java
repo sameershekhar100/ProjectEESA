@@ -46,6 +46,7 @@ public class HomeFragment extends Fragment implements PostItemClicked {
     CollectionReference postRefrence;
     PostAdapter postAdapter;
     DocumentReference userRefrence;
+    int postLimit = 10;
     private ShimmerFrameLayout shimmerLayout;
     public HomeFragment() {
         // Required empty public constructor
@@ -74,7 +75,7 @@ public class HomeFragment extends Fragment implements PostItemClicked {
 
     private ArrayList<Post> fetchPosts() {
         ArrayList<Post> postList=new ArrayList<>();
-        postRefrence.limit(3).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        postRefrence.limit(postLimit).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 shimmerLayout.startShimmerAnimation();
@@ -140,6 +141,5 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         Intent intent=new Intent(getContext(), CommentActivity.class);
         intent.putExtra("postID",postID);
         startActivity(intent);
-        Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
     }
 }

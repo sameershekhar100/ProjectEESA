@@ -15,13 +15,14 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/l1">
+            android:id="@+id/l1"
+            android:background="?selectableItemBackground">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/cimg"
                 android:layout_marginEnd="12dp"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/user_profile_placeholder" />
 
             <TextView
                 style="@style/general_text_style"
