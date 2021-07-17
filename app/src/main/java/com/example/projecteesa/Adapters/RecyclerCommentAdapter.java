@@ -16,7 +16,6 @@ import com.example.projecteesa.utils.TimeUtils;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -42,7 +41,7 @@ public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment,Rec
 
     @Override
     protected void onBindViewHolder(@NonNull @NotNull RecyclerCommentAdapter.CommentHolder holder, int position, @NonNull @NotNull Comment model) {
-         FirebaseFirestore.getInstance().document("Users/"+model.getUserID()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+         FirebaseFirestore.getInstance().document("Users/"+model.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
              @Override
              public void onSuccess(DocumentSnapshot documentSnapshot) {
                  String s=documentSnapshot.getString("name");

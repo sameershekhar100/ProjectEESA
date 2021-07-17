@@ -1,7 +1,7 @@
 package com.example.projecteesa.Posts;
 
 public class Comment {
-    private String UserID,message;
+    private String uid,message;
     long time;
     //mandatory fun for firestore
     public Comment(){
@@ -12,7 +12,7 @@ public class Comment {
 
 
     public Comment(String userID, String message, long time) {
-        this.UserID = userID;
+        this.uid = userID;
         this.message = message;
         this.time=time;
 
@@ -20,12 +20,12 @@ public class Comment {
 
     }
 
-    public String getUserID() {
-        return UserID;
+    public String getUid() {
+        return uid;
     }
 
-    public void setUserID(String userID) {
-        UserID = userID;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getMessage() {

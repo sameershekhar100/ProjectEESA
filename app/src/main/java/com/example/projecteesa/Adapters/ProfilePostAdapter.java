@@ -47,7 +47,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             @Override
             public void onClick(View v) {
                 ArrayList<String> likes=posts.get(holder.getAdapterPosition()).getLikes();
-                String postID=posts.get(holder.getAdapterPosition()).getPostID();
+                String postID=posts.get(holder.getAdapterPosition()).getPostId();
                 String uid= FirebaseAuth.getInstance().getUid();
                 if(likes.contains(uid))
                 {
@@ -81,7 +81,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             @Override
             public void onClick(View v) {
                 assert AccountsUtil.fetchData() != null;
-                String path="AllPost/"+posts.get(holder.getAdapterPosition()).getPostID();
+                String path="AllPost/"+posts.get(holder.getAdapterPosition()).getPostId();
                 if (savedPosts == null){
                     savedPosts = new ArrayList<>();
                     savedPosts.add(path);
@@ -107,7 +107,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
         holder.commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String postID=posts.get(holder.getAdapterPosition()).getPostID();
+                String postID=posts.get(holder.getAdapterPosition()).getPostId();
                 listener.onCommentClicked(postID);
             }
         });
@@ -123,11 +123,11 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             saved= AccountsUtil.fetchData().getSavedPost();
         else
             saved = new ArrayList<>();
-        Glide.with(context).load(post.getImageURL()).into(holder.postImg);
+        Glide.with(context).load(post.getImageUrl()).into(holder.postImg);
         holder.captionHeader.setText(post.getName()+": ");
         holder.captionTv.setText(post.getCaption());
-        if (post.getUserProfile() != null && !post.getUserProfile().isEmpty())
-            Glide.with(context).load(post.getUserProfile()).into(holder.ownerImg);
+        if (post.getUserImg() != null && !post.getUserImg().isEmpty())
+            Glide.with(context).load(post.getUserImg()).into(holder.ownerImg);
         else
             holder.ownerImg.setImageResource(R.drawable.user_profile_placeholder);
         holder.ownerNameTv.setText(post.getName());
@@ -141,7 +141,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
         {
             holder.likeBtn.setImageResource(R.drawable.ic_like_border);
         }
-        if(saved!=null && saved.contains("AllPost/"+post.getPostID()))
+        if(saved!=null && saved.contains("AllPost/"+post.getPostId()))
         {
             holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_black);
         }

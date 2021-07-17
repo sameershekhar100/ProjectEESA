@@ -1,8 +1,6 @@
 package com.example.projecteesa.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,27 +8,20 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.Posts.Post;
-import com.example.projecteesa.ProfileSection.Profile;
-import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
@@ -58,7 +49,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             @Override
             public void onClick(View v) {
                 ArrayList<String> likes=posts.get(holder.getAdapterPosition()).getLikes();
-                String postID=posts.get(holder.getAdapterPosition()).getPostID();
+                String postID=posts.get(holder.getAdapterPosition()).getPostId();
                 String uid=FirebaseAuth.getInstance().getUid();
                 if(likes.contains(uid))
                 {
@@ -92,7 +83,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             @Override
             public void onClick(View v) {
                 assert AccountsUtil.fetchData() != null;
-                String path="AllPost/"+posts.get(holder.getAdapterPosition()).getPostID();
+                String path="AllPost/"+posts.get(holder.getAdapterPosition()).getPostId();
                 if (savedPosts == null){
                     savedPosts = new ArrayList<>();
                     savedPosts.add(path);
@@ -118,7 +109,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String postID=posts.get(holder.getAdapterPosition()).getPostID();
+                String postID=posts.get(holder.getAdapterPosition()).getPostId();
                 listener.onCommentClicked(postID);
             }
         });
@@ -141,7 +132,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         else
             saved = new ArrayList<>();
         holder.postHeader.setText(post.getName());
-        Glide.with(context).load(post.getImageURL()).into(holder.postImg);
+        Glide.with(context).load(post.getImageUrl()).into(holder.postImg);
         if(likes.size()<2)
         {
             holder.likes.setText(likes.size()+" like");
@@ -151,8 +142,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         }
         holder.captionHeader.setText(post.getName()+": ");
         holder.caption.setText(post.getCaption());
-        if (post.getUserProfile() != null && !(post.getUserProfile().isEmpty()))
-        Glide.with(context).load(post.getUserProfile()).into(holder.postProfileHeader);
+        if (post.getUserImg() != null && !(post.getUserImg().isEmpty()))
+        Glide.with(context).load(post.getUserImg()).into(holder.postProfileHeader);
         else holder.postProfileHeader.setImageResource(R.drawable.user_profile_placeholder);
         if(post.getLikes().contains(AccountsUtil.getUID()))
         {
@@ -162,7 +153,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         {
             holder.likeBtn.setImageResource(R.drawable.ic_like_border);
         }
-        if(saved!=null && saved.contains("AllPost/"+post.getPostID()))
+        if(saved!=null && saved.contains("AllPost/"+post.getPostId()))
         {
             holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_black);
         }
@@ -172,7 +163,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.postHeaderLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onOwnerProfileClicked(post.getUserID());
+                listener.onOwnerProfileClicked(post.getUid());
             }
         });
         holder.postTime.setText(TimeUtils.getTime(post.getTimestamp()));

@@ -18,11 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.projecteesa.Adapters.ProfileItemClicked;
 import com.example.projecteesa.Adapters.RecyclerCommentAdapter;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
-import com.example.projecteesa.utils.TimeUtils;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -100,10 +98,10 @@ public class CommentActivity extends AppCompatActivity {
                 caption.setText(post.getCaption().toString());
                 captionHeader.setText(post.getName() + ": ");
                 postHeader.setText(post.getName() + "");
-                Glide.with(getApplicationContext()).load(post.getImageURL()).into(postImg);
+                Glide.with(getApplicationContext()).load(post.getImageUrl()).into(postImg);
 
-                if (post.getUserProfile() != null && !(post.getUserProfile().isEmpty()))
-                    Glide.with(getApplicationContext()).load(post.getUserProfile()).into(postProfileHeader);
+                if (post.getUserImg() != null && !(post.getUserImg().isEmpty()))
+                    Glide.with(getApplicationContext()).load(post.getUserImg()).into(postProfileHeader);
                 else
                     postProfileHeader.setImageResource(R.drawable.user_profile_placeholder);
                 if (like.contains(user.getUid())) {

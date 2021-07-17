@@ -166,7 +166,7 @@ public class SignUpActivity extends AppCompatActivity {
     void add(String name, String email,String phoneNum,FirebaseUser user, String passingYear, String linkedinUrl) {
         ArrayList<String> savedPosts=new ArrayList<>();
         String branch = Constants.BRANCH_ARRAY[branchSpinner.getSelectedItemPosition()];
-        Profile profile = new Profile(name, "Member of NITP Family", phoneNum,savedPosts, Integer.parseInt(passingYear), branch, linkedinUrl);
+        Profile profile = new Profile(name, "Member of NITP Family", phoneNum,savedPosts, Integer.parseInt(passingYear), branch, linkedinUrl, user.getUid(), email);
         String uid=user.getUid();
         users.document(uid+"").set(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

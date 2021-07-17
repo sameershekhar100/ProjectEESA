@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.projecteesa.utils.AccountsUtil;
-import com.example.projecteesa.Fragment.ProfileFragment;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.ActivityProgressDialog;
@@ -89,7 +88,6 @@ public class CreatePostActivity extends AppCompatActivity {
         storageReference= FirebaseStorage.getInstance().getReference().child("posts");
         firestore=FirebaseFirestore.getInstance();
         postsCollection=firestore.collection("AllPost");
-        UserCollection=firestore.collection("Users/"+userID+"/MyPosts");
     }
 
     @Override
@@ -155,7 +153,7 @@ public class CreatePostActivity extends AppCompatActivity {
         ArrayList<String> likes=new ArrayList<>();
         AccountsUtil util=new AccountsUtil();
         Profile item=util.fetchData();
-        String userProfileImg=item.getImage();
+        String userProfileImg=item.getUserImg();
         String name= AccountsUtil.fetchData().getName();
         String postID=userID+time;
         Post post=new Post(postID,userID,name,userProfileImg,caption,url,time,likes);
@@ -173,8 +171,6 @@ public class CreatePostActivity extends AppCompatActivity {
                 progressDialog.hideDialog();
             }
         });
-
-        UserCollection.document(userID+time).set(post);
 
     }
 

@@ -4,21 +4,21 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 
 public class Post {
-    private String postID;
-    private String UserID;
+    private String postId;
+    private String uid;
     private String caption;
-    private String imageURL;
+    private String imageUrl;
     private String name;
-    private String userProfile;
+    private String userImg;
     private long timestamp;
     private ArrayList<String> likes;
 
     public Post(String postID, String userID,String name, String userProfile, String caption, String imageURL, long timestamp, ArrayList<String> likes) {
-        UserID = userID;
-        this.postID=postID;
+        uid = userID;
+        this.postId =postID;
         this.caption = caption;
-        this.imageURL = imageURL;
-        this.userProfile=userProfile;
+        this.imageUrl = imageURL;
+        this.userImg =userProfile;
         this.timestamp = timestamp;
         this.likes = likes;
         this.name=name;
@@ -29,20 +29,20 @@ public class Post {
         //Required because of firestore
     }
 
-    public String getPostID() {
-        return postID;
+    public String getPostId() {
+        return postId;
     }
 
-    public void setPostID(String postID) {
-        this.postID = postID;
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 
-    public String getUserProfile() {
-        return userProfile;
+    public String getUserImg() {
+        return userImg;
     }
 
-    public void setUserProfile(String userProfile) {
-        this.userProfile = userProfile;
+    public void setUserImg(String userImg) {
+        this.userImg = userImg;
     }
 
     public String getName() {
@@ -53,12 +53,12 @@ public class Post {
         this.name = name;
     }
 
-    public String getUserID() {
-        return UserID;
+    public String getUid() {
+        return uid;
     }
 
-    public void setUserID(String userID) {
-        UserID = userID;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getCaption() {
@@ -69,12 +69,12 @@ public class Post {
         this.caption = caption;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public long getTimestamp() {
