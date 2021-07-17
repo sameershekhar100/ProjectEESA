@@ -74,8 +74,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
                     }
                 }
                 else
-                {
-                    likes.add(uid);
+                 {
+                   likes.add(uid);
                     listener.onLikeClicked(likes,postID);
                     holder.likeBtn.setImageResource(R.drawable.ic_like);
                     if(likes.size()<2)

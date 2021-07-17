@@ -1,6 +1,7 @@
 package com.example.projecteesa.Posts;
 
 import java.util.ArrayList;
+@SuppressWarnings("serial")
 
 public class Post {
     private String postID;

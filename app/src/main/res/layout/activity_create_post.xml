@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:background="@android:color/darker_gray"
         android:layout_height="300dp"
-        android:id="@+id/post_image"
+        android:id="@+id/post_image1"
         >
         <ImageView
             android:layout_width="fill_parent"

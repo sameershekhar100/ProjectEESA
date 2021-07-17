@@ -74,7 +74,7 @@ public class HomeFragment extends Fragment implements PostItemClicked {
 
     private ArrayList<Post> fetchPosts() {
         ArrayList<Post> postList=new ArrayList<>();
-        postRefrence.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        postRefrence.limit(3).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 shimmerLayout.startShimmerAnimation();
