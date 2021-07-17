@@ -21,6 +21,7 @@ import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.Constants;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -35,6 +36,7 @@ public class SearchFragment extends Fragment implements ProfileItemClicked {
     RecyclerView.LayoutManager manager;
     private TextView searchHeader;
     public static TextView noDataTv;
+    private FirebaseAuth mAuth;
 
     @Override
     public void onStart() {
@@ -62,6 +64,7 @@ public class SearchFragment extends Fragment implements ProfileItemClicked {
         manager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         firestore=FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         reference=firestore.collection("Users");
         fetchSuggestedProfiles();
         searchquery();
@@ -69,7 +72,7 @@ public class SearchFragment extends Fragment implements ProfileItemClicked {
     }
 
     private void fetchSuggestedProfiles() {
-        Query query = reference.limit(5);
+        Query query = reference.whereNotEqualTo("uid", mAuth.getCurrentUser().getUid()).limit(5);
         FirestoreRecyclerOptions suggestedOptions = new FirestoreRecyclerOptions.Builder<Profile>()
                 .setQuery(query, Profile.class)
                 .build();
