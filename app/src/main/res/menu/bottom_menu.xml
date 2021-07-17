@@ -9,6 +9,13 @@
         app:cnb_textColor="#fff"
         android:title="Home" />
     <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search"
+        app:cnb_iconColor="#fff"
+        app:cnb_backgroundColor="#ff785b"
+        app:cnb_textColor="#fff"
+        android:title="Search"/>
+    <item
         app:cnb_textColor="#fff"
         android:id="@+id/feed"
         app:cnb_iconColor="#fff"

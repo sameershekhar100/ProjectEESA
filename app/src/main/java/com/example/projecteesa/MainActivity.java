@@ -20,6 +20,7 @@ import com.example.projecteesa.Fragment.PostsFragment;
 import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.Fragment.ProfileFragment;
 
+import com.example.projecteesa.Fragment.SearchFragment;
 import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.ProfileSection.SavedPostsActivity;
 import com.example.projecteesa.utils.AccountsUtil;
@@ -54,11 +55,14 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.home:
                     fragment=new HomeFragment();
                     break;
-                case R.id.profile:
-                    fragment=new ProfileFragment();
+                case R.id.search:
+                    fragment=new SearchFragment();
                     break;
                 case R.id.feed:
                     startActivity(new Intent(mContext, CreatePostActivity.class));
+                    break;
+                case R.id.profile:
+                    fragment=new ProfileFragment();
                     break;
             }
             if(fragment!=null){
