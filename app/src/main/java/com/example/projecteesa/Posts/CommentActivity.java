@@ -1,5 +1,6 @@
 package com.example.projecteesa.Posts;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,8 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.projecteesa.Adapters.RecyclerCommentAdapter;
+import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
+import com.example.projecteesa.utils.Constants;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +40,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class CommentActivity extends AppCompatActivity {
+
+    private final Context mContext = this;
+
     RecyclerView commentsList;
     RecyclerCommentAdapter commentAdapter;
     EditText write_cmt;
@@ -56,6 +62,13 @@ public class CommentActivity extends AppCompatActivity {
     ArrayList<String> likeslist;
     //    ArrayList<Comment> myComment;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (commentAdapter != null)
+            commentAdapter.stopListening();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +185,9 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //add intent to user profile
+                Intent profileIntent = new Intent(mContext, UserProfileActivity.class);
+                profileIntent.putExtra(Constants.USER_UID_KEY, post.getUid());
+                startActivity(profileIntent);
             }
         });
 
@@ -189,13 +205,23 @@ public class CommentActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        commentAdapter.startListening();
+    }
+
     void fetchComments() {
 //        ArrayList<Comment> commentList = new ArrayList<>();
         Query query = commentsRef.orderBy("time", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Comment>().setQuery(query, Comment.class).build();
-        commentAdapter = new RecyclerCommentAdapter(options, CommentActivity.this);
+        commentAdapter = new RecyclerCommentAdapter(options, CommentActivity.this, uid -> {
+            Intent profileIntent = new Intent(mContext, UserProfileActivity.class);
+            profileIntent.putExtra(Constants.USER_UID_KEY, uid);
+            startActivity(profileIntent);
+        });
         commentsList.setAdapter(commentAdapter);
-        commentAdapter.startListening();
+//        commentAdapter.startListening();
 //                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 //            @Override
 //            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

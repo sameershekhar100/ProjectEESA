@@ -138,7 +138,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
             }
         });
         emailBtn.setOnClickListener(v -> {
-            String email = firebaseUser.getEmail();
+            String email = profilex.getEmail();
             Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
             emailIntent.setData(Uri.parse("mailto:"));
             emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
@@ -186,8 +186,8 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
 
     void fetchMyPosts(){
         ArrayList<Post> myPostList=new ArrayList<>();
-        db.document(userUid).collection("MyPosts").
-                orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        firestore.collection("AllPost")
+                .orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots.isEmpty()){
@@ -197,7 +197,12 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
                 for(DocumentSnapshot documentSnapshot:queryDocumentSnapshots)
                 {
                     Post post=documentSnapshot.toObject(Post.class);
+                    if (post.getUid().equals(userUid))
                     myPostList.add(post);
+                }
+                if (myPostList.isEmpty()){
+                    myPostHeaderTitle.setVisibility(View.GONE);
+                    return;
                 }
                 Log.e("abc",myPostList.size()+"");
                 profilePostAdapter=new ProfilePostAdapter(myPostList,getContext(),ProfileFragment.this);
@@ -206,7 +211,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
-                Toast.makeText(getContext(), "oh yeah I fucked up :(", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
             }
         });
 

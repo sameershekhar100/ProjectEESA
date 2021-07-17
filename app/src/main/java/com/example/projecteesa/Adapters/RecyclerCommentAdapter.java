@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.projecteesa.Posts.Comment;
+import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.TimeUtils;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -34,9 +36,11 @@ public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment,Rec
      *
      */
     Context context;
-    public RecyclerCommentAdapter(@NonNull @NotNull FirestoreRecyclerOptions<Comment> options,Context context) {
+    private final CommentClickListener mListener;
+    public RecyclerCommentAdapter(@NonNull @NotNull FirestoreRecyclerOptions<Comment> options, Context context, CommentClickListener mListener) {
         super(options);
         this.context=context;
+        this.mListener = mListener;
     }
 
     @Override
@@ -44,16 +48,23 @@ public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment,Rec
          FirebaseFirestore.getInstance().document("Users/"+model.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
              @Override
              public void onSuccess(DocumentSnapshot documentSnapshot) {
-                 String s=documentSnapshot.getString("name");
-                 String s2=documentSnapshot.getString("image");
-                 holder.userName.setText(s);
-                 Glide.with(context).load(s2).into(holder.comment_pic);
+                 Profile profile = documentSnapshot.toObject(Profile.class);
+                 holder.userName.setText(profile.getName());
+                 Glide.with(context).load(profile.getUserImg()).into(holder.comment_pic);
              }
          });
         holder.cMsg.setText(model.getMessage());
 //        holder.userName.setText(model.getUserID());
         holder.cTime.setText(TimeUtils.getTime(model.getTime()));
 
+        holder.profileHeader.setOnClickListener(v -> {
+            mListener.onProfileClicked(model.getUid());
+        });
+
+    }
+
+    public interface CommentClickListener {
+        void onProfileClicked(String uid);
     }
 
     @NonNull
@@ -70,6 +81,7 @@ public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment,Rec
         CircleImageView comment_pic;
         TextView userName;
         TextView cMsg, cTime;
+        RelativeLayout profileHeader;
 
         public CommentHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -77,6 +89,7 @@ public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment,Rec
             userName = itemView.findViewById(R.id.cuser);
             cMsg = itemView.findViewById(R.id.cMsg);
             cTime = itemView.findViewById(R.id.time);
+            profileHeader = itemView.findViewById(R.id.l1);
         }
     }
 }

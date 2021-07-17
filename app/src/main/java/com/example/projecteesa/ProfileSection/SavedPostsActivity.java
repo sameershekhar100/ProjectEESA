@@ -21,6 +21,7 @@ import com.example.projecteesa.Posts.CommentActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
+import com.example.projecteesa.utils.Constants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -92,6 +93,8 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
     @Override
     public void onOwnerProfileClicked(String uid) {
         Intent intent = new Intent(this, UserProfileActivity.class);
+        intent.putExtra(Constants.USER_UID_KEY, uid);
+        startActivity(intent);
     }
     
    @Override
