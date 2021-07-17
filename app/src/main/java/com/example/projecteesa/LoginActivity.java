@@ -94,10 +94,14 @@ public class LoginActivity extends AppCompatActivity {
             splashLogo.animate().scaleX(0.0f).scaleY(0.0f).withEndAction(() -> {
                 FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null) {
-                    AccountsUtil util=new AccountsUtil();
-                    Intent transfer = new Intent(this, MainActivity.class);
-                    startActivity(transfer);
-                    finish();
+                    if (user.isEmailVerified()){
+                        AccountsUtil util=new AccountsUtil();
+                        Intent transfer = new Intent(this, MainActivity.class);
+                        startActivity(transfer);
+                        finish();
+                    }
+                    else
+                        resendVerificationEmail();
                 } else {
                     loginLayout.setVisibility(View.VISIBLE);
                 }

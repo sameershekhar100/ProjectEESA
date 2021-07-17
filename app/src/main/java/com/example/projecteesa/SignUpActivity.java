@@ -139,7 +139,6 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             add(name, email, phoneNum, user, passingYear, linkedinUrl);
-                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             progressDialog.hideDialog();
                             MotionToastUtils.showInfoToast(mContext, "Verify your email", "Signup was successful but please make sure to verify your email");
                             finish();
