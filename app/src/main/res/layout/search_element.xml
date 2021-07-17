@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/searched_profile_card"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="20dp"
+    android:layout_margin="5dp"
+    app:cardElevation="4dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:layout_height="wrap_content"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+       <RelativeLayout
+           android:id="@+id/image_border"
+           android:layout_width="72dp"
+           android:layout_height="72dp"
+           android:layout_margin="10dp"
+           android:gravity="center"
+           android:background="@drawable/image_border"
+           >
+           <de.hdodenhof.circleimageview.CircleImageView
+               android:id="@+id/searched_image"
+               android:layout_width="70dp"
+               android:layout_height="70dp"
+               android:src="@drawable/ic_profile"
+               />
+       </RelativeLayout>
+        <TextView
+            android:id="@+id/searched_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/image_border"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:id="@+id/searched_branch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/image_border"
+            android:layout_below="@id/searched_name"
+            android:textSize="18sp"
+            />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
