@@ -28,7 +28,7 @@
             android:layout_height="fill_parent"
             android:id="@+id/empty_post"
             android:gravity="center"
-            android:text="Click here to upload."
+            android:text="Click here to upload an image"
             android:textSize="20sp"
             />
 

@@ -1,5 +1,6 @@
 package com.example.projecteesa.Adapters;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,15 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.projecteesa.Fragment.SearchFragment;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
 
 public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapter.ProfileHolder> {
     /**
@@ -36,8 +40,16 @@ public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapt
 
     @Override
     protected void onBindViewHolder(@NonNull @NotNull SearchAdapter.ProfileHolder holder, int position, @NonNull @NotNull Profile model) {
+        SearchFragment.noDataTv.setVisibility(View.GONE);
         holder.name.setText(model.getName());
-        holder.branch.setText(model.getBranch());
+        int passingYear = model.getPassingYear();
+        String statusText = "";
+        Date date = new Date();
+        int currentYear = date.getYear()+1900;
+        if(currentYear>passingYear) statusText += "Alumni ";
+        else statusText += "Student ";
+        statusText += model.getBranch() + " "+ passingYear;
+        holder.branch.setText(statusText);
         Glide.with(context).load(model.getUserImg()).into(holder.profile);
     }
 

@@ -69,6 +69,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
     private ImageButton emailBtn;
     private String userUid = "";
     private String currentUserUid = "";
+    private String myPostHeaderText = "My Posts";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -159,6 +160,10 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
                 if (documentSnapshot.exists()) {
                     Profile profile = documentSnapshot.toObject(Profile.class);
                     name.setText(profile.getName());
+                    if (!currentUserUid.equals(userUid))
+                        myPostHeaderText = profile.getName().split(" ")[0] + " Posts";
+                    myPostHeaderTitle.setText(myPostHeaderText.toUpperCase());
+                    myPostHeaderTitle.setVisibility(View.VISIBLE);
                     bioTv.setText(profile.getBio());
                     img = profile.getUserImg();
                     int passingYear = profile.getPassingYear();
@@ -168,7 +173,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
                             int currentYear = date.getYear()+1900;
                             if(currentYear>passingYear) statusText += "Alumni ";
                             else statusText += "Student ";
-                            statusText += passingYear;
+                            statusText += profile.getBranch() + " " + passingYear;
                             statusTv.setText(statusText);
                     }
                     if (img != null && !img.isEmpty())
