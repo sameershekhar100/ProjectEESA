@@ -16,7 +16,6 @@ import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +38,7 @@ public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapt
     protected void onBindViewHolder(@NonNull @NotNull SearchAdapter.ProfileHolder holder, int position, @NonNull @NotNull Profile model) {
         holder.name.setText(model.getName());
         holder.branch.setText(model.getBranch());
-        Glide.with(context).load(model.getImage()).into(holder.profile);
+        Glide.with(context).load(model.getUserImg()).into(holder.profile);
     }
 
     @NonNull

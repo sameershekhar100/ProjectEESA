@@ -8,16 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.example.projecteesa.Adapters.PostItemClicked;
 import com.example.projecteesa.Adapters.ProfilePostAdapter;
 import com.example.projecteesa.Posts.CommentActivity;
-import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
@@ -164,7 +160,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
                     Profile profile = documentSnapshot.toObject(Profile.class);
                     name.setText(profile.getName());
                     bioTv.setText(profile.getBio());
-                    img = profile.getImage();
+                    img = profile.getUserImg();
                     int passingYear = profile.getPassingYear();
                     if(passingYear != 0){
                             String statusText = "";

@@ -5,20 +5,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
 
 
 import com.bumptech.glide.Glide;
@@ -37,7 +32,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -81,7 +75,7 @@ public class EditProfile extends AppCompatActivity {
 
         name.setText(profile.getName());
         BIO.setText(profile.getBio());
-        phoneNo.setText(profile.getPhoneNO());
+        phoneNo.setText(profile.getPhoneNo());
         setProfileData();
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -104,9 +98,9 @@ public class EditProfile extends AppCompatActivity {
     private void setProfileData() {
         name.setText(profile.getName());
         BIO.setText(profile.getBio() == null ? "" : profile.getBio());
-        phoneNo.setText(profile.getPhoneNO() == null ? "" : profile.getPhoneNO());
-        if (profile.getImage() != null && !profile.getImage().isEmpty())
-            Glide.with(this).load(profile.getImage()).into(imageView);
+        phoneNo.setText(profile.getPhoneNo() == null ? "" : profile.getPhoneNo());
+        if (profile.getUserImg() != null && !profile.getUserImg().isEmpty())
+            Glide.with(this).load(profile.getUserImg()).into(imageView);
     }
 
     void updateProfile() {
@@ -115,9 +109,9 @@ public class EditProfile extends AppCompatActivity {
         String phonex = phoneNo.getText().toString();
         profile.setName(namex);
         profile.setBio(BIOx);
-        profile.setPhoneNO(phonex);
+        profile.setPhoneNo(phonex);
         if (downloadurl != null && !downloadurl.toString().isEmpty())
-            profile.setImage(downloadurl.toString());
+            profile.setUserImg(downloadurl.toString());
 
         progressDialog.setTitle("Updating profile data");
         progressDialog.setMessage("Please wait while we update your profile data");
