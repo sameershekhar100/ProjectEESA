@@ -22,7 +22,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.projecteesa.Adapters.PostItemClicked;
 import com.example.projecteesa.Adapters.ProfilePostAdapter;
+import com.example.projecteesa.Posts.CommentActivity;
 import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.ProfileSection.EditProfile;
@@ -47,13 +49,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements PostItemClicked {
 
     ImageButton fab;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     CollectionReference db = firestore.collection("Users");
+    DocumentReference doc;
     TextView name, statusTv, myPostHeaderTitle;
     String img = "";
     ImageView imageView;
@@ -90,10 +93,11 @@ public class ProfileFragment extends Fragment {
         firebaseUser = firebaseAuth.getCurrentUser();
         currentUserUid =  firebaseUser.getUid();
         if (userUid.isEmpty()) userUid = currentUserUid;
+        doc = db.document("" + userUid);
         progressDialog = new ActivityProgressDialog(mContext);
         progressDialog.setCancelable(false);
 
-      
+
         name = view.findViewById(R.id.name);
         statusTv = view.findViewById(R.id.statusTv);
         imageView = view.findViewById(R.id.profile_image);
@@ -151,7 +155,7 @@ public class ProfileFragment extends Fragment {
         progressDialog.setTitle("Fetching profile data");
         progressDialog.setMessage("Please wait while we fetch your profile data");
         progressDialog.showDialog();
-        DocumentReference doc = db.document("" + userUid);
+
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -200,7 +204,7 @@ public class ProfileFragment extends Fragment {
                     myPostList.add(post);
                 }
                 Log.e("abc",myPostList.size()+"");
-                profilePostAdapter=new ProfilePostAdapter(myPostList,getContext());
+                profilePostAdapter=new ProfilePostAdapter(myPostList,getContext(),ProfileFragment.this);
                 myPosts.setAdapter(profilePostAdapter);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -216,4 +220,49 @@ public class ProfileFragment extends Fragment {
         return profileData;
     }
 
+    @Override
+    public void onLikeClicked(ArrayList<String> likes, String postID) {
+        firestore.collection("AllPost")
+                .document(postID)
+                .update("likes",likes)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.i("Like updated","!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Log.i("Failed: ","to update likes");
+            }
+        });
+    }
+
+    @Override
+    public void onBookmarkClicked(ArrayList<String> savedPosts, String uid) {
+        doc.update("savedPost",savedPosts).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.i("SavedPost","post added!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Log.i("SavedPost","Failed!");
+            }
+        });
+    }
+
+    @Override
+    public void onOwnerProfileClicked(String uid) {
+        //Not to be deleted.
+    }
+
+    @Override
+    public void onCommentClicked(String postID) {
+        Intent intent=new Intent(getContext(), CommentActivity.class);
+        intent.putExtra("postID",postID);
+        startActivity(intent);
+        Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
+    }
 }

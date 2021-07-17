@@ -113,13 +113,15 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
             {
                 firestore.document(path).get().addOnSuccessListener(documentSnapshot -> {
                     Post post=documentSnapshot.toObject(Post.class);
-                    postsList.add(post);
-                    adapter.setData(postsList);
+                    if(post!=null) {
+                        postsList.add(post);
+                        adapter.setData(postsList);
+                    }
                 }).addOnFailureListener(e -> {
                     Log.i("Failure:","could not fetch");
                 });
-            }
 
+            }
             return null;
         }
     }

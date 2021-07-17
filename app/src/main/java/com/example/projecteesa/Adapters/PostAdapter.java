@@ -23,6 +23,7 @@ import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
+import com.example.projecteesa.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
@@ -174,6 +175,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
                 listener.onOwnerProfileClicked(post.getUserID());
             }
         });
+        holder.postTime.setText(TimeUtils.getTime(post.getTimestamp()));
     }
 
     @Override
@@ -183,7 +185,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     public class PostHolder extends RecyclerView.ViewHolder {
         ImageView postImg,postProfileHeader,likeBtn,commentBtn,bookmarkBtn;
-        TextView caption,likes,captionHeader,postHeader;
+        TextView caption,likes,captionHeader,postHeader,postTime;
         CardView mainCard;
         LinearLayout postHeaderLayout;
         public PostHolder(@NonNull @NotNull View itemView) {
@@ -199,6 +201,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             mainCard = itemView.findViewById(R.id.mainCard);
             bookmarkBtn=itemView.findViewById(R.id.post_save_btn);
             postHeaderLayout = itemView.findViewById(R.id.post_header_layout);
+            postTime= itemView.findViewById(R.id.post_time);
         }
     }
 }

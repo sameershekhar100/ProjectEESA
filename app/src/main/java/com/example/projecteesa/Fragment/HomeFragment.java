@@ -55,6 +55,12 @@ public class HomeFragment extends Fragment implements PostItemClicked {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_posts, container, false);
+        setup(view);
+        posts=fetchPosts();
+        return  view;
+    }
+
+    private void setup(View view) {
         recyclerView=view.findViewById(R.id.recyclerView);
         firestore=FirebaseFirestore.getInstance();
         postRefrence=firestore.collection("AllPost");
@@ -64,8 +70,6 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         shimmerLayout.startShimmerAnimation();
         manager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
-        posts=fetchPosts();
-        return  view;
     }
 
     private ArrayList<Post> fetchPosts() {
