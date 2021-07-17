@@ -1,5 +1,6 @@
 package com.example.projecteesa.Adapters;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.projecteesa.Fragment.SearchFragment;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -38,6 +40,7 @@ public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapt
 
     @Override
     protected void onBindViewHolder(@NonNull @NotNull SearchAdapter.ProfileHolder holder, int position, @NonNull @NotNull Profile model) {
+        SearchFragment.noDataTv.setVisibility(View.GONE);
         holder.name.setText(model.getName());
         int passingYear = model.getPassingYear();
         String statusText = "";

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.projecteesa.Adapters.ProfileItemClicked;
@@ -32,6 +33,23 @@ public class SearchFragment extends Fragment implements ProfileItemClicked {
     FirebaseFirestore firestore;
     CollectionReference reference;
     RecyclerView.LayoutManager manager;
+    private TextView searchHeader;
+    public static TextView noDataTv;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (adapter != null)
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (adapter != null)
+        adapter.stopListening();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,12 +57,25 @@ public class SearchFragment extends Fragment implements ProfileItemClicked {
         View view=inflater.inflate(R.layout.fragment_search, container, false);
         searchView=view.findViewById(R.id.search_view);
         recyclerView=view.findViewById(R.id.profile_search_recycler);
+        searchHeader = view.findViewById(R.id.search_header);
+        noDataTv = view.findViewById(R.id.no_data_tv);
         manager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         firestore=FirebaseFirestore.getInstance();
         reference=firestore.collection("Users");
+        fetchSuggestedProfiles();
         searchquery();
         return view;
+    }
+
+    private void fetchSuggestedProfiles() {
+        Query query = reference.limit(5);
+        FirestoreRecyclerOptions suggestedOptions = new FirestoreRecyclerOptions.Builder<Profile>()
+                .setQuery(query, Profile.class)
+                .build();
+        adapter = new SearchAdapter(suggestedOptions, getContext(), SearchFragment.this);
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 
     private void searchquery() {
@@ -64,13 +95,14 @@ public class SearchFragment extends Fragment implements ProfileItemClicked {
 
     private void fetchProfiles(String str) {
         if(str.length()>0) {
+            noDataTv.setVisibility(View.VISIBLE);
             Query query = reference.orderBy("name").startAt(str).endAt(str + "\uf88f");
             FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Profile>()
                     .setQuery(query, Profile.class)
                     .build();
-            adapter = new SearchAdapter(options, getContext(), SearchFragment.this);
+            adapter.updateOptions(options);
             recyclerView.setAdapter(adapter);
-            adapter.startListening();
+            searchHeader.setText("SEARCH RESULTS");
         }
     }
 

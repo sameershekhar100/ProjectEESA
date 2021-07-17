@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             navbar.setItemSelected(R.id.home, true);
             fragmentManager=getSupportFragmentManager();
             HomeFragment home=new HomeFragment();
-            fragmentManager.beginTransaction().replace(R.id.main_frame,home).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_frame,home, "home").commit();
         }
         navbar.setOnItemSelectedListener(i -> {
             Fragment fragment=null;
@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentManager=getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.main_frame, fragment)
+                        .addToBackStack("home")
                         .commit();
             } else {
                 Log.e(TAG, "ERROR");
