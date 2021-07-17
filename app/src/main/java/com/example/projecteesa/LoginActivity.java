@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,12 +21,16 @@ import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -122,14 +127,18 @@ public class LoginActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     progressDialog.hideDialog();
 
+                    //checking if user email is verified or not
                     if (task.isSuccessful()) {
-                        AccountsUtil util=new AccountsUtil();
-                        MotionToastUtils.showSuccessToast(mContext, "Logged In", "Glad to see you");
-                        Intent transfer = new Intent(LoginActivity.this, MainActivity.class);
-                        transfer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(transfer);
-                        finish();
-
+                        if (mAuth.getCurrentUser().isEmailVerified()){
+                            AccountsUtil util=new AccountsUtil();
+                            MotionToastUtils.showSuccessToast(mContext, "Logged In", "Glad to see you");
+                            Intent transfer = new Intent(LoginActivity.this, MainActivity.class);
+                            transfer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(transfer);
+                            finish();
+                        }
+                        else
+                            resendVerificationEmail();
                     }
                     else
                     {
@@ -153,6 +162,28 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
     }
+
+    private void resendVerificationEmail() {
+        progressDialog.setTitle("Resending verification email");
+        progressDialog.setMessage("We are resending the verification email, please verify your email to use the app");
+        progressDialog.showDialog();
+
+        mAuth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                progressDialog.hideDialog();
+                MotionToastUtils.showInfoToast(mContext, "Verification email resent", "Please check your email and verify it to use the app");
+                mAuth.signOut();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                MotionToastUtils.showErrorToast(mContext, "Error", "Some error occurred in sending verification email");
+                mAuth.signOut();
+            }
+        });
+    }
+
     private void createAlert(String heading, String message, String possitive)
     {
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
