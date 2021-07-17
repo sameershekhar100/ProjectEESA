@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,6 +63,7 @@ public class CommentActivity extends AppCompatActivity {
     ArrayList<String> likeslist;
     //    ArrayList<Comment> myComment;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private Toolbar toolbar;
 
     @Override
     protected void onStop() {
@@ -74,6 +76,10 @@ public class CommentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+        getSupportActionBar().hide();
+        toolbar = findViewById(R.id.toolbar);
+        TextView titleTv = toolbar.findViewById(R.id.titleTv);
+        titleTv.setText("Post");
         postProfileHeader = findViewById(R.id.post_header_img1);
         postHeader = findViewById(R.id.post_header1);
         postImg = findViewById(R.id.post_image1);

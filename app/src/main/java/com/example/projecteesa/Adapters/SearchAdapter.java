@@ -19,6 +19,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
+
 public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapter.ProfileHolder> {
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -37,7 +39,14 @@ public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapt
     @Override
     protected void onBindViewHolder(@NonNull @NotNull SearchAdapter.ProfileHolder holder, int position, @NonNull @NotNull Profile model) {
         holder.name.setText(model.getName());
-        holder.branch.setText(model.getBranch());
+        int passingYear = model.getPassingYear();
+        String statusText = "";
+        Date date = new Date();
+        int currentYear = date.getYear()+1900;
+        if(currentYear>passingYear) statusText += "Alumni ";
+        else statusText += "Student ";
+        statusText += model.getBranch() + " "+ passingYear;
+        holder.branch.setText(statusText);
         Glide.with(context).load(model.getUserImg()).into(holder.profile);
     }
 

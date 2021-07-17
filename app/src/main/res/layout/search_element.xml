@@ -13,6 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/general_card_style"
         >
        <RelativeLayout
            android:id="@+id/image_border"
@@ -26,7 +27,7 @@
                android:id="@+id/searched_image"
                android:layout_width="70dp"
                android:layout_height="70dp"
-               android:src="@drawable/ic_profile"
+               android:src="@drawable/user_profile_placeholder"
                />
        </RelativeLayout>
         <TextView
@@ -35,16 +36,29 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/image_border"
             android:textSize="20sp"
+            android:textStyle="bold"
             android:layout_marginTop="10dp"
             />
-        <TextView
-            android:id="@+id/searched_branch"
+
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="12dp"
+            app:cardCornerRadius="8dp"
             android:layout_toRightOf="@id/image_border"
-            android:layout_below="@id/searched_name"
-            android:textSize="18sp"
-            />
+            android:layout_below="@id/searched_name">
+        <TextView
+            android:id="@+id/searched_branch"
+            style="@style/general_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:background="#daa520"
+            android:fontFamily="@font/comic_sans"
+            android:padding="8dp"
+            android:textAlignment="textEnd"
+            android:textSize="16sp" />
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 

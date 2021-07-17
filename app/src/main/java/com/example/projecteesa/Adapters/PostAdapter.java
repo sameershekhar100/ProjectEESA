@@ -1,6 +1,7 @@
 package com.example.projecteesa.Adapters;
 
 import android.content.Context;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,7 +114,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
                 listener.onCommentClicked(postID);
             }
         });
-
+        holder.mainCard.setOnClickListener(v -> {
+            String postID=posts.get(holder.getAdapterPosition()).getPostId();
+            listener.onCommentClicked(postID);
+        });
         return holder;
     }
     public void setData(ArrayList<Post> posts)
