@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -182,7 +183,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         ImageView postImg,postProfileHeader,likeBtn,commentBtn,bookmarkBtn;
         TextView caption,likes,captionHeader,postHeader,postTime;
         CardView mainCard;
-        LinearLayout postHeaderLayout;
+        RelativeLayout postHeaderLayout;
         public PostHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             postProfileHeader=itemView.findViewById(R.id.post_header_img);

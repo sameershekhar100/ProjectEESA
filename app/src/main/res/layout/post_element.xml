@@ -14,7 +14,7 @@
         android:elevation="32dp"
         style="@style/general_card_style"
         >
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/post_header_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,16 +30,26 @@
                 />
             <TextView
                 android:id="@+id/post_header"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 style="@style/general_text_style"
                 android:gravity="center_vertical"
+                android:layout_toEndOf="@id/post_header_img"
                 android:text="Socilliant"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 />
-        </LinearLayout>
+            <TextView
+                android:id="@+id/postMenuBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                android:text="&#8942;"/>
+        </RelativeLayout>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

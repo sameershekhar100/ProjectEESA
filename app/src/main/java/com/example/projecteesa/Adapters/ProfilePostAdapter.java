@@ -2,20 +2,29 @@ package com.example.projecteesa.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
+import com.example.projecteesa.utils.ActivityProgressDialog;
+import com.example.projecteesa.utils.MotionToastUtils;
 import com.example.projecteesa.utils.TimeUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,6 +37,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
     Context context;
     PostItemClicked listener;
     ArrayList<String> savedPosts;
+    String currentUserUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     public ProfilePostAdapter(ArrayList<Post> posts,Context context,PostItemClicked listener) {
         this.posts = posts;
         this.context=context;
@@ -112,6 +122,37 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             }
         });
 
+        holder.postMenuBtn.setOnClickListener(v -> {
+            PopupMenu menu = new PopupMenu(context, holder.postMenuBtn);
+            menu.inflate(R.menu.my_post_menu);
+            menu.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() ==  R.id.delete_post){
+                    ActivityProgressDialog dialog = new ActivityProgressDialog(context);
+                    dialog.setCancelable(false);
+                    dialog.setTitle("Deleting Post");
+                    dialog.setMessage("Please wait while we delete your post");
+                    dialog.showDialog();
+                    String postId = posts.get(holder.getAdapterPosition()).getPostId();
+                    FirebaseFirestore.getInstance().collection("AllPost").document(postId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull @NotNull Task<Void> task) {
+                            dialog.hideDialog();
+                            if (task.isSuccessful()){
+                                MotionToastUtils.showSuccessToast(context, "Post deleted", "We have successfully deleted your post");
+                                posts.remove(holder.getAdapterPosition());
+                                notifyDataSetChanged();
+                            }else{
+                                MotionToastUtils.showErrorToast(context, "Error", "Some error occurred while deleting your post");
+                            }
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            });
+            menu.show();
+        });
+
         return holder;
     }
 
@@ -148,6 +189,10 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
         else {
             holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_border);
         }
+        if (post.getUid().equals(currentUserUId))
+            holder.postMenuBtn.setVisibility(View.VISIBLE);
+
+
     }
 
     @Override
@@ -164,6 +209,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
         TextView likesTv;
         TextView time;
         ImageView likeBtn,commentBtn,bookmarkBtn;
+        TextView postMenuBtn;
         public PostHolder(@NonNull @NotNull View itemView) {
             super(itemView);
 /*
@@ -178,6 +224,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             likeBtn=itemView.findViewById(R.id.post_like_btn);
             commentBtn=itemView.findViewById(R.id.post_comment_btn);
             bookmarkBtn=itemView.findViewById(R.id.post_save_btn);
+            postMenuBtn = itemView.findViewById(R.id.postMenuBtn);
         }
     }
 }
