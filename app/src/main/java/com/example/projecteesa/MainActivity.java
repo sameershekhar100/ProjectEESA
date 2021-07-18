@@ -84,7 +84,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.savedPosts:
                         startActivity(new Intent(mContext, SavedPostsActivity.class));
                         return true;
-
+                    case R.id.aboutUS:
+                        startActivity(new Intent(mContext,AboutUs.class));
+                        return true;
 
                 }
                 return false;

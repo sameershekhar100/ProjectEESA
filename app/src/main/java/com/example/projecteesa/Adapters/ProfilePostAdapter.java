@@ -38,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -160,7 +161,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
                             FirebaseFirestore.getInstance().collection("AllPost/" + postId + "/comments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                                    for (QueryDocumentSnapshot snapshots : task.getResult()) {
+                                    for (QueryDocumentSnapshot snapshots : Objects.requireNonNull(task.getResult())) {
                                         FirebaseFirestore.getInstance().collection("AllPost/" + postId + "/comments").document(snapshots.getId()).delete();
                                     }
                                 }
