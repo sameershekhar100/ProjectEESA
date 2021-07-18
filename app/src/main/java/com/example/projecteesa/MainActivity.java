@@ -2,6 +2,7 @@ package com.example.projecteesa;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -87,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.aboutUS:
                         startActivity(new Intent(mContext,AboutUs.class));
                         return true;
+                    case R.id.privacyPolicy:
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse("https://sites.google.com/view/sanshreya-home/home"));
+                        startActivity(i);
 
                 }
                 return false;

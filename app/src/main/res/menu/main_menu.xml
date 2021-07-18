@@ -16,4 +16,8 @@
         android:icon="@drawable/ic_baseline_people_outline_24"
         android:title="About Us"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/privacyPolicy"
+        android:title="Privacy Policy"
+        app:showAsAction="never"/>
 </menu>
