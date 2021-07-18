@@ -30,6 +30,7 @@
             app:layout_constraintVertical_bias="0.054" />
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/sanshyeya"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
@@ -52,51 +53,99 @@
             app:layout_constraintTop_toTopOf="@+id/textView8"
             app:layout_constraintVertical_bias="0.151" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="16dp"
-            android:src="@mipmap/ic_eesa" />
-
         <TextView
-            android:id="@+id/aboutEESA"
             style="@style/general_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="8dp"
+            android:id="@+id/eesa"
+            android:background="@drawable/light_gradient"
+            android:drawableLeft="@drawable/ic_arrow_right_24"
             android:fontFamily="@font/comic_sans"
             android:lineSpacingExtra="4dp"
-            android:padding="14dp"
-            android:text="@string/aboutUsEssa"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView8"
-            app:layout_constraintVertical_bias="0.151" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="16dp"
-            android:src="@drawable/nitplogo" />
+            android:padding="11dp"
+            android:text="About EESA"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/aboutNITP"
             style="@style/general_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/light_gradient"
+            android:drawableLeft="@drawable/ic_arrow_right_24"
             android:fontFamily="@font/comic_sans"
             android:lineSpacingExtra="4dp"
-            android:padding="14dp"
-            android:text="@string/aboutUsNitp"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView8"
-            app:layout_constraintVertical_bias="0.151" />
+            android:id="@+id/nitp"
+            android:padding="11dp"
+            android:text="About NIT PATNA"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/layout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="16dp"
+                android:src="@mipmap/ic_eesa" />
+
+            <TextView
+                android:id="@+id/aboutEESA"
+                style="@style/general_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comic_sans"
+                android:lineSpacingExtra="4dp"
+                android:padding="14dp"
+                android:text="@string/aboutUsEssa"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView8"
+                app:layout_constraintVertical_bias="0.151" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="16dp"
+                android:src="@drawable/nitplogo" />
+
+            <TextView
+                android:id="@+id/aboutNITP"
+                style="@style/general_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comic_sans"
+                android:lineSpacingExtra="4dp"
+                android:padding="14dp"
+                android:text="@string/aboutUsNitp"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView8"
+                app:layout_constraintVertical_bias="0.151" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
