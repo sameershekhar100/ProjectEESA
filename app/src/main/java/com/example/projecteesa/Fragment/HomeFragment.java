@@ -24,8 +24,10 @@ import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.Constants;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -33,10 +35,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.example.projecteesa.utils.AccountsUtil.fetchData;
 
 public class HomeFragment extends Fragment implements PostItemClicked {
     ArrayList<Post> posts;
@@ -46,8 +55,9 @@ public class HomeFragment extends Fragment implements PostItemClicked {
     CollectionReference postRefrence;
     PostAdapter postAdapter;
     DocumentReference userRefrence;
-    int postLimit = 10;
     private ShimmerFrameLayout shimmerLayout;
+    private FirebaseRemoteConfig remoteConfig;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -56,9 +66,29 @@ public class HomeFragment extends Fragment implements PostItemClicked {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_posts, container, false);
+        remoteConfig = FirebaseRemoteConfig.getInstance();
         setup(view);
-        posts=fetchPosts();
+        fetchPostsData();
         return  view;
+    }
+
+    private void fetchPostsData() {
+        remoteConfig.setConfigSettingsAsync(new FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(10)
+        .build());
+
+        HashMap<String, Object> defaults = new HashMap<>();
+        defaults.put(Constants.FETCH_POSTS_COUNT_KEY, 5);
+        remoteConfig.setDefaultsAsync(defaults);
+        remoteConfig.fetchAndActivate()
+                .addOnCompleteListener(new OnCompleteListener<Boolean>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Boolean> task) {
+                        if (task.isSuccessful()){
+                            posts =  fetchPosts();
+                        }
+                    }
+                });
     }
 
     private void setup(View view) {
@@ -75,7 +105,7 @@ public class HomeFragment extends Fragment implements PostItemClicked {
 
     private ArrayList<Post> fetchPosts() {
         ArrayList<Post> postList=new ArrayList<>();
-        postRefrence.limit(postLimit).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        postRefrence.limit(remoteConfig.getLong(Constants.FETCH_POSTS_COUNT_KEY)).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 shimmerLayout.startShimmerAnimation();
