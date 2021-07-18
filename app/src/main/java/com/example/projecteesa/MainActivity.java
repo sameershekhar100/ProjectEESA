@@ -1,32 +1,23 @@
 package com.example.projecteesa;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.accounts.Account;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
-
-
-import com.example.projecteesa.Fragment.PostsFragment;
 import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.Fragment.ProfileFragment;
-
 import com.example.projecteesa.Fragment.SearchFragment;
 import com.example.projecteesa.Posts.CreatePostActivity;
 import com.example.projecteesa.ProfileSection.SavedPostsActivity;
 import com.example.projecteesa.utils.AccountsUtil;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,23 +41,23 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().replace(R.id.main_frame,home, "home").commit();
         }
         navbar.setOnItemSelectedListener(i -> {
-            Fragment fragment=null;
-            switch (i){
+            Fragment fragment = null;
+            switch (i) {
                 case R.id.home:
-                    fragment=new HomeFragment();
+                    fragment = new HomeFragment();
                     break;
                 case R.id.search:
-                    fragment=new SearchFragment();
+                    fragment = new SearchFragment();
                     break;
                 case R.id.feed:
                     startActivity(new Intent(mContext, CreatePostActivity.class));
                     break;
                 case R.id.profile:
-                    fragment=new ProfileFragment();
+                    fragment = new ProfileFragment();
                     break;
             }
-            if(fragment!=null){
-                fragmentManager=getSupportFragmentManager();
+            if (fragment != null) {
+                fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.main_frame, fragment)
                         .addToBackStack("home")
@@ -93,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.savedPosts:
                         startActivity(new Intent(mContext, SavedPostsActivity.class));
                         return true;
+
+
                 }
                 return false;
             }

@@ -11,4 +11,9 @@
         android:icon="@mipmap/ic_saved_post_round"
         android:title="Saved Posts"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/aboutUs"
+        android:icon="@drawable/ic_baseline_people_outline_24"
+        android:title="About Us"
+        app:showAsAction="never"/>
 </menu>

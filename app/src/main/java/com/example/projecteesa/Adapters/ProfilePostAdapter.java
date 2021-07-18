@@ -1,6 +1,7 @@
 package com.example.projecteesa.Adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,9 +24,16 @@ import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.example.projecteesa.utils.MotionToastUtils;
 import com.example.projecteesa.utils.TimeUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -37,6 +46,8 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
     Context context;
     PostItemClicked listener;
     ArrayList<String> savedPosts;
+    Post p;
+    boolean b;
     String currentUserUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     public ProfilePostAdapter(ArrayList<Post> posts,Context context,PostItemClicked listener) {
         this.posts = posts;
@@ -118,37 +129,76 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             @Override
             public void onClick(View v) {
                 String postID=posts.get(holder.getAdapterPosition()).getPostId();
+
                 listener.onCommentClicked(postID);
             }
         });
 
         holder.postMenuBtn.setOnClickListener(v -> {
+
             PopupMenu menu = new PopupMenu(context, holder.postMenuBtn);
             menu.inflate(R.menu.my_post_menu);
+
             menu.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() ==  R.id.delete_post){
-                    ActivityProgressDialog dialog = new ActivityProgressDialog(context);
-                    dialog.setCancelable(false);
-                    dialog.setTitle("Deleting Post");
-                    dialog.setMessage("Please wait while we delete your post");
-                    dialog.showDialog();
-                    String postId = posts.get(holder.getAdapterPosition()).getPostId();
-                    FirebaseFirestore.getInstance().collection("AllPost").document(postId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull @NotNull Task<Void> task) {
-                            dialog.hideDialog();
-                            if (task.isSuccessful()){
-                                MotionToastUtils.showSuccessToast(context, "Post deleted", "We have successfully deleted your post");
-                                posts.remove(holder.getAdapterPosition());
-                                notifyDataSetChanged();
-                            }else{
-                                MotionToastUtils.showErrorToast(context, "Error", "Some error occurred while deleting your post");
-                            }
+                AlertDialog.Builder alert =new AlertDialog.Builder(context);
+                alert.setTitle("Delete").setMessage("Are you sure?")
+                        .setNegativeButton("No",null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog1, int which) {
+
+
+
+                        if (item.getItemId() == R.id.delete_post) {
+                            ActivityProgressDialog dialog = new ActivityProgressDialog(context);
+                            dialog.setCancelable(false);
+                            dialog.setTitle("Deleting Post");
+                            dialog.setMessage("Please wait while we delete your post");
+
+                            dialog.showDialog();
+                            String imgUrl = posts.get((holder.getAdapterPosition())).getImageUrl();
+                            String postId = posts.get(holder.getAdapterPosition()).getPostId();
+                            FirebaseFirestore.getInstance().collection("AllPost/" + postId + "/comments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                                    for (QueryDocumentSnapshot snapshots : task.getResult()) {
+                                        FirebaseFirestore.getInstance().collection("AllPost/" + postId + "/comments").document(snapshots.getId()).delete();
+                                    }
+                                }
+                            });
+                            FirebaseFirestore.getInstance().collection("AllPost").document(postId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                    dialog.hideDialog();
+                                    if (task.isSuccessful()) {
+                                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("posts/" + postId);
+                                        StorageReference mPic = FirebaseStorage.getInstance().getReferenceFromUrl("" + imgUrl);
+                                        mPic.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                MotionToastUtils.showSuccessToast(context, "Post deleted", "We have successfully deleted your post");
+                                                posts.remove(holder.getAdapterPosition());
+                                                notifyDataSetChanged();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull @NotNull Exception e) {
+                                                MotionToastUtils.showErrorToast(context, "Error", e + "");
+                                            }
+                                        });
+
+                                    } else {
+                                        MotionToastUtils.showErrorToast(context, "Error", "Some error occurred while deleting your post");
+                                    }
+                                }
+                            });
+//                            return true;
+                                b=true;
                         }
-                    });
-                    return true;
-                }
-                return false;
+
+                    }
+                });
+                    alert.show();
+                return b;
             });
             menu.show();
         });

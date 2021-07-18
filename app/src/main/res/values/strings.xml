@@ -2,4 +2,6 @@
     <string name="app_name">Sanshreya</string>
     <string name="show_password">Show Password</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="aboutUs">this app is made by the students of EESA community of NIT PATNA. This android application
+    is developed by Sameer Shekhar ,Mayank Kumar and Ayushman Sharma. Link to the web version of this app is given below </string>
 </resources>

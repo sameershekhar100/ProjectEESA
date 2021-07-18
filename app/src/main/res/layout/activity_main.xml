@@ -26,7 +26,7 @@
         app:cnb_menuResource="@menu/bottom_menu"
         android:background="@drawable/radius_background"
         app:cnb_radius="18dp"
-        app:cnb_iconSize="24dp"
+        app:cnb_iconSize="25dp"
         />
 
 </RelativeLayout>

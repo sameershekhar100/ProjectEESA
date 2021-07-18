@@ -48,6 +48,7 @@ public class CreatePostActivity extends AppCompatActivity {
     Uri selected;
     String caption;
     Uri downloadUrl;
+    String pID;
     StorageReference storageReference;
     FirebaseFirestore firestore;
     String userID= FirebaseAuth.getInstance().getUid();
@@ -117,7 +118,8 @@ public class CreatePostActivity extends AppCompatActivity {
         {
             caption="";
         }
-        StorageReference photoRef=storageReference.child(selected.getLastPathSegment());
+        pID=userID+System.currentTimeMillis();
+        StorageReference photoRef=storageReference.child(pID);
         byte[] data;
         try {
             //compression of selected image to 10% of the actual size
