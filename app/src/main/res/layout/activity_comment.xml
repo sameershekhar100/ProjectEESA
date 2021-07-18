@@ -60,7 +60,7 @@
             </LinearLayout>
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="250dp"
                 android:scaleType="fitCenter"
                 android:id="@+id/post_image1"
                 android:background="@drawable/border_bg"

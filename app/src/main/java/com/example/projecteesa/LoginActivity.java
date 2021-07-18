@@ -182,6 +182,7 @@ public class LoginActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
+                progressDialog.hideDialog();
                 MotionToastUtils.showErrorToast(mContext, "Error", "Some error occurred in sending verification email");
                 mAuth.signOut();
             }

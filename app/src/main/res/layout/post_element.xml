@@ -46,6 +46,9 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:visibility="gone"
+                android:padding="4dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_marginHorizontal="4dp"
                 android:layout_alignParentEnd="true"
                 android:gravity="end"
                 android:text="&#8942;"/>
