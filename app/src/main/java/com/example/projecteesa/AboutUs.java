@@ -18,12 +18,13 @@ public class AboutUs extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
         aboutUs=findViewById(R.id.aboutUS);
-        firestore.collection("AboutUs").document("AboutUsText").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                String txt=documentSnapshot.getString("Text");
-//                aboutUs.setText(txt);
-            }
-        });
+        getSupportActionBar().hide();
+//        firestore.collection("AboutUs").document("AboutUsText").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                String txt=documentSnapshot.getString("Text");
+////                aboutUs.setText(txt);
+//            }
+//        });
     }
 }
