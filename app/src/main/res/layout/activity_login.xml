@@ -9,8 +9,9 @@
 
     <ImageView
         android:id="@+id/splash_logo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
+        android:alpha="0.8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,6 +31,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/splash_logo" />
+
+    <TextView
+        android:id="@+id/appNameTv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/general_text_style"
+        android:fontFamily="@font/comic_sans"
+        android:textSize="22sp"
+        android:textAlignment="center"
+        android:text="Where Corporate Meets Students"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appNameTv" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/login_layout"

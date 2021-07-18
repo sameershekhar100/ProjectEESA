@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView splashLogo;
     private ConstraintLayout loginLayout;
     private ActivityProgressDialog progressDialog;
-    private TextView appNameTv;
+    private TextView appNameTv,appNameTv1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         //hiding the action bar
         getSupportActionBar().hide();
         appNameTv = findViewById(R.id.appNameTv);
+        appNameTv1 = findViewById(R.id.appNameTv1);
         progressDialog = new ActivityProgressDialog(mContext);
         progressDialog.setCancelable(false);
         splashLogo = findViewById(R.id.splash_logo);
@@ -91,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         Handler handler = new Handler();
         handler.postDelayed(() -> {
             appNameTv.animate().scaleX(0.0f);
+            appNameTv1.animate().scaleX(0.0f);
             splashLogo.animate().scaleX(0.0f).scaleY(0.0f).withEndAction(() -> {
                 FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null) {
@@ -106,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginLayout.setVisibility(View.VISIBLE);
                 }
             });
-        }, 3500);
+        }, 2500);
 
     }
 
