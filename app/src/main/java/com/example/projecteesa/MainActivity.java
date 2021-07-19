@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if (fragment != null) {
                 fragmentManager = getSupportFragmentManager();
+                fragmentManager.popBackStackImmediate();
                 fragmentManager.beginTransaction()
                         .replace(R.id.main_frame, fragment)
                         .addToBackStack("home")
