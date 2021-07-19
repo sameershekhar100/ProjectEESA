@@ -146,6 +146,10 @@
         android:text="Post"
         />
 </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
     <TextView
         android:id="@+id/text"
         style="@style/general_text_style"
@@ -156,6 +160,15 @@
         android:textSize="22dp"
         android:textStyle="bold"
         />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/numComments"
+            android:layout_gravity="end|center_vertical"
+            android:gravity="center"
+            android:layout_marginEnd="18dp"
+            android:textSize="16sp"/>
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/comments_list"
         android:layout_width="match_parent"

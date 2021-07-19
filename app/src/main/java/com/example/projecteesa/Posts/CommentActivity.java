@@ -35,6 +35,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +44,8 @@ import java.util.ArrayList;
 public class CommentActivity extends AppCompatActivity {
 
     private final Context mContext = this;
-
+    int i=0;
+    TextView numComments;
     RecyclerView commentsList;
     RecyclerCommentAdapter commentAdapter;
     EditText write_cmt;
@@ -80,6 +82,7 @@ public class CommentActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         TextView titleTv = toolbar.findViewById(R.id.titleTv);
         titleTv.setText("Post");
+        numComments=findViewById(R.id.numComments);
         postProfileHeader = findViewById(R.id.post_header_img1);
         postHeader = findViewById(R.id.post_header1);
         postImg = findViewById(R.id.post_image1);
@@ -184,6 +187,8 @@ public class CommentActivity extends AppCompatActivity {
         });
 
 
+
+
 //        postTime.setText(TimeUtils.getTime(post.getTimestamp()));
 
 
@@ -214,7 +219,10 @@ public class CommentActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        i=0;
+
         commentAdapter.startListening();
+        countComment();
     }
 
     void fetchComments() {
@@ -226,7 +234,10 @@ public class CommentActivity extends AppCompatActivity {
             profileIntent.putExtra(Constants.USER_UID_KEY, uid);
             startActivity(profileIntent);
         });
+
         commentsList.setAdapter(commentAdapter);
+
+
 //        commentAdapter.startListening();
 //                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 //            @Override
@@ -247,8 +258,6 @@ public class CommentActivity extends AppCompatActivity {
 //                Toast.makeText(CommentActivity.this, e + "", Toast.LENGTH_SHORT).show();
 //            }
 //        });
-
-
     }
 
     void postComment() {
@@ -258,7 +267,7 @@ public class CommentActivity extends AppCompatActivity {
             Toast.makeText(this, "Enter yor comment", Toast.LENGTH_SHORT).show();
             return;
         }
-        Log.d("gandu<3", "posst btn klicked");
+
         username.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -275,9 +284,39 @@ public class CommentActivity extends AppCompatActivity {
             }
         });
         commentAdapter.startListening();
+        i++;
+        if(i<=100)
+        numComments.setText(i+"");
+        else
+            numComments.setText("100+");
         write_cmt.setText("");
 
     }
+void countComment(){
+        i=0;
+    commentsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        @Override
+        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+            for(DocumentSnapshot documentSnapshot:queryDocumentSnapshots) {
+                if (i > 100) {
+                    break;
+                }
+                i++;
+            }
+            if(i>100){
+                String s="100+";
+                numComments.setText(s);
+            }
+            else {
+                String s = i + "";
+                numComments.setText(s);
+            }
+        }
+    });
+}
+
+
 
 }
+
 // TODO add on click listener for comment users
