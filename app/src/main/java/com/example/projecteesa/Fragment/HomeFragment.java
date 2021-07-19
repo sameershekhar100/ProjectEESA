@@ -8,7 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +60,7 @@ public class HomeFragment extends Fragment implements PostItemClicked {
     DocumentReference userRefrence;
     private ShimmerFrameLayout shimmerLayout;
     private FirebaseRemoteConfig remoteConfig;
+    private SwipeRefreshLayout refreshLayout;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -74,6 +77,7 @@ public class HomeFragment extends Fragment implements PostItemClicked {
     }
 
     private void fetchPostsData() {
+        shimmerLayout.startShimmerAnimation();
         remoteConfig.setConfigSettingsAsync(new FirebaseRemoteConfigSettings.Builder()
                 .setMinimumFetchIntervalInSeconds(10)
         .build());
@@ -99,9 +103,11 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         String uid= FirebaseAuth.getInstance().getUid();
         userRefrence=firestore.collection("Users").document(uid);
         shimmerLayout = view.findViewById(R.id.shimmerLayout);
-        shimmerLayout.startShimmerAnimation();
         manager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
+        refreshLayout = view.findViewById(R.id.swipe_refresh);
+
+        refreshLayout.setOnRefreshListener(this::fetchPostsData);
     }
 
     private ArrayList<Post> fetchPosts() {
@@ -118,12 +124,13 @@ public class HomeFragment extends Fragment implements PostItemClicked {
                 }
                 postAdapter=new PostAdapter(postList,getActivity(), HomeFragment.this);
                 recyclerView.setAdapter(postAdapter);
-
+                refreshLayout.setRefreshing(false);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
                 MotionToastUtils.showErrorToast(getContext(), "Error fetching posts", "Some error occured while fetching posts, try after some time.");
+                refreshLayout.setRefreshing(false);
             }
         });
         return postList;

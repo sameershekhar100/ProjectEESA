@@ -5,14 +5,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Fragment.PostsFragment">
-   <ScrollView
+   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+       android:id="@+id/swipe_refresh"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
    <androidx.recyclerview.widget.RecyclerView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:id="@+id/recyclerView"/>
-   </ScrollView>
+   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
    <com.facebook.shimmer.ShimmerFrameLayout
        android:id="@+id/shimmerLayout"
