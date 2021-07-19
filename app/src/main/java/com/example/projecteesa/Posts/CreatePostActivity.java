@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.projecteesa.MainActivity;
 import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
@@ -164,12 +165,14 @@ public class CreatePostActivity extends AppCompatActivity {
             public void onSuccess(Void unused) {
                 progressDialog.hideDialog();
                 MotionToastUtils.showSuccessToast(mContext, "Success", "Your new post is now live");
-                finish();
+                Intent homeIntent = new Intent(mContext, MainActivity.class);
+                startActivity(homeIntent);
+                finishAffinity();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
-                Toast.makeText(CreatePostActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                MotionToastUtils.showErrorToast(mContext, "Error occured", "Some error occurred while created your post");
                 progressDialog.hideDialog();
             }
         });

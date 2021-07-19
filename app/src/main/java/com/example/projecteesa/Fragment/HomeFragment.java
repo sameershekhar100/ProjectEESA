@@ -23,6 +23,7 @@ import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.Constants;
+import com.example.projecteesa.utils.MotionToastUtils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -122,7 +123,7 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
-                Toast.makeText(getContext(), "??", Toast.LENGTH_SHORT).show();
+                MotionToastUtils.showErrorToast(getContext(), "Error fetching posts", "Some error occured while fetching posts, try after some time.");
             }
         });
         return postList;

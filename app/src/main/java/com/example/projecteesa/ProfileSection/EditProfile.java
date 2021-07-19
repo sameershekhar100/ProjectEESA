@@ -47,6 +47,7 @@ public class EditProfile extends AppCompatActivity {
     public EditText BIO;
     public EditText phoneNo;
     public Button update;
+    private EditText linkedinUrlEdit;
     CircleImageView imageView;
     Uri downloadurl;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -67,15 +68,13 @@ public class EditProfile extends AppCompatActivity {
         name = findViewById(R.id.edit_name);
         BIO = findViewById(R.id.edit_bio);
         phoneNo = findViewById(R.id.edit_Phone);
+        linkedinUrlEdit = findViewById(R.id.edit_linkedin_url);
         update = findViewById(R.id.update);
         imageView = findViewById(R.id.image);
         Intent intent = getIntent();
         profile = (Profile) intent.getSerializableExtra("profile");
         mstorageReference = FirebaseStorage.getInstance().getReference().child("images");
 
-        name.setText(profile.getName());
-        BIO.setText(profile.getBio());
-        phoneNo.setText(profile.getPhoneNo());
         setProfileData();
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -99,17 +98,20 @@ public class EditProfile extends AppCompatActivity {
         name.setText(profile.getName());
         BIO.setText(profile.getBio() == null ? "" : profile.getBio());
         phoneNo.setText(profile.getPhoneNo() == null ? "" : profile.getPhoneNo());
+        linkedinUrlEdit.setText(profile.getLinkedinUrl() == null ? "" : profile.getLinkedinUrl());
         if (profile.getUserImg() != null && !profile.getUserImg().isEmpty())
             Glide.with(this).load(profile.getUserImg()).into(imageView);
     }
 
     void updateProfile() {
-        String namex = name.getText().toString();
-        String BIOx = BIO.getText().toString();
-        String phonex = phoneNo.getText().toString();
+        String namex = name.getText().toString().trim();
+        String BIOx = BIO.getText().toString().trim();
+        String phonex = phoneNo.getText().toString().trim();
+        String linkedinProfileUrl = linkedinUrlEdit.getText().toString().trim();
         profile.setName(namex);
         profile.setBio(BIOx);
         profile.setPhoneNo(phonex);
+        profile.setLinkedinUrl(linkedinProfileUrl);
         if (downloadurl != null && !downloadurl.toString().isEmpty())
             profile.setUserImg(downloadurl.toString());
 
