@@ -24,6 +24,7 @@ import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.utils.Constants;
+import com.example.projecteesa.utils.MotionToastUtils;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -271,7 +272,7 @@ public class CommentActivity extends AppCompatActivity {
                 long time = System.currentTimeMillis();
                 Comment comment = new Comment(user.getUid(), cmt, time);
                 commentsRef.document(user.getUid() + "+" + time).set(comment);
-                Toast.makeText(CommentActivity.this, "posted", Toast.LENGTH_SHORT).show();
+                MotionToastUtils.showSuccessToast(mContext, "Comment posted", "Your comment just got posted");
 
             }
         }).addOnFailureListener(new OnFailureListener() {

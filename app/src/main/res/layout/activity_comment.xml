@@ -62,10 +62,11 @@
                 <ImageView
                     android:id="@+id/post_image1"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/border_bg"
+                    android:layout_marginVertical="8dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_add" />
+                    />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

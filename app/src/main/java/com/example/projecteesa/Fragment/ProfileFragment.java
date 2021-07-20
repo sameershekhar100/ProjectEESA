@@ -268,6 +268,5 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         Intent intent = new Intent(getContext(), CommentActivity.class);
         intent.putExtra("postID", postID);
         startActivity(intent);
-        Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
     }
 }
