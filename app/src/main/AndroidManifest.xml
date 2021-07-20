@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectEESA">
-        <activity android:name=".AboutUs"></activity>
+        <activity android:name=".Posts.NumLikesActivity"></activity>
+        <activity android:name=".AboutUs" />
         <activity android:name=".ProfileSection.UserProfileActivity" />
         <activity android:name=".Posts.CommentActivity" />
         <activity android:name=".ProfileSection.SavedPostsActivity" />

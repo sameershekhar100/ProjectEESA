@@ -10,4 +10,7 @@ public interface PostItemClicked {
     public void onOwnerProfileClicked(String uid);
 
     public void onCommentClicked(String postID);
+
+    public void onNumLikesClicked(String postID);
+
 }

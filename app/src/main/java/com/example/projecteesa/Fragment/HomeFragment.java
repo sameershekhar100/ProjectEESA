@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.projecteesa.Adapters.PostAdapter;
 import com.example.projecteesa.Adapters.PostItemClicked;
 import com.example.projecteesa.Posts.CommentActivity;
+import com.example.projecteesa.Posts.NumLikesActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.ProfileSection.UserProfileActivity;
 import com.example.projecteesa.R;
@@ -171,4 +172,12 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         intent.putExtra("postID", postID);
         startActivity(intent);
     }
+
+    @Override
+    public void onNumLikesClicked(String postID) {
+        Intent intent=new Intent(getContext(), NumLikesActivity.class);
+        intent.putExtra("postID",postID+"");
+        startActivity(intent);
+    }
+
 }

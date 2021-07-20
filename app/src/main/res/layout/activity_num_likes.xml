@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Posts.NumLikesActivity"
+    style="@style/gradient_finish">
+
+    <include
+        layout="@layout/main_toolbar"
+        android:id="@+id/toolbar1"/>
+    <TextView
+        android:layout_below="@+id/toolbar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/general_text_style"
+        android:textSize="28sp"
+        android:id="@+id/textx"
+        android:text="Likes"
+        android:layout_margin="12dp"
+        android:paddingLeft="12dp"
+        android:textStyle="bold"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/likesList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textx"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:layout_marginBottom="10dp"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/liked_user_view" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+
+        android:layout_centerInParent="true"
+        android:text="@string/no_likes_be_the_first_n_person_to_like_this_post"
+        android:gravity="center"
+
+        style="@style/general_text_style"
+        android:textStyle="italic"
+        android:id="@+id/zero_like"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>

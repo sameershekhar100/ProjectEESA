@@ -105,7 +105,14 @@ public class CommentActivity extends AppCompatActivity {
         commentsRef = firestore.collection("AllPost/" + postID + "/comments");
 
         fetchComments();
-
+        likes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1=new Intent(getApplicationContext(),NumLikesActivity.class);
+                intent.putExtra("postID",""+postID);
+                startActivity(intent1);
+            }
+        });
         postref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

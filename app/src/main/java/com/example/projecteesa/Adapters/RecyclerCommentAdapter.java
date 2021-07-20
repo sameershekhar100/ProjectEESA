@@ -67,12 +67,15 @@ public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment, Re
         void onProfileClicked(String uid);
     }
 
+
     @NonNull
     @NotNull
     @Override
     public CommentHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View myView = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item_view, parent, false);
         RecyclerCommentAdapter.CommentHolder cHolder = new RecyclerCommentAdapter.CommentHolder(myView);
+
+
         return cHolder;
     }
 

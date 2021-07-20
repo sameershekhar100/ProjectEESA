@@ -45,6 +45,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
     PostItemClicked listener;
     ArrayList<String> savedPosts;
     Post p;
+    ArrayList<String> likes1=new ArrayList<>();
     boolean b;
     String currentUserUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -67,6 +68,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             @Override
             public void onClick(View v) {
                 ArrayList<String> likes = posts.get(holder.getAdapterPosition()).getLikes();
+                likes1=likes;
                 String postID = posts.get(holder.getAdapterPosition()).getPostId();
                 String uid = FirebaseAuth.getInstance().getUid();
                 if (likes.contains(uid)) {
@@ -196,7 +198,10 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
 
             listener.onCommentClicked(postID);
         });
-
+        holder.likesTv.setOnClickListener(v ->{
+            String postID=posts.get(holder.getAdapterPosition()).getPostId();
+            listener.onNumLikesClicked(postID);
+        });
         return holder;
     }
 

@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -81,16 +82,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
                     savedPosts = new ArrayList<>();
                     savedPosts.add(path);
                     holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_black);
+                    Toast.makeText(context, "Saved!", Toast.LENGTH_SHORT).show();
                     listener.onBookmarkClicked(savedPosts, AccountsUtil.getUID());
                     return;
                 }
                 if (savedPosts.contains(path)) {
                     savedPosts.remove(path);
                     holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_border);
+                    Toast.makeText(context, "Unsaved!", Toast.LENGTH_SHORT).show();
+
                     listener.onBookmarkClicked(savedPosts, AccountsUtil.getUID());
                 } else {
                     savedPosts.add(path);
                     holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_black);
+                    Toast.makeText(context, "Saved!", Toast.LENGTH_SHORT).show();
                     listener.onBookmarkClicked(savedPosts, AccountsUtil.getUID());
                 }
 
@@ -106,6 +111,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.mainCard.setOnClickListener(v -> {
             String postID = posts.get(holder.getAdapterPosition()).getPostId();
             listener.onCommentClicked(postID);
+        });
+        holder.likes.setOnClickListener(v ->{
+            String postID=posts.get(holder.getAdapterPosition()).getPostId();
+            listener.onNumLikesClicked(postID);
         });
         return holder;
     }

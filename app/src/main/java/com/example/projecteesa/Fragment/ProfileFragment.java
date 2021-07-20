@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.projecteesa.Adapters.PostItemClicked;
 import com.example.projecteesa.Adapters.ProfilePostAdapter;
 import com.example.projecteesa.Posts.CommentActivity;
+import com.example.projecteesa.Posts.NumLikesActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.ProfileSection.EditProfile;
 import com.example.projecteesa.ProfileSection.Profile;
@@ -266,6 +267,13 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
     @Override
     public void onCommentClicked(String postID) {
         Intent intent = new Intent(getContext(), CommentActivity.class);
+        intent.putExtra("postID", postID);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onNumLikesClicked(String postID) {
+        Intent intent = new Intent(getContext(), NumLikesActivity.class);
         intent.putExtra("postID", postID);
         startActivity(intent);
     }

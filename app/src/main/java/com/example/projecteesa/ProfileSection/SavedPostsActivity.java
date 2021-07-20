@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.projecteesa.Adapters.PostAdapter;
 import com.example.projecteesa.Adapters.PostItemClicked;
 import com.example.projecteesa.Posts.CommentActivity;
+import com.example.projecteesa.Posts.NumLikesActivity;
 import com.example.projecteesa.Posts.Post;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
@@ -100,6 +101,13 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
     @Override
     public void onCommentClicked(String postID) {
         Intent intent = new Intent(getApplicationContext(), CommentActivity.class);
+        intent.putExtra("postID", postID + "");
+        startActivity(intent);
+    }
+
+    @Override
+    public void onNumLikesClicked(String postID) {
+        Intent intent = new Intent(getApplicationContext(), NumLikesActivity.class);
         intent.putExtra("postID", postID + "");
         startActivity(intent);
     }
