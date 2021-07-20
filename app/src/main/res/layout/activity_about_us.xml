@@ -39,7 +39,6 @@
 
         <TextView
             android:id="@+id/aboutUS"
-            style="@style/general_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/comic_sans"
@@ -55,12 +54,11 @@
 
         <TextView
             android:id="@+id/eesa"
-            style="@style/general_text_style"
+            style="@style/aboutus_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/light_gradient"
             android:drawableLeft="@drawable/ic_arrow_right_24"
             android:fontFamily="@font/comic_sans"
             android:lineSpacingExtra="4dp"
@@ -71,12 +69,11 @@
 
         <TextView
             android:id="@+id/nitp"
-            style="@style/general_text_style"
+            style="@style/aboutus_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
             android:layout_marginStart="10dp"
-            android:background="@drawable/light_gradient"
             android:drawableLeft="@drawable/ic_arrow_right_24"
             android:fontFamily="@font/comic_sans"
             android:lineSpacingExtra="4dp"

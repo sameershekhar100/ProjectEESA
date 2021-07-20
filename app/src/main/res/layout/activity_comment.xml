@@ -110,6 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="Sociallant: "
+                        android:visibility="gone"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
@@ -118,7 +119,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Here comes the caption"
-                        android:textSize="17sp" />
+                        android:layout_margin="8dp"
+                        android:textStyle="bold"
+                        android:textSize="20sp" />
                 </LinearLayout>
 
             </LinearLayout>

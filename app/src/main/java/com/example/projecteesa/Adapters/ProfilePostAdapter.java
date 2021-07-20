@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -190,6 +191,12 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             menu.show();
         });
 
+        holder.mainCard.setOnClickListener(v -> {
+            String postID = posts.get(holder.getAdapterPosition()).getPostId();
+
+            listener.onCommentClicked(postID);
+        });
+
         return holder;
     }
 
@@ -242,6 +249,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
         TextView time;
         ImageView likeBtn, commentBtn, bookmarkBtn;
         TextView postMenuBtn;
+        private CardView mainCard;
 
         public PostHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -258,6 +266,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             commentBtn = itemView.findViewById(R.id.post_comment_btn);
             bookmarkBtn = itemView.findViewById(R.id.post_save_btn);
             postMenuBtn = itemView.findViewById(R.id.postMenuBtn);
+            mainCard = itemView.findViewById(R.id.mainCard);
         }
     }
 }

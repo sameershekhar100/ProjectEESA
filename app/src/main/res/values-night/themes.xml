@@ -19,7 +19,7 @@
     </style>
 
     <style name="general_card_style">
-        <item name="android:background">#212504</item>
+        <item name="android:background">#292929</item>
     </style>
 
     <style name="gradient_finish">
@@ -27,6 +27,10 @@
     </style>
     <style name="toolbar_style">
         <item name="android:background">#000</item>
+    </style>
+
+    <style name="aboutus_style">
+        <item name="android:background">@drawable/aboutus_gradient_night</item>
     </style>
 
 </resources>

@@ -30,4 +30,8 @@
         <item name="android:background">#F3CB82</item>
     </style>
     <color name="wheat">#F3CB82</color>
+
+    <style name="aboutus_style">
+        <item name="android:background">@drawable/light_gradient</item>
+    </style>
 </resources>
