@@ -2,17 +2,15 @@ package com.example.projecteesa.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projecteesa.Adapters.ProfileItemClicked;
 import com.example.projecteesa.Adapters.SearchAdapter;
@@ -42,30 +40,30 @@ public class SearchFragment extends Fragment implements ProfileItemClicked {
     public void onStart() {
         super.onStart();
         if (adapter != null)
-        adapter.startListening();
+            adapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         if (adapter != null)
-        adapter.stopListening();
+            adapter.stopListening();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_search, container, false);
-        searchView=view.findViewById(R.id.search_view);
-        recyclerView=view.findViewById(R.id.profile_search_recycler);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        searchView = view.findViewById(R.id.search_view);
+        recyclerView = view.findViewById(R.id.profile_search_recycler);
         searchHeader = view.findViewById(R.id.search_header);
         noDataTv = view.findViewById(R.id.no_data_tv);
-        manager=new LinearLayoutManager(getContext());
+        manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
-        firestore=FirebaseFirestore.getInstance();
+        firestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        reference=firestore.collection("Users");
+        reference = firestore.collection("Users");
         fetchSuggestedProfiles();
         searchquery();
         return view;
@@ -97,7 +95,7 @@ public class SearchFragment extends Fragment implements ProfileItemClicked {
     }
 
     private void fetchProfiles(String str) {
-        if(str.length()>0) {
+        if (str.length() > 0) {
             noDataTv.setVisibility(View.VISIBLE);
             Query query = reference.orderBy("name").startAt(str).endAt(str + "\uf88f");
             FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Profile>()
@@ -112,8 +110,8 @@ public class SearchFragment extends Fragment implements ProfileItemClicked {
 
     @Override
     public void profileClicked(String uid) {
-        Intent transfer=new Intent(getContext(), UserProfileActivity.class);
-        transfer.putExtra(Constants.USER_UID_KEY,uid);
+        Intent transfer = new Intent(getContext(), UserProfileActivity.class);
+        transfer.putExtra(Constants.USER_UID_KEY, uid);
         startActivity(transfer);
     }
 }

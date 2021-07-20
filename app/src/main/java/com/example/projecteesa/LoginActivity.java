@@ -1,11 +1,5 @@
 package com.example.projecteesa;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.utils.ActivityProgressDialog;
@@ -46,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView splashLogo;
     private ConstraintLayout loginLayout;
     private ActivityProgressDialog progressDialog;
-    private TextView appNameTv,appNameTv1;
+    private TextView appNameTv, appNameTv1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,13 +95,12 @@ public class LoginActivity extends AppCompatActivity {
             splashLogo.animate().scaleX(0.0f).scaleY(0.0f).withEndAction(() -> {
                 FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null) {
-                    if (user.isEmailVerified()){
-                        AccountsUtil util=new AccountsUtil();
+                    if (user.isEmailVerified()) {
+                        AccountsUtil util = new AccountsUtil();
                         Intent transfer = new Intent(this, MainActivity.class);
                         startActivity(transfer);
                         finish();
-                    }
-                    else
+                    } else
                         resendVerificationEmail();
                 } else {
                     loginLayout.setVisibility(View.VISIBLE);
@@ -122,8 +120,7 @@ public class LoginActivity extends AppCompatActivity {
             MotionToastUtils.showErrorToast(mContext, "Invalid email", "Please enter a valid email address");
         } else if (mPassword.isEmpty()) {
             MotionToastUtils.showErrorToast(mContext, "Password is empty", "Please enter a valid password");
-        }
-        else {
+        } else {
             progressDialog.setTitle("Logging in");
             progressDialog.setMessage("Please wait while we log you in");
             progressDialog.showDialog();
@@ -135,30 +132,22 @@ public class LoginActivity extends AppCompatActivity {
 
                     //checking if user email is verified or not
                     if (task.isSuccessful()) {
-                        if (mAuth.getCurrentUser().isEmailVerified()){
-                            AccountsUtil util=new AccountsUtil();
+                        if (mAuth.getCurrentUser().isEmailVerified()) {
+                            AccountsUtil util = new AccountsUtil();
                             MotionToastUtils.showSuccessToast(mContext, "Logged In", "Glad to see you");
                             Intent transfer = new Intent(LoginActivity.this, MainActivity.class);
-                            transfer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            transfer.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(transfer);
                             finish();
-                        }
-                        else
+                        } else
                             resendVerificationEmail();
-                    }
-                    else
-                    {
+                    } else {
 
-                        if(task.getException() instanceof FirebaseAuthInvalidUserException)
-                        {
-                            createAlert("Error","This email is not registered","OK");
-                        }
-                        else if(task.getException() instanceof FirebaseAuthInvalidCredentialsException)
-                        {
-                            createAlert("Error","Wrong Password!","OK");
-                        }
-                        else
-                        {
+                        if (task.getException() instanceof FirebaseAuthInvalidUserException) {
+                            createAlert("Error", "This email is not registered", "OK");
+                        } else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            createAlert("Error", "Wrong Password!", "OK");
+                        } else {
                             MotionToastUtils.showErrorToast(mContext, "Unable to login", "We were to log you in, please check your credentials");
                             Objects.requireNonNull(task.getException()).printStackTrace();
 
@@ -191,12 +180,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void createAlert(String heading, String message, String possitive)
-    {
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+    private void createAlert(String heading, String message, String possitive) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(heading)
                 .setMessage(message)
-                .setPositiveButton(possitive,null)
+                .setPositiveButton(possitive, null)
                 .create().show();
     }
 

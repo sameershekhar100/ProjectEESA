@@ -75,7 +75,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         // Required empty public constructor
     }
 
-    public ProfileFragment(String uid){
+    public ProfileFragment(String uid) {
         userUid = uid;
     }
 
@@ -88,7 +88,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         fab = view.findViewById(R.id.edit_profile_fab);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        currentUserUid =  firebaseUser.getUid();
+        currentUserUid = firebaseUser.getUid();
         if (userUid.isEmpty()) userUid = currentUserUid;
         doc = db.document("" + userUid);
         progressDialog = new ActivityProgressDialog(mContext);
@@ -98,14 +98,14 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         name = view.findViewById(R.id.name);
         statusTv = view.findViewById(R.id.statusTv);
         imageView = view.findViewById(R.id.profile_image);
-        myPosts=view.findViewById(R.id.myPosts);
+        myPosts = view.findViewById(R.id.myPosts);
         myPostHeaderTitle = view.findViewById(R.id.header_title);
-        layoutManager=new LinearLayoutManager(getContext());
+        layoutManager = new LinearLayoutManager(getContext());
         bioTv = view.findViewById(R.id.bioTv);
         emailBtn = view.findViewById(R.id.emailBtn);
         linkedinBtn = view.findViewById(R.id.linkedinBtn);
         myPosts.setLayoutManager(layoutManager);
-        if(!userUid.equals(currentUserUid)) fab.setVisibility(View.GONE);
+        if (!userUid.equals(currentUserUid)) fab.setVisibility(View.GONE);
 
 //        getPosts();
         Log.i("Hello:", "Profile fragment");
@@ -126,15 +126,15 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
 
     private void setListeners() {
         linkedinBtn.setOnClickListener(v -> {
-            if (profilex != null){
+            if (profilex != null) {
                 String linkedinProfileUrl = profilex.getLinkedinUrl();
-                if (linkedinProfileUrl != null && !(linkedinProfileUrl.isEmpty())){
+                if (linkedinProfileUrl != null && !(linkedinProfileUrl.isEmpty())) {
                     Intent linkedinIntent = new Intent(Intent.ACTION_VIEW);
                     if (!linkedinProfileUrl.contains("https://"))
-                        linkedinProfileUrl = "https://"+linkedinProfileUrl;
+                        linkedinProfileUrl = "https://" + linkedinProfileUrl;
                     linkedinIntent.setData(Uri.parse(linkedinProfileUrl));
                     startActivity(linkedinIntent);
-                }else
+                } else
                     MotionToastUtils.showInfoToast(getContext(), "Linkedin profile unavailable", "User does not have linkedin profile");
             }
         });
@@ -167,18 +167,18 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
                     bioTv.setText(profile.getBio());
                     img = profile.getUserImg();
                     int passingYear = profile.getPassingYear();
-                    if(passingYear != 0){
-                            String statusText = "";
-                            Date date = new Date();
-                            int currentYear = date.getYear()+1900;
-                            if(currentYear>passingYear) statusText += "Alumni ";
-                            else statusText += "Student ";
-                            statusText += profile.getBranch() + " " + passingYear;
-                            statusTv.setText(statusText);
+                    if (passingYear != 0) {
+                        String statusText = "";
+                        Date date = new Date();
+                        int currentYear = date.getYear() + 1900;
+                        if (currentYear > passingYear) statusText += "Alumni ";
+                        else statusText += "Student ";
+                        statusText += profile.getBranch() + " " + passingYear;
+                        statusTv.setText(statusText);
                     }
                     if (img != null && !img.isEmpty())
                         Glide.with(getContext()).load(img).into(imageView);
-                        profilex = profile;
+                    profilex = profile;
                     if (userUid.equals(currentUserUid))
                         profileData = profilex;
                 }
@@ -189,28 +189,27 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
 
     }
 
-    void fetchMyPosts(){
-        ArrayList<Post> myPostList=new ArrayList<>();
+    void fetchMyPosts() {
+        ArrayList<Post> myPostList = new ArrayList<>();
         firestore.collection("AllPost")
                 .orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (queryDocumentSnapshots.isEmpty()){
+                if (queryDocumentSnapshots.isEmpty()) {
                     myPostHeaderTitle.setVisibility(View.GONE);
                     return;
                 }
-                for(DocumentSnapshot documentSnapshot:queryDocumentSnapshots)
-                {
-                    Post post=documentSnapshot.toObject(Post.class);
+                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    Post post = documentSnapshot.toObject(Post.class);
                     if (post.getUid().equals(userUid))
-                    myPostList.add(post);
+                        myPostList.add(post);
                 }
-                if (myPostList.isEmpty()){
+                if (myPostList.isEmpty()) {
                     myPostHeaderTitle.setVisibility(View.GONE);
                     return;
                 }
-                Log.e("abc",myPostList.size()+"");
-                profilePostAdapter=new ProfilePostAdapter(myPostList,getContext(),ProfileFragment.this);
+                Log.e("abc", myPostList.size() + "");
+                profilePostAdapter = new ProfilePostAdapter(myPostList, getContext(), ProfileFragment.this);
                 myPosts.setAdapter(profilePostAdapter);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -221,8 +220,8 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         });
 
     }
-    public static Profile getProfileData()
-    {
+
+    public static Profile getProfileData() {
         return profileData;
     }
 
@@ -230,31 +229,31 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
     public void onLikeClicked(ArrayList<String> likes, String postID) {
         firestore.collection("AllPost")
                 .document(postID)
-                .update("likes",likes)
+                .update("likes", likes)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.i("Like updated","!");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.i("Like updated", "!");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
-                Log.i("Failed: ","to update likes");
+                Log.i("Failed: ", "to update likes");
             }
         });
     }
 
     @Override
     public void onBookmarkClicked(ArrayList<String> savedPosts, String uid) {
-        doc.update("savedPost",savedPosts).addOnSuccessListener(new OnSuccessListener<Void>() {
+        doc.update("savedPost", savedPosts).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.i("SavedPost","post added!");
+                Log.i("SavedPost", "post added!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
-                Log.i("SavedPost","Failed!");
+                Log.i("SavedPost", "Failed!");
             }
         });
     }
@@ -266,8 +265,8 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
 
     @Override
     public void onCommentClicked(String postID) {
-        Intent intent=new Intent(getContext(), CommentActivity.class);
-        intent.putExtra("postID",postID);
+        Intent intent = new Intent(getContext(), CommentActivity.class);
+        intent.putExtra("postID", postID);
         startActivity(intent);
         Toast.makeText(getContext(), "working", Toast.LENGTH_SHORT).show();
     }

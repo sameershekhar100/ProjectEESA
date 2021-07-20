@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.projecteesa.Fragment.HomeFragment;
 import com.example.projecteesa.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,8 +25,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     @NotNull
     @Override
     public HomeHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.home_element,parent,false);
-        HomeHolder homeHolder=new HomeHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_element, parent, false);
+        HomeHolder homeHolder = new HomeHolder(view);
         return homeHolder;
     }
 
@@ -43,9 +42,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
     public class HomeHolder extends RecyclerView.ViewHolder {
         TextView text;
+
         public HomeHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            text=itemView.findViewById(R.id.home_text);
+            text = itemView.findViewById(R.id.home_text);
         }
     }
 }

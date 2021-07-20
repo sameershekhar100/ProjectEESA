@@ -2,32 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/gradient_finish"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/gradient_finish"
     android:orientation="vertical"
     tools:context=".ProfileSection.EditProfile">
 
     <TextView
+        style="@style/general_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="@font/permanent_marker"
         android:text="Edit Your Profile"
-        style="@style/general_text_style"
         android:textSize="36sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_gravity="center_horizontal"/>
+        android:textStyle="bold" />
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image"
         android:layout_width="120dp"
         android:layout_height="104dp"
-        android:src="@drawable/user_profile_placeholder"
-        android:scaleType="centerCrop"
-        android:id="@+id/image"
+        android:layout_gravity="center_horizontal"
         android:layout_margin="8dp"
-        android:layout_gravity="center_horizontal"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/user_profile_placeholder" />
 
     <TextView
         android:id="@+id/textView"
@@ -51,8 +51,8 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:text="Phone no"
         android:textSize="24sp" />
 
@@ -108,8 +108,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="UPDATE"
         android:layout_marginTop="16dp"
+        android:text="UPDATE"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

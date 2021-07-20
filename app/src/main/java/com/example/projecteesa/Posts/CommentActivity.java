@@ -3,7 +3,6 @@ package com.example.projecteesa.Posts;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,7 +43,7 @@ import java.util.ArrayList;
 public class CommentActivity extends AppCompatActivity {
 
     private final Context mContext = this;
-    int i=0;
+    int i = 0;
     TextView numComments;
     RecyclerView commentsList;
     RecyclerCommentAdapter commentAdapter;
@@ -82,7 +81,7 @@ public class CommentActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         TextView titleTv = toolbar.findViewById(R.id.titleTv);
         titleTv.setText("Post");
-        numComments=findViewById(R.id.numComments);
+        numComments = findViewById(R.id.numComments);
         postProfileHeader = findViewById(R.id.post_header_img1);
         postHeader = findViewById(R.id.post_header1);
         postImg = findViewById(R.id.post_image1);
@@ -187,8 +186,6 @@ public class CommentActivity extends AppCompatActivity {
         });
 
 
-
-
 //        postTime.setText(TimeUtils.getTime(post.getTimestamp()));
 
 
@@ -219,7 +216,7 @@ public class CommentActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        i=0;
+        i = 0;
 
         commentAdapter.startListening();
         countComment();
@@ -285,38 +282,36 @@ public class CommentActivity extends AppCompatActivity {
         });
         commentAdapter.startListening();
         i++;
-        if(i<=100)
-        numComments.setText(i+"");
+        if (i <= 100)
+            numComments.setText(i + "");
         else
             numComments.setText("100+");
         write_cmt.setText("");
 
     }
-void countComment(){
-        i=0;
-    commentsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-        @Override
-        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-            for(DocumentSnapshot documentSnapshot:queryDocumentSnapshots) {
-                if (i > 100) {
-                    break;
+
+    void countComment() {
+        i = 0;
+        commentsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    if (i > 100) {
+                        break;
+                    }
+                    i++;
                 }
-                i++;
+                if (i > 100) {
+                    String s = "100+";
+                    numComments.setText(s);
+                } else {
+                    String s = i + "";
+                    numComments.setText(s);
+                }
             }
-            if(i>100){
-                String s="100+";
-                numComments.setText(s);
-            }
-            else {
-                String s = i + "";
-                numComments.setText(s);
-            }
-        }
-    });
-}
-
+        });
+    }
 
 
 }
 
-// TODO add on click listener for comment users

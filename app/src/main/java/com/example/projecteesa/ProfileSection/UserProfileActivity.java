@@ -1,11 +1,11 @@
 package com.example.projecteesa.ProfileSection;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.projecteesa.Fragment.ProfileFragment;
 import com.example.projecteesa.R;

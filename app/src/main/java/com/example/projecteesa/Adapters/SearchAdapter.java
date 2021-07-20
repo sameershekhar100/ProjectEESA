@@ -1,6 +1,5 @@
 package com.example.projecteesa.Adapters;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +31,11 @@ public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapt
      */
     Context context;
     ProfileItemClicked listener;
+
     public SearchAdapter(@NonNull @NotNull FirestoreRecyclerOptions<Profile> options, Context context, ProfileItemClicked listener) {
         super(options);
-        this.context=context;
-        this.listener=listener;
+        this.context = context;
+        this.listener = listener;
     }
 
     @Override
@@ -45,26 +45,26 @@ public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapt
         int passingYear = model.getPassingYear();
         String statusText = "";
         Date date = new Date();
-        int currentYear = date.getYear()+1900;
-        if(currentYear>passingYear) statusText += "Alumni ";
+        int currentYear = date.getYear() + 1900;
+        if (currentYear > passingYear) statusText += "Alumni ";
         else statusText += "Student ";
-        statusText += model.getBranch() + " "+ passingYear;
+        statusText += model.getBranch() + " " + passingYear;
         holder.branch.setText(statusText);
         if (model.getUserImg() == null || model.getUserImg().isEmpty())
             holder.profile.setImageResource(R.drawable.user_profile_placeholder);
         else
-        Glide.with(context).load(model.getUserImg()).into(holder.profile);
+            Glide.with(context).load(model.getUserImg()).into(holder.profile);
     }
 
     @NonNull
     @NotNull
     @Override
     public ProfileHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.search_element,parent,false);
-        SearchAdapter.ProfileHolder holder=new SearchAdapter.ProfileHolder(view);
-        holder.card.setOnClickListener(v->
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_element, parent, false);
+        SearchAdapter.ProfileHolder holder = new SearchAdapter.ProfileHolder(view);
+        holder.card.setOnClickListener(v ->
         {
-            String uid=getSnapshots().getSnapshot(holder.getAdapterPosition()).getId();
+            String uid = getSnapshots().getSnapshot(holder.getAdapterPosition()).getId();
             listener.profileClicked(uid);
         });
         return holder;
@@ -72,14 +72,15 @@ public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapt
 
     public class ProfileHolder extends RecyclerView.ViewHolder {
         ImageView profile;
-        TextView name,branch;
+        TextView name, branch;
         CardView card;
+
         public ProfileHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            profile=itemView.findViewById(R.id.searched_image);
-            name=itemView.findViewById(R.id.searched_name);
-            branch=itemView.findViewById(R.id.searched_branch);
-            card=itemView.findViewById(R.id.searched_profile_card);
+            profile = itemView.findViewById(R.id.searched_image);
+            name = itemView.findViewById(R.id.searched_name);
+            branch = itemView.findViewById(R.id.searched_branch);
+            card = itemView.findViewById(R.id.searched_profile_card);
         }
     }
 }

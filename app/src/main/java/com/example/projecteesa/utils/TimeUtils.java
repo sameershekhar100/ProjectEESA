@@ -1,6 +1,6 @@
 package com.example.projecteesa.utils;
 
-public  class TimeUtils {
+public class TimeUtils {
     private static int SECOND_MILLIS = 1000;
     private static int MINUTE_MILLIS = 60 * SECOND_MILLIS;
     private static int HOUR_MILLIS = 60 * MINUTE_MILLIS;

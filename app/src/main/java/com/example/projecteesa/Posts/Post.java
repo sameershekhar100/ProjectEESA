@@ -1,6 +1,7 @@
 package com.example.projecteesa.Posts;
 
 import java.util.ArrayList;
+
 @SuppressWarnings("serial")
 
 public class Post {
@@ -13,19 +14,18 @@ public class Post {
     private long timestamp;
     private ArrayList<String> likes;
 
-    public Post(String postID, String userID,String name, String userProfile, String caption, String imageURL, long timestamp, ArrayList<String> likes) {
+    public Post(String postID, String userID, String name, String userProfile, String caption, String imageURL, long timestamp, ArrayList<String> likes) {
         uid = userID;
-        this.postId =postID;
+        this.postId = postID;
         this.caption = caption;
         this.imageUrl = imageURL;
-        this.userImg =userProfile;
+        this.userImg = userProfile;
         this.timestamp = timestamp;
         this.likes = likes;
-        this.name=name;
+        this.name = name;
     }
 
-    public Post()
-    {
+    public Post() {
         //Required because of firestore
     }
 

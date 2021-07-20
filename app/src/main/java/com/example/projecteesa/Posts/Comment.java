@@ -1,21 +1,19 @@
 package com.example.projecteesa.Posts;
 
 public class Comment {
-    private String uid,message;
+    private String uid, message;
     long time;
+
     //mandatory fun for firestore
-    public Comment(){
+    public Comment() {
 
     }
-
-
 
 
     public Comment(String userID, String message, long time) {
         this.uid = userID;
         this.message = message;
-        this.time=time;
-
+        this.time = time;
 
 
     }

@@ -1,8 +1,6 @@
 package com.example.projecteesa;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -18,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.utils.ActivityProgressDialog;
@@ -103,7 +100,7 @@ public class SignUpActivity extends AppCompatActivity {
         final String linkedinUrl = linkedinProfileEdit.getText().toString().trim();
         final String passingYear = passingYearEdit.getText().toString().trim();
         Date date = new Date();
-        int currentYear = date.getYear()+1900;
+        int currentYear = date.getYear() + 1900;
         if (name.equals("")) {
             MotionToastUtils.showErrorToast(mContext, "Email required", "Please enter your email address");
         } else if (email.isEmpty()) {
@@ -118,12 +115,11 @@ public class SignUpActivity extends AppCompatActivity {
             MotionToastUtils.showErrorToast(mContext, "Phone number empty", "Please enter your phone number");
         } else if (!Patterns.PHONE.matcher(phoneNum).matches()) {
             MotionToastUtils.showErrorToast(mContext, "Invalid phone number", "Please enter a valid phone number");
-        } else if(passingYear.length()<4){
+        } else if (passingYear.length() < 4) {
             MotionToastUtils.showErrorToast(mContext, "Invalid passing year", "Please enter a passing year");
-        }else if (currentYear+4 < Integer.parseInt(passingYear)){
+        } else if (currentYear + 4 < Integer.parseInt(passingYear)) {
             MotionToastUtils.showErrorToast(mContext, "Invalid passing year", "Please enter a valid passing year");
-        }
-        else {
+        } else {
             progressDialog.setTitle("Creating account");
             progressDialog.setMessage("Please wait while we sign you up");
             progressDialog.showDialog();
@@ -150,7 +146,7 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     });
 
-              }
+                }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
@@ -162,12 +158,13 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
     }
-    void add(String name, String email,String phoneNum,FirebaseUser user, String passingYear, String linkedinUrl) {
-        ArrayList<String> savedPosts=new ArrayList<>();
+
+    void add(String name, String email, String phoneNum, FirebaseUser user, String passingYear, String linkedinUrl) {
+        ArrayList<String> savedPosts = new ArrayList<>();
         String branch = Constants.BRANCH_ARRAY[branchSpinner.getSelectedItemPosition()];
-        Profile profile = new Profile(name, "Member of NITP Family", phoneNum,savedPosts, Integer.parseInt(passingYear), branch, linkedinUrl, user.getUid(), email);
-        String uid=user.getUid();
-        users.document(uid+"").set(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
+        Profile profile = new Profile(name, "Member of NITP Family", phoneNum, savedPosts, Integer.parseInt(passingYear), branch, linkedinUrl, user.getUid(), email);
+        String uid = user.getUid();
+        users.document(uid + "").set(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(SignUpActivity.this, "data added", Toast.LENGTH_SHORT).show();

@@ -54,12 +54,12 @@
             app:layout_constraintVertical_bias="0.151" />
 
         <TextView
+            android:id="@+id/eesa"
             style="@style/general_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="8dp"
-            android:id="@+id/eesa"
             android:background="@drawable/light_gradient"
             android:drawableLeft="@drawable/ic_arrow_right_24"
             android:fontFamily="@font/comic_sans"
@@ -70,6 +70,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/nitp"
             style="@style/general_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +80,6 @@
             android:drawableLeft="@drawable/ic_arrow_right_24"
             android:fontFamily="@font/comic_sans"
             android:lineSpacingExtra="4dp"
-            android:id="@+id/nitp"
             android:padding="11dp"
             android:text="About NIT PATNA"
             android:textSize="18sp"

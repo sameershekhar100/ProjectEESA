@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment,RecyclerCommentAdapter.CommentHolder> {
+public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment, RecyclerCommentAdapter.CommentHolder> {
 
 
     /**
@@ -33,26 +33,26 @@ public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment,Rec
      * FirestoreRecyclerOptions} for configuration options.
      *
      * @param options
-     *
      */
     Context context;
     private final CommentClickListener mListener;
+
     public RecyclerCommentAdapter(@NonNull @NotNull FirestoreRecyclerOptions<Comment> options, Context context, CommentClickListener mListener) {
         super(options);
-        this.context=context;
+        this.context = context;
         this.mListener = mListener;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull @NotNull RecyclerCommentAdapter.CommentHolder holder, int position, @NonNull @NotNull Comment model) {
-         FirebaseFirestore.getInstance().document("Users/"+model.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-             @Override
-             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                 Profile profile = documentSnapshot.toObject(Profile.class);
-                 holder.userName.setText(profile.getName());
-                 Glide.with(context).load(profile.getUserImg()).into(holder.comment_pic);
-             }
-         });
+        FirebaseFirestore.getInstance().document("Users/" + model.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Profile profile = documentSnapshot.toObject(Profile.class);
+                holder.userName.setText(profile.getName());
+                Glide.with(context).load(profile.getUserImg()).into(holder.comment_pic);
+            }
+        });
         holder.cMsg.setText(model.getMessage());
 //        holder.userName.setText(model.getUserID());
         holder.cTime.setText(TimeUtils.getTime(model.getTime()));
@@ -71,8 +71,8 @@ public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment,Rec
     @NotNull
     @Override
     public CommentHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View myView= LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item_view,parent,false);
-        RecyclerCommentAdapter.CommentHolder cHolder=new RecyclerCommentAdapter.CommentHolder(myView);
+        View myView = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item_view, parent, false);
+        RecyclerCommentAdapter.CommentHolder cHolder = new RecyclerCommentAdapter.CommentHolder(myView);
         return cHolder;
     }
 

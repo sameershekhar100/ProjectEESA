@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     private Context mContext = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
         ChipNavigationBar navbar = findViewById(R.id.bottom_nav);
         if (savedInstanceState == null) {
             navbar.setItemSelected(R.id.home, true);
-            fragmentManager=getSupportFragmentManager();
-            HomeFragment home=new HomeFragment();
-            fragmentManager.beginTransaction().replace(R.id.main_frame,home, "home").commit();
+            fragmentManager = getSupportFragmentManager();
+            HomeFragment home = new HomeFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_frame, home, "home").commit();
         }
         navbar.setOnItemSelectedListener(i -> {
             Fragment fragment = null;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(mContext, SavedPostsActivity.class));
                         return true;
                     case R.id.aboutUS:
-                        startActivity(new Intent(mContext,AboutUs.class));
+                        startActivity(new Intent(mContext, AboutUs.class));
                         return true;
                     case R.id.privacyPolicy:
                         Intent i = new Intent(Intent.ACTION_VIEW);

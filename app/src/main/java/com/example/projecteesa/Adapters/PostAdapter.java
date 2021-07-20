@@ -1,13 +1,11 @@
 package com.example.projecteesa.Adapters;
 
 import android.content.Context;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,11 +30,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     PostItemClicked listener;
     static ArrayList<String> savedPosts;
 
-    public PostAdapter(ArrayList<Post> posts,Context context,PostItemClicked listener) {
+    public PostAdapter(ArrayList<Post> posts, Context context, PostItemClicked listener) {
         this.posts = posts;
-        this.context=context;
-        this.listener=listener;
-        if(AccountsUtil.fetchData()!=null) {
+        this.context = context;
+        this.listener = listener;
+        if (AccountsUtil.fetchData() != null) {
             savedPosts = AccountsUtil.fetchData().getSavedPost();
         }
     }
@@ -45,37 +43,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     @NotNull
     @Override
     public PostHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View myView= LayoutInflater.from(parent.getContext()).inflate(R.layout.post_element,parent,false);
-        PostHolder holder=new PostHolder(myView);
+        View myView = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_element, parent, false);
+        PostHolder holder = new PostHolder(myView);
         holder.likeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> likes=posts.get(holder.getAdapterPosition()).getLikes();
-                String postID=posts.get(holder.getAdapterPosition()).getPostId();
-                String uid=FirebaseAuth.getInstance().getUid();
-                if(likes.contains(uid))
-                {
+                ArrayList<String> likes = posts.get(holder.getAdapterPosition()).getLikes();
+                String postID = posts.get(holder.getAdapterPosition()).getPostId();
+                String uid = FirebaseAuth.getInstance().getUid();
+                if (likes.contains(uid)) {
                     likes.remove(uid);
-                    listener.onLikeClicked(likes,postID);
+                    listener.onLikeClicked(likes, postID);
                     holder.likeBtn.setImageResource(R.drawable.ic_like_border);
-                    if(likes.size()<2)
-                    {
-                        holder.likes.setText(likes.size()+" like");
-                    }
-                    else {
+                    if (likes.size() < 2) {
+                        holder.likes.setText(likes.size() + " like");
+                    } else {
                         holder.likes.setText(likes.size() + " likes");
                     }
-                }
-                else
-                 {
-                   likes.add(uid);
-                    listener.onLikeClicked(likes,postID);
+                } else {
+                    likes.add(uid);
+                    listener.onLikeClicked(likes, postID);
                     holder.likeBtn.setImageResource(R.drawable.ic_like);
-                    if(likes.size()<2)
-                    {
-                        holder.likes.setText(likes.size()+" like");
-                    }
-                    else {
+                    if (likes.size() < 2) {
+                        holder.likes.setText(likes.size() + " like");
+                    } else {
                         holder.likes.setText(likes.size() + " likes");
                     }
                 }
@@ -85,25 +76,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             @Override
             public void onClick(View v) {
                 assert AccountsUtil.fetchData() != null;
-                String path="AllPost/"+posts.get(holder.getAdapterPosition()).getPostId();
-                if (savedPosts == null){
+                String path = "AllPost/" + posts.get(holder.getAdapterPosition()).getPostId();
+                if (savedPosts == null) {
                     savedPosts = new ArrayList<>();
                     savedPosts.add(path);
                     holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_black);
-                    listener.onBookmarkClicked(savedPosts,AccountsUtil.getUID());
+                    listener.onBookmarkClicked(savedPosts, AccountsUtil.getUID());
                     return;
                 }
-                if(savedPosts.contains(path))
-                {
+                if (savedPosts.contains(path)) {
                     savedPosts.remove(path);
                     holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_border);
-                    listener.onBookmarkClicked(savedPosts,AccountsUtil.getUID());
-                }
-                else
-                {
+                    listener.onBookmarkClicked(savedPosts, AccountsUtil.getUID());
+                } else {
                     savedPosts.add(path);
                     holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_black);
-                    listener.onBookmarkClicked(savedPosts,AccountsUtil.getUID());
+                    listener.onBookmarkClicked(savedPosts, AccountsUtil.getUID());
                 }
 
             }
@@ -111,58 +99,52 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String postID=posts.get(holder.getAdapterPosition()).getPostId();
+                String postID = posts.get(holder.getAdapterPosition()).getPostId();
                 listener.onCommentClicked(postID);
             }
         });
         holder.mainCard.setOnClickListener(v -> {
-            String postID=posts.get(holder.getAdapterPosition()).getPostId();
+            String postID = posts.get(holder.getAdapterPosition()).getPostId();
             listener.onCommentClicked(postID);
         });
         return holder;
     }
-    public void setData(ArrayList<Post> posts)
-    {
-        this.posts=posts;
+
+    public void setData(ArrayList<Post> posts) {
+        this.posts = posts;
         notifyDataSetChanged();
     }
+
     @Override
     public void onBindViewHolder(@NonNull @NotNull PostAdapter.PostHolder holder, int position) {
         holder.mainCard.setAnimation(AnimationUtils.loadAnimation(context, R.anim.post_animation));
-        Post post=posts.get(position);
-        ArrayList<String> likes= post.getLikes();
+        Post post = posts.get(position);
+        ArrayList<String> likes = post.getLikes();
         ArrayList<String> saved;
-        if (AccountsUtil.fetchData() !=null)
-        saved= AccountsUtil.fetchData().getSavedPost();
+        if (AccountsUtil.fetchData() != null)
+            saved = AccountsUtil.fetchData().getSavedPost();
         else
             saved = new ArrayList<>();
         holder.postHeader.setText(post.getName());
         Glide.with(context).load(post.getImageUrl()).into(holder.postImg);
-        if(likes.size()<2)
-        {
-            holder.likes.setText(likes.size()+" like");
-        }
-        else {
+        if (likes.size() < 2) {
+            holder.likes.setText(likes.size() + " like");
+        } else {
             holder.likes.setText(likes.size() + " likes");
         }
-        holder.captionHeader.setText(post.getName()+": ");
+        holder.captionHeader.setText(post.getName() + ": ");
         holder.caption.setText(post.getCaption());
         if (post.getUserImg() != null && !(post.getUserImg().isEmpty()))
-        Glide.with(context).load(post.getUserImg()).into(holder.postProfileHeader);
+            Glide.with(context).load(post.getUserImg()).into(holder.postProfileHeader);
         else holder.postProfileHeader.setImageResource(R.drawable.user_profile_placeholder);
-        if(post.getLikes().contains(AccountsUtil.getUID()))
-        {
+        if (post.getLikes().contains(AccountsUtil.getUID())) {
             holder.likeBtn.setImageResource(R.drawable.ic_like);
-        }
-        else
-        {
+        } else {
             holder.likeBtn.setImageResource(R.drawable.ic_like_border);
         }
-        if(saved!=null && saved.contains("AllPost/"+post.getPostId()))
-        {
+        if (saved != null && saved.contains("AllPost/" + post.getPostId())) {
             holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_black);
-        }
-        else {
+        } else {
             holder.bookmarkBtn.setImageResource(R.drawable.ic_bookmark_border);
         }
         holder.postHeaderLayout.setOnClickListener(new View.OnClickListener() {
@@ -180,24 +162,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     }
 
     public class PostHolder extends RecyclerView.ViewHolder {
-        ImageView postImg,postProfileHeader,likeBtn,commentBtn,bookmarkBtn;
-        TextView caption,likes,captionHeader,postHeader,postTime;
+        ImageView postImg, postProfileHeader, likeBtn, commentBtn, bookmarkBtn;
+        TextView caption, likes, captionHeader, postHeader, postTime;
         CardView mainCard;
         RelativeLayout postHeaderLayout;
+
         public PostHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            postProfileHeader=itemView.findViewById(R.id.post_header_img);
-            postHeader=itemView.findViewById(R.id.post_header);
-            postImg=itemView.findViewById(R.id.post_image);
-            likeBtn=itemView.findViewById(R.id.post_like_btn);
-            commentBtn=itemView.findViewById(R.id.post_comment_btn);
-            likes=itemView.findViewById(R.id.like_number_text);
-            captionHeader=itemView.findViewById(R.id.caption_header);
-            caption=itemView.findViewById(R.id.post_caption);
+            postProfileHeader = itemView.findViewById(R.id.post_header_img);
+            postHeader = itemView.findViewById(R.id.post_header);
+            postImg = itemView.findViewById(R.id.post_image);
+            likeBtn = itemView.findViewById(R.id.post_like_btn);
+            commentBtn = itemView.findViewById(R.id.post_comment_btn);
+            likes = itemView.findViewById(R.id.like_number_text);
+            captionHeader = itemView.findViewById(R.id.caption_header);
+            caption = itemView.findViewById(R.id.post_caption);
             mainCard = itemView.findViewById(R.id.mainCard);
-            bookmarkBtn=itemView.findViewById(R.id.post_save_btn);
+            bookmarkBtn = itemView.findViewById(R.id.post_save_btn);
             postHeaderLayout = itemView.findViewById(R.id.post_header_layout);
-            postTime= itemView.findViewById(R.id.post_time);
+            postTime = itemView.findViewById(R.id.post_time);
         }
     }
 }

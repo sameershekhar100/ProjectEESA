@@ -1,4 +1,5 @@
 package com.example.projecteesa.ProfileSection;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -61,10 +62,10 @@ public class Profile implements Serializable {
         this.name = name;
         this.bio = bio;
         this.phoneNo = phoneNo;
-        this.savedPost=savedPost;
-        userImg ="";
+        this.savedPost = savedPost;
+        userImg = "";
         this.branch = "";
-        this.passingYear=0;
+        this.passingYear = 0;
         this.linkedinUrl = "";
     }
 
@@ -81,7 +82,7 @@ public class Profile implements Serializable {
         this.email = email;
     }
 
-    public Profile(){
+    public Profile() {
 
     }
 

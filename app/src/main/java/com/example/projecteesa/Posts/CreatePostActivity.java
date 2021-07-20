@@ -18,9 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.projecteesa.MainActivity;
-import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
+import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.example.projecteesa.utils.MotionToastUtils;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,11 +52,12 @@ public class CreatePostActivity extends AppCompatActivity {
     String pID;
     StorageReference storageReference;
     FirebaseFirestore firestore;
-    String userID= FirebaseAuth.getInstance().getUid();
-    CollectionReference postsCollection,UserCollection;
+    String userID = FirebaseAuth.getInstance().getUid();
+    CollectionReference postsCollection, UserCollection;
     private Toolbar toolbar;
-    private static final int IMG_CODE=1;
+    private static final int IMG_CODE = 1;
     private ActivityProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,40 +69,40 @@ public class CreatePostActivity extends AppCompatActivity {
         titleTv.setText("Create a new post");
         progressDialog = new ActivityProgressDialog(mContext);
         progressDialog.setCancelable(false);
-        postImg.setOnClickListener(v->{
-            Intent post=new Intent();
+        postImg.setOnClickListener(v -> {
+            Intent post = new Intent();
             post.setType("image/*");
             post.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(post,"Select Picture"),IMG_CODE);
+            startActivityForResult(Intent.createChooser(post, "Select Picture"), IMG_CODE);
         });
-        post.setOnClickListener(v->{
-            if(selected!=null) {
+        post.setOnClickListener(v -> {
+            if (selected != null) {
                 caption = captionEdit.getText().toString().trim();
                 createPost(caption);
             }
         });
 
     }
+
     private void setView() {
-        emptyImg=findViewById(R.id.empty_post);
-        post=findViewById(R.id.create_post_btn);
-        postImg=findViewById(R.id.create_post_img);
-        captionEdit=findViewById(R.id.create_post_caption);
-        storageReference= FirebaseStorage.getInstance().getReference().child("posts");
-        firestore=FirebaseFirestore.getInstance();
-        postsCollection=firestore.collection("AllPost");
+        emptyImg = findViewById(R.id.empty_post);
+        post = findViewById(R.id.create_post_btn);
+        postImg = findViewById(R.id.create_post_img);
+        captionEdit = findViewById(R.id.create_post_caption);
+        storageReference = FirebaseStorage.getInstance().getReference().child("posts");
+        firestore = FirebaseFirestore.getInstance();
+        postsCollection = firestore.collection("AllPost");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMG_CODE && resultCode == RESULT_OK)
-        {
-            assert data!=null;
-            selected=data.getData();
+        if (requestCode == IMG_CODE && resultCode == RESULT_OK) {
+            assert data != null;
+            selected = data.getData();
             try {
-                Bitmap currentImage= MediaStore.Images.Media.getBitmap
-                        (this.getContentResolver(),selected);
+                Bitmap currentImage = MediaStore.Images.Media.getBitmap
+                        (this.getContentResolver(), selected);
                 postImg.setImageBitmap(currentImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -115,12 +116,11 @@ public class CreatePostActivity extends AppCompatActivity {
         progressDialog.setTitle("Creating new post");
         progressDialog.setMessage("Please wait while we create your new post");
         progressDialog.showDialog();
-        if(caption==null)
-        {
-            caption="";
+        if (caption == null) {
+            caption = "";
         }
-        pID=userID+System.currentTimeMillis();
-        StorageReference photoRef=storageReference.child(pID);
+        pID = userID + System.currentTimeMillis();
+        StorageReference photoRef = storageReference.child(pID);
         byte[] data;
         try {
             //compression of selected image to 10% of the actual size
@@ -131,9 +131,9 @@ public class CreatePostActivity extends AppCompatActivity {
             photoRef.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> taskresult=taskSnapshot.getStorage().getDownloadUrl();
-                    while (!taskresult.isSuccessful());
-                    downloadUrl=taskresult.getResult();
+                    Task<Uri> taskresult = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!taskresult.isSuccessful()) ;
+                    downloadUrl = taskresult.getResult();
                     addDataToFirestore();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -151,15 +151,15 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
     private void addDataToFirestore() {
-        String url=downloadUrl.toString();
-        long time=System.currentTimeMillis();
-        ArrayList<String> likes=new ArrayList<>();
-        AccountsUtil util=new AccountsUtil();
-        Profile item=util.fetchData();
-        String userProfileImg=item.getUserImg();
-        String name= AccountsUtil.fetchData().getName();
-        String postID=userID+time;
-        Post post=new Post(postID,userID,name,userProfileImg,caption,url,time,likes);
+        String url = downloadUrl.toString();
+        long time = System.currentTimeMillis();
+        ArrayList<String> likes = new ArrayList<>();
+        AccountsUtil util = new AccountsUtil();
+        Profile item = util.fetchData();
+        String userProfileImg = item.getUserImg();
+        String name = AccountsUtil.fetchData().getName();
+        String postID = userID + time;
+        Post post = new Post(postID, userID, name, userProfileImg, caption, url, time, likes);
         postsCollection.document(postID).set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
