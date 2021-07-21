@@ -94,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse("https://sites.google.com/view/sanshreya-home/home"));
                         startActivity(i);
+                        return true;
+                    case R.id.websiteBtn:
+                        Intent websietIntent = new Intent(Intent.ACTION_VIEW);
+                        websietIntent.setData(Uri.parse("https://projecteesa.web.app"));
+                        startActivity(websietIntent);
 
                 }
                 return false;

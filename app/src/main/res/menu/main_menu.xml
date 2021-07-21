@@ -20,4 +20,9 @@
         android:id="@+id/privacyPolicy"
         android:title="Privacy Policy"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/websiteBtn"
+        android:title="Go to website"
+        app:showAsAction="never"/>
 </menu>
