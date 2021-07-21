@@ -89,7 +89,7 @@ public class SearchFragment extends Fragment implements ProfileItemClicked {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                fetchProfiles(newText);
+                //fetchProfiles(newText);
                 return false;
             }
         });
