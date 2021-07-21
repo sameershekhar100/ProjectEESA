@@ -144,7 +144,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.captionHeader.setText(post.getName() + ": ");
         holder.caption.setText(post.getCaption());
         if (post.getUserImg() != null && !(post.getUserImg().isEmpty()))
-            Glide.with(context).load(post.getUserImg()).into(holder.postProfileHeader);
+            Glide.with(context).load(post.getUserImg())
+                    .placeholder(R.drawable.user_profile_placeholder)
+                    .error(R.drawable.user_profile_placeholder)
+                    .into(holder.postProfileHeader);
         else holder.postProfileHeader.setImageResource(R.drawable.user_profile_placeholder);
         if (post.getLikes().contains(AccountsUtil.getUID())) {
             holder.likeBtn.setImageResource(R.drawable.ic_like);

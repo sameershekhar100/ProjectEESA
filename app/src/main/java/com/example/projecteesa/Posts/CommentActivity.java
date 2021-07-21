@@ -130,7 +130,10 @@ public class CommentActivity extends AppCompatActivity {
                 Glide.with(getApplicationContext()).load(post.getImageUrl()).into(postImg);
 
                 if (post.getUserImg() != null && !(post.getUserImg().isEmpty()))
-                    Glide.with(getApplicationContext()).load(post.getUserImg()).into(postProfileHeader);
+                    Glide.with(getApplicationContext()).load(post.getUserImg())
+                            .placeholder(R.drawable.user_profile_placeholder)
+                            .error(R.drawable.user_profile_placeholder)
+                            .into(postProfileHeader);
                 else
                     postProfileHeader.setImageResource(R.drawable.user_profile_placeholder);
                 if (like.contains(user.getUid())) {

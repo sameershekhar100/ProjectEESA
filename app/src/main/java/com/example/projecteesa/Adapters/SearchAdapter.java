@@ -53,7 +53,10 @@ public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapt
         if (model.getUserImg() == null || model.getUserImg().isEmpty())
             holder.profile.setImageResource(R.drawable.user_profile_placeholder);
         else
-            Glide.with(context).load(model.getUserImg()).into(holder.profile);
+            Glide.with(context).load(model.getUserImg())
+                    .placeholder(R.drawable.user_profile_placeholder)
+                    .error(R.drawable.user_profile_placeholder)
+                    .into(holder.profile);
     }
 
     @NonNull

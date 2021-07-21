@@ -71,7 +71,10 @@ CollectionReference reference=firestore.collection("Users/");
                 if (p.getUserImg() == null || p.getUserImg().isEmpty())
                     holder.imageView.setImageResource(R.drawable.user_profile_placeholder);
                 else
-                Glide.with(mContext).load(p.getUserImg()).into(holder.imageView);
+                Glide.with(mContext).load(p.getUserImg())
+                        .placeholder(R.drawable.user_profile_placeholder)
+                        .error(R.drawable.user_profile_placeholder)
+                        .into(holder.imageView);
             }
         });
 

@@ -50,7 +50,10 @@ public class RecyclerCommentAdapter extends FirestoreRecyclerAdapter<Comment, Re
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Profile profile = documentSnapshot.toObject(Profile.class);
                 holder.userName.setText(profile.getName());
-                Glide.with(context).load(profile.getUserImg()).into(holder.comment_pic);
+                Glide.with(context).load(profile.getUserImg())
+                        .placeholder(R.drawable.user_profile_placeholder)
+                        .error(R.drawable.user_profile_placeholder)
+                        .into(holder.comment_pic);
             }
         });
         holder.cMsg.setText(model.getMessage());

@@ -217,7 +217,10 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
         holder.captionHeader.setText(post.getName() + ": ");
         holder.captionTv.setText(post.getCaption());
         if (post.getUserImg() != null && !post.getUserImg().isEmpty())
-            Glide.with(context).load(post.getUserImg()).into(holder.ownerImg);
+            Glide.with(context).load(post.getUserImg())
+                    .placeholder(R.drawable.user_profile_placeholder)
+                    .error(R.drawable.user_profile_placeholder)
+                    .into(holder.ownerImg);
         else
             holder.ownerImg.setImageResource(R.drawable.user_profile_placeholder);
         holder.ownerNameTv.setText(post.getName());
