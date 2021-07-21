@@ -68,6 +68,9 @@ CollectionReference reference=firestore.collection("Users/");
                 Profile p=documentSnapshot.toObject(Profile.class);
                 holder.user.setText(p.getName());
                 holder.userBio.setText(p.getBio());
+                if (p.getUserImg() == null || p.getUserImg().isEmpty())
+                    holder.imageView.setImageResource(R.drawable.user_profile_placeholder);
+                else
                 Glide.with(mContext).load(p.getUserImg()).into(holder.imageView);
             }
         });
