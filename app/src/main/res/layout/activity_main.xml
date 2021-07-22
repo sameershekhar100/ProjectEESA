@@ -27,6 +27,9 @@
         android:background="@drawable/radius_background"
         app:cnb_radius="18dp"
         app:cnb_iconSize="25dp"
+        app:cnb_badgeColor="@color/white"
+        android:filterTouchesWhenObscured="true"
+        app:cnb_unselectedColor="#000"
         />
 
 </RelativeLayout>

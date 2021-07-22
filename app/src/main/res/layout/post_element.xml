@@ -25,21 +25,28 @@
                 android:id="@+id/post_header_img"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/user_profile_placeholder"
+                android:background="@drawable/placeholder"
+                android:src="@drawable/ic_baseline_person_24"
                 android:layout_margin="5dp"
                 />
+
             <TextView
                 android:id="@+id/post_header"
+                style="@style/general_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                style="@style/general_text_style"
-                android:gravity="center_vertical"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginBottom="7dp"
                 android:layout_toEndOf="@id/post_header_img"
+                android:layout_toRightOf="@+id/post_header_img"
+                android:fontFamily="@font/poppins"
+                android:gravity="center_vertical"
+                android:paddingTop="3dp"
                 android:text="Socilliant"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                />
+                android:textSize="15sp"
+                android:textStyle="bold" />
             <TextView
                 android:id="@+id/postMenuBtn"
                 android:layout_width="wrap_content"
@@ -83,38 +90,37 @@
                 android:layout_height="wrap_content"
                 android:text="Here comes the caption"
                 android:layout_margin="8dp"
-                android:textStyle="bold"
+
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 />
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <ImageView
                 android:id="@+id/post_like_btn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_margin="5dp"
-                android:src="@drawable/ic_like_border"
-                />
+                android:src="@drawable/ic_like_border" />
+
             <ImageView
                 android:id="@+id/post_comment_btn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_margin="5dp"
                 android:layout_toRightOf="@id/post_like_btn"
-                android:src="@drawable/ic_comment"
-                />
+                android:src="@drawable/ic_comment" />
 
             <ImageView
                 android:id="@+id/post_save_btn"
-                android:layout_width="38dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/ic_bookmark_border" />
@@ -129,17 +135,19 @@
             android:id="@+id/like_number_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="likes"
-            android:textSize="20sp"
-            android:paddingVertical="8dp"
-            android:layout_marginStart="10dp"
+            android:text="2"
+            android:fontFamily="@font/poppins"
+            android:textSize="12sp"
+            android:layout_marginStart="17dp"
             />
         <TextView
             android:id="@+id/post_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="16sp"
+            android:paddingEnd="8dp"
+            android:fontFamily="@font/poppins"
+            android:textSize="12sp"
+            android:text="now"
             android:layout_alignParentEnd="true"
             />
         </RelativeLayout>

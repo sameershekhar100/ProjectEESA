@@ -137,18 +137,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         holder.postHeader.setText(post.getName());
         Glide.with(context).load(post.getImageUrl()).into(holder.postImg);
         if (likes.size() < 2) {
-            holder.likes.setText(likes.size() + " like");
+            holder.likes.setText(likes.size()+"" );
         } else {
-            holder.likes.setText(likes.size() + " likes");
+            holder.likes.setText(likes.size()+"" );
         }
         holder.captionHeader.setText(post.getName() + ": ");
         holder.caption.setText(post.getCaption());
         if (post.getUserImg() != null && !(post.getUserImg().isEmpty()))
             Glide.with(context).load(post.getUserImg())
-                    .placeholder(R.drawable.user_profile_placeholder)
-                    .error(R.drawable.user_profile_placeholder)
+                    .placeholder(R.drawable.ic_baseline_person_24)
+                    .error(R.drawable.ic_baseline_person_24)
                     .into(holder.postProfileHeader);
-        else holder.postProfileHeader.setImageResource(R.drawable.user_profile_placeholder);
+        else holder.postProfileHeader.setImageResource(R.drawable.ic_baseline_person_24);
         if (post.getLikes().contains(AccountsUtil.getUID())) {
             holder.likeBtn.setImageResource(R.drawable.ic_like);
         } else {

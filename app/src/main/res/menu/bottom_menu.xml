@@ -4,29 +4,30 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/ic_home"
-        app:cnb_iconColor="#fff"
-        app:cnb_backgroundColor="#ff785b"
-        app:cnb_textColor="#fff"
+        app:cnb_iconColor="#000"
+        app:cnb_backgroundColor="#fff"
+        app:cnb_textColor="#000"
         android:title="Home" />
     <item
         android:id="@+id/search"
         android:icon="@drawable/ic_search"
-        app:cnb_iconColor="#fff"
-        app:cnb_backgroundColor="#ff785b"
-        app:cnb_textColor="#fff"
+        app:cnb_iconColor="#000"
+        app:cnb_backgroundColor="#fff"
+        app:cnb_textColor="#000"
         android:title="Search"/>
     <item
-        app:cnb_textColor="#fff"
+        app:cnb_textColor="#000"
         android:id="@+id/feed"
-        app:cnb_iconColor="#fff"
-        app:cnb_backgroundColor="#ff785b"
+        app:cnb_iconColor="#000"
+        app:cnb_backgroundColor="#fff"
+
         android:icon="@drawable/ic_add"
         android:title="Add Post" />
     <item
-        app:cnb_textColor="#fff"
+        app:cnb_textColor="#000"
         android:id="@+id/profile"
-        app:cnb_iconColor="#fff"
-        app:cnb_backgroundColor="#ff785b"
+        app:cnb_iconColor="#000"
+        app:cnb_backgroundColor="#fff"
         android:icon="@drawable/ic_profile"
         android:title="Profile" />
 </menu>

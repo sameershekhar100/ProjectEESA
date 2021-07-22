@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:fontFamily="@font/permanent_marker"
+            android:fontFamily="@font/rajdhani_semibold"
             android:text="ABOUT US"
             android:textSize="30sp"
             android:textStyle="bold"

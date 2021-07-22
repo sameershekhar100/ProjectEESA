@@ -51,11 +51,11 @@ public class SearchAdapter extends FirestoreRecyclerAdapter<Profile, SearchAdapt
         statusText += model.getBranch() + " " + passingYear;
         holder.branch.setText(statusText);
         if (model.getUserImg() == null || model.getUserImg().isEmpty())
-            holder.profile.setImageResource(R.drawable.user_profile_placeholder);
+            holder.profile.setImageResource(R.drawable.ic_baseline_person_24);
         else
             Glide.with(context).load(model.getUserImg())
-                    .placeholder(R.drawable.user_profile_placeholder)
-                    .error(R.drawable.user_profile_placeholder)
+                    .placeholder(R.drawable.ic_baseline_person_24)
+                    .error(R.drawable.ic_baseline_person_24)
                     .into(holder.profile);
     }
 
