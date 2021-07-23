@@ -44,7 +44,7 @@ public class NumLikesActivity extends AppCompatActivity implements likeItemClick
         recyclerView = findViewById(R.id.likesList);
 //        toolbar = (Toolbar)findViewById(R.id.toolbar1);
         Intent intent = getIntent();
-        postId = intent.getStringExtra("postID");
+        postId = intent.getStringExtra("ID");
         recyclerView.setLayoutManager(new LinearLayoutManager(NumLikesActivity.this));
         post = firestore.document("AllPost/" + postId);
         uid = firestore.collection("Users/");
@@ -53,6 +53,7 @@ public class NumLikesActivity extends AppCompatActivity implements likeItemClick
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Post post = documentSnapshot.toObject(Post.class);
+                assert post != null;
                 users = post.getLikes();
                 if(users.size()==0){
                     nonZeroLike.setVisibility(View.VISIBLE);
