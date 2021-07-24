@@ -9,10 +9,16 @@
        android:id="@+id/swipe_refresh"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
-   <androidx.recyclerview.widget.RecyclerView
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:id="@+id/recyclerView"/>
+      <androidx.core.widget.NestedScrollView
+          android:id="@+id/nested_scroll_home"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          >
+         <androidx.recyclerview.widget.RecyclerView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:id="@+id/recyclerView"/>
+      </androidx.core.widget.NestedScrollView>
    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
    <com.facebook.shimmer.ShimmerFrameLayout
@@ -50,5 +56,12 @@
 
       </LinearLayout>
    </com.facebook.shimmer.ShimmerFrameLayout>
-
+   <ProgressBar
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_centerHorizontal="true"
+       android:paddingBottom="10dp"
+       android:id="@+id/progressbar_home"
+       />
 </RelativeLayout>

@@ -6,8 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,7 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HomeFragment extends Fragment implements PostItemClicked {
-    ArrayList<Post> posts;
+    static ArrayList<Post> postList = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerView.LayoutManager manager;
     FirebaseFirestore firestore;
@@ -53,6 +55,11 @@ public class HomeFragment extends Fragment implements PostItemClicked {
     private ShimmerFrameLayout shimmerLayout;
     private FirebaseRemoteConfig remoteConfig;
     private SwipeRefreshLayout refreshLayout;
+    private static final String HOME_TAG="HomeFragment";
+    //For pagination
+    static DocumentSnapshot lastSnapshot;
+    ProgressBar progressBar;
+    NestedScrollView nestedScrollView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -64,9 +71,33 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
         remoteConfig = FirebaseRemoteConfig.getInstance();
+        Log.i(HOME_TAG,"OnCreate");
         setup(view);
-        fetchPostsData();
+        if(postList.size()==0) {
+            fetchPostsData();
+        }
+        else {
+            postAdapter=new PostAdapter(postList,getContext(),HomeFragment.this);
+            recyclerView.setAdapter(postAdapter);
+            shimmerLayout.setVisibility(View.GONE);
+        }
+        setupPagination();
         return view;
+    }
+
+    private void setupPagination() {
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY==v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight())
+                {
+                    if(lastSnapshot!=null) {
+                        fetchPosts();
+                    }
+                    Log.i(HOME_TAG,"last snapshot");
+                }
+            }
+        });
     }
 
     private void fetchPostsData() {
@@ -83,7 +114,9 @@ public class HomeFragment extends Fragment implements PostItemClicked {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Boolean> task) {
                         if (task.isSuccessful()) {
-                            posts = fetchPosts();
+                            lastSnapshot=null;
+                            postList=new ArrayList<>();
+                            fetchPosts();
                         }
                     }
                 });
@@ -101,31 +134,81 @@ public class HomeFragment extends Fragment implements PostItemClicked {
         refreshLayout = view.findViewById(R.id.swipe_refresh);
 
         refreshLayout.setOnRefreshListener(this::fetchPostsData);
+        //For pagination
+        nestedScrollView=view.findViewById(R.id.nested_scroll_home);
+        progressBar=view.findViewById(R.id.progressbar_home);
+        progressBar.setVisibility(View.GONE);
+        Log.i(HOME_TAG,"Setup view");
     }
 
-    private ArrayList<Post> fetchPosts() {
-        ArrayList<Post> postList = new ArrayList<>();
-        postRefrence.limit(remoteConfig.getLong(Constants.FETCH_POSTS_COUNT_KEY)).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                shimmerLayout.startShimmerAnimation();
-                shimmerLayout.setVisibility(View.GONE);
-                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    Post post = documentSnapshot.toObject(Post.class);
-                    postList.add(post);
+    private void fetchPosts() {
+        if(lastSnapshot==null)
+        {
+            Log.i(HOME_TAG,"first one");
+            postRefrence.limit(remoteConfig.getLong(Constants.FETCH_POSTS_COUNT_KEY)).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    shimmerLayout.startShimmerAnimation();
+                    shimmerLayout.setVisibility(View.GONE);
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        Post post = documentSnapshot.toObject(Post.class);
+                        postList.add(post);
+                    }
+                    int lastSize=queryDocumentSnapshots.size()-1;
+                    if(lastSize>0) {
+                        lastSnapshot = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                    }
+                    else
+                    {
+                        lastSnapshot=null;
+                    }
+                    postAdapter = new PostAdapter(postList, getActivity(), HomeFragment.this);
+                    recyclerView.setAdapter(postAdapter);
+                    refreshLayout.setRefreshing(false);
                 }
-                postAdapter = new PostAdapter(postList, getActivity(), HomeFragment.this);
-                recyclerView.setAdapter(postAdapter);
-                refreshLayout.setRefreshing(false);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull @NotNull Exception e) {
-                MotionToastUtils.showErrorToast(getContext(), "Error fetching posts", "Some error occured while fetching posts, try after some time.");
-                refreshLayout.setRefreshing(false);
-            }
-        });
-        return postList;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception e) {
+                    MotionToastUtils.showErrorToast(getContext(), "Error fetching posts", "Some error occured while fetching posts, try after some time.");
+                    refreshLayout.setRefreshing(false);
+                }
+            });
+        }
+        else
+        {
+            Log.i(HOME_TAG,"Next Fetch");
+            progressBar.setVisibility(View.VISIBLE);
+            postRefrence.limit(remoteConfig.getLong(Constants.FETCH_POSTS_COUNT_KEY))
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .startAfter(lastSnapshot).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    shimmerLayout.startShimmerAnimation();
+                    shimmerLayout.setVisibility(View.GONE);
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        Post post = documentSnapshot.toObject(Post.class);
+                        postList.add(post);
+                    }
+                    int lastSize=queryDocumentSnapshots.size()-1;
+                    if(lastSize>0) {
+                        lastSnapshot = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                    }
+                    else
+                    {
+                        lastSnapshot=null;
+                    }
+                    postAdapter.setData(postList);
+                    progressBar.setVisibility(View.GONE);
+                    refreshLayout.setRefreshing(false);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception e) {
+                    MotionToastUtils.showErrorToast(getContext(), "Error fetching posts", "Some error occured while fetching posts, try after some time.");
+                    refreshLayout.setRefreshing(false);
+                }
+            });
+        }
     }
 
     @Override
@@ -157,7 +240,6 @@ public class HomeFragment extends Fragment implements PostItemClicked {
             }
         });
     }
-
 
     @Override
     public void onOwnerProfileClicked(String uid) {

@@ -46,8 +46,8 @@ public class CommentActivity extends AppCompatActivity {
     private final Context mContext = this;
     int i = 0;
     TextView numComments;
-    RecyclerView commentsList;
-    RecyclerCommentAdapter commentAdapter;
+    /*RecyclerView commentsList;
+    RecyclerCommentAdapter commentAdapter;*/
     EditText write_cmt;
     Button post_cmt;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -67,12 +67,12 @@ public class CommentActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private Toolbar toolbar;
 
-    @Override
+ /*   @Override
     protected void onStop() {
         super.onStop();
         if (commentAdapter != null)
             commentAdapter.stopListening();
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,9 @@ public class CommentActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         TextView titleTv = toolbar.findViewById(R.id.titleTv);
         titleTv.setText("Post");
+/*
         numComments = findViewById(R.id.numComments);
+*/
         postProfileHeader = findViewById(R.id.post_header_img1);
         postHeader = findViewById(R.id.post_header1);
         postImg = findViewById(R.id.post_image1);
@@ -94,22 +96,25 @@ public class CommentActivity extends AppCompatActivity {
         bookmarkBtn = findViewById(R.id.post_save_btn1);
         postHeaderLayout = findViewById(R.id.post_header_layout1);
 
+/*
         commentsList = findViewById(R.id.comments_list);
-        write_cmt = findViewById(R.id.write_comment);
-        post_cmt = findViewById(R.id.postCmt);
+*/
+/*        write_cmt = findViewById(R.id.write_comment);
+        post_cmt = findViewById(R.id.postCmt);*/
         Intent intent = getIntent();
         postID = intent.getStringExtra("postID");
         postPath = "AllPost/" + postID;
         postref = firestore.document("AllPost/" + postID);
-        commentsList.setLayoutManager(new LinearLayoutManager(this));
+/*        commentsList.setLayoutManager(new LinearLayoutManager(this));
         commentsRef = firestore.collection("AllPost/" + postID + "/comments");
 
-        fetchComments();
+        fetchComments();*/
         likes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1=new Intent(getApplicationContext(),NumLikesActivity.class);
-                intent.putExtra("postID",""+postID);
+                Intent intent1=new Intent(mContext,NumLikesActivity.class);
+                intent1.putExtra("ID",postID);
+                Toast.makeText(mContext, postID, Toast.LENGTH_SHORT).show();
                 startActivity(intent1);
             }
         });
@@ -141,6 +146,7 @@ public class CommentActivity extends AppCompatActivity {
                 }
             }
         });
+        assert AccountsUtil.fetchData() != null;
         savedPosts = AccountsUtil.fetchData().getSavedPost();
 
         if (savedPosts.contains(postPath)) {
@@ -214,16 +220,17 @@ public class CommentActivity extends AppCompatActivity {
         username = firestore.document("Users/" + user.getUid());
 
 
-        post_cmt.setOnClickListener(new View.OnClickListener() {
+        /*post_cmt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 postComment();
             }
-        });
+        });*/
 
 
     }
 
+/*
     @Override
     protected void onStart() {
         super.onStart();
@@ -323,6 +330,7 @@ public class CommentActivity extends AppCompatActivity {
         });
     }
 
+*/
 
 }
 

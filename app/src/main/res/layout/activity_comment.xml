@@ -129,64 +129,64 @@
 
         </androidx.cardview.widget.CardView>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <!-- <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/write_comment"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:hint="Enter your comment"
-                android:inputType="textCapSentences"
-                android:padding="14dp" />
+             <EditText
+                 android:id="@+id/write_comment"
+                 android:layout_width="280dp"
+                 android:layout_height="wrap_content"
+                 android:layout_margin="8dp"
+                 android:hint="Enter your comment"
+                 android:inputType="textCapSentences"
+                 android:padding="14dp" />
 
-            <Button
-                android:id="@+id/postCmt"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:elevation="32dp"
-                android:text="Post" />
-        </LinearLayout>
+             <Button
+                 android:id="@+id/postCmt"
+                 android:layout_width="80dp"
+                 android:layout_height="wrap_content"
+                 android:elevation="32dp"
+                 android:text="Post" />
+         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/text"
-                style="@style/general_text_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:text="Comments"
-                android:textSize="22dp"
-                android:textStyle="bold" />
+             <TextView
+                 android:id="@+id/text"
+                 style="@style/general_text_style"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginHorizontal="20dp"
+                 android:text="Comments"
+                 android:textSize="22dp"
+                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/numComments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="18dp"
-                android:gravity="center"
-                android:textSize="16sp" />
-        </LinearLayout>
+             <TextView
+                 android:id="@+id/numComments"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="end|center_vertical"
+                 android:layout_marginEnd="18dp"
+                 android:gravity="center"
+                 android:textSize="16sp" />
+         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/comments_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/write_comment"
-            android:layout_margin="18dp"
-            android:layout_weight="7"
-            android:paddingBottom="6dp"
-            android:scrollbars="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/comment_item_view" />
-
+         <androidx.recyclerview.widget.RecyclerView
+             android:id="@+id/comments_list"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_above="@+id/write_comment"
+             android:layout_margin="18dp"
+             android:layout_weight="7"
+             android:paddingBottom="6dp"
+             android:scrollbars="vertical"
+             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+             tools:listitem="@layout/comment_item_view" />
+ -->
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
