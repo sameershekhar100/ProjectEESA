@@ -45,17 +45,20 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_margin="5dp"
-                        android:src="@drawable/user_profile_placeholder" />
+                        android:background="@drawable/placeholder"
+                        android:src="@drawable/ic_baseline_person_24" />
 
                     <TextView
                         android:id="@+id/post_header1"
                         style="@style/general_text_style"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
                         android:layout_margin="5dp"
+                        android:paddingTop="3dp"
                         android:gravity="center_vertical"
                         android:text="Socilliant"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -70,21 +73,22 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/post_like_btn1"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_margin="5dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
                         android:src="@drawable/ic_like_border" />
 
 
                     <ImageView
                         android:id="@+id/post_save_btn1"
-                        android:layout_width="38dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="10dp"
                         android:src="@drawable/ic_bookmark_border" />
@@ -97,8 +101,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="likes"
-                    android:textSize="17sp" />
+                    android:layout_marginTop="2dp"
+                    tools:text="likes"
+                    android:textSize="13sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -120,9 +125,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Here comes the caption"
+                        android:fontFamily="@font/poppins_medium"
                         android:layout_margin="8dp"
-                        android:textStyle="bold"
-                        android:textSize="20sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
             </LinearLayout>

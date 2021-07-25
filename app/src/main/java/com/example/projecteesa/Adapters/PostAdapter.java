@@ -136,7 +136,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             saved = new ArrayList<>();
         holder.postHeader.setText(post.getName());
         Glide.with(context).load(post.getImageUrl()).
-                placeholder(R.drawable.user_profile_placeholder).into(holder.postImg);
+                placeholder(R.drawable.ic_baseline_person_24).into(holder.postImg);
         if (likes.size() < 2) {
             holder.likes.setText(likes.size()+"" );
         } else {

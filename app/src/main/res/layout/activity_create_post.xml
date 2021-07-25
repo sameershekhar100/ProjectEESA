@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/gradient_finish"
+    style="@style/Bg1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,46 +12,59 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/main_toolbar" />
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/main_toolbar" />
 
-    <RelativeLayout
-        android:id="@+id/post_image1"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@android:color/darker_gray">
+        <RelativeLayout
+            android:id="@+id/post_image1"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@android:color/darker_gray">
 
-        <ImageView
-            android:id="@+id/create_post_img"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:scaleType="centerInside" />
+            <ImageView
+                android:id="@+id/create_post_img"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scaleType="centerInside" />
 
-        <TextView
-            android:id="@+id/empty_post"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:gravity="center"
-            android:text="Click here to upload an image"
-            android:textSize="20sp" />
+            <TextView
+                android:id="@+id/empty_post"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                android:text="Image Preview"
+                android:textSize="20sp" />
 
-    </RelativeLayout>
+        </RelativeLayout>
 
-    <EditText
-        android:id="@+id/create_post_caption"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="Post Caption" />
+        <EditText
+            android:id="@+id/create_post_caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/poppins"
+            android:hint="Caption This" />
 
-    <Button
-        android:id="@+id/create_post_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Post!" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <ImageButton
+                android:id="@+id/create_post_btn"
+                style="@style/button_style"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:scaleType="center"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/send_black"
+                />
+        </RelativeLayout>
     </LinearLayout>
 
 </ScrollView>

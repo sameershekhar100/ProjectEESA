@@ -45,7 +45,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
     PostItemClicked listener;
     ArrayList<String> savedPosts;
     Post p;
-    ArrayList<String> likes1=new ArrayList<>();
+    ArrayList<String> likes1 = new ArrayList<>();
     boolean b;
     String currentUserUId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -68,7 +68,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             @Override
             public void onClick(View v) {
                 ArrayList<String> likes = posts.get(holder.getAdapterPosition()).getLikes();
-                likes1=likes;
+                likes1 = likes;
                 String postID = posts.get(holder.getAdapterPosition()).getPostId();
                 String uid = FirebaseAuth.getInstance().getUid();
                 if (likes.contains(uid)) {
@@ -198,8 +198,8 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
 
             listener.onCommentClicked(postID);
         });
-        holder.likesTv.setOnClickListener(v ->{
-            String postID=posts.get(holder.getAdapterPosition()).getPostId();
+        holder.likesTv.setOnClickListener(v -> {
+            String postID = posts.get(holder.getAdapterPosition()).getPostId();
             listener.onNumLikesClicked(postID);
         });
         return holder;
@@ -218,13 +218,13 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
         holder.captionTv.setText(post.getCaption());
         if (post.getUserImg() != null && !post.getUserImg().isEmpty())
             Glide.with(context).load(post.getUserImg())
-                    .placeholder(R.drawable.user_profile_placeholder)
-                    .error(R.drawable.user_profile_placeholder)
+                    .placeholder(R.drawable.ic_baseline_person_24)
+                    .error(R.drawable.ic_baseline_person_24)
                     .into(holder.ownerImg);
         else
-            holder.ownerImg.setImageResource(R.drawable.user_profile_placeholder);
+            holder.ownerImg.setImageResource(R.drawable.ic_baseline_person_24);
         holder.ownerNameTv.setText(post.getName());
-        holder.likesTv.setText(post.getLikes().size() + " likes");
+        holder.likesTv.setText(post.getLikes().size() + " ");
         holder.time.setText(TimeUtils.getTime(post.getTimestamp()));
         if (post.getLikes().contains(AccountsUtil.getUID())) {
             holder.likeBtn.setImageResource(R.drawable.ic_like);

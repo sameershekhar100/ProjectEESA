@@ -43,9 +43,9 @@
                 android:layout_toRightOf="@+id/post_header_img"
                 android:fontFamily="@font/poppins"
                 android:gravity="center_vertical"
-                android:paddingTop="3dp"
+                android:paddingTop="2dp"
                 android:text="Socilliant"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
             <TextView
                 android:id="@+id/postMenuBtn"
@@ -62,7 +62,7 @@
         </RelativeLayout>
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:scaleType="fitCenter"
             android:id="@+id/post_image"
             android:background="@drawable/border_bg"

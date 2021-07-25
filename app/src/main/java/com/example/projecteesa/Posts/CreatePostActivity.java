@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 public class CreatePostActivity extends AppCompatActivity {
     private Context mContext = this;
     TextView emptyImg;
-    Button post;
+    ImageButton post;
     ImageView postImg;
     EditText captionEdit;
     Uri selected;
@@ -76,6 +77,7 @@ public class CreatePostActivity extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(post, "Select Picture"), IMG_CODE);
         });
         post.setOnClickListener(v -> {
+            Toast.makeText(mContext, "Add a photo!!", Toast.LENGTH_SHORT).show();
             if (selected != null) {
                 caption = captionEdit.getText().toString().trim();
                 createPost(caption);

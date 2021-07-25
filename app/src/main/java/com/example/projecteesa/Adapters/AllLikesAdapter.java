@@ -69,11 +69,11 @@ CollectionReference reference=firestore.collection("Users/");
                 holder.user.setText(p.getName());
                 holder.userBio.setText(p.getBio());
                 if (p.getUserImg() == null || p.getUserImg().isEmpty())
-                    holder.imageView.setImageResource(R.drawable.user_profile_placeholder);
+                    holder.imageView.setImageResource(R.drawable.ic_baseline_person_24);
                 else
                 Glide.with(mContext).load(p.getUserImg())
-                        .placeholder(R.drawable.user_profile_placeholder)
-                        .error(R.drawable.user_profile_placeholder)
+                        .placeholder(R.drawable.ic_baseline_person_24)
+                        .error(R.drawable.ic_baseline_person_24)
                         .into(holder.imageView);
             }
         });

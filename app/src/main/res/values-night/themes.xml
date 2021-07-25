@@ -33,5 +33,11 @@
     <style name="aboutus_style">
         <item name="android:background">@drawable/aboutus_gradient_night</item>
     </style>
+    <style name="button_style">
+        <item name="android:background">@drawable/placeholder1</item>
+    </style>
+    <style name="Bg1">
+        <item name="android:background">@drawable/night_gradient</item>
 
+    </style>
 </resources>

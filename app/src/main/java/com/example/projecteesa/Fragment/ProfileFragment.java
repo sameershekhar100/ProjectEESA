@@ -274,7 +274,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
     @Override
     public void onNumLikesClicked(String postID) {
         Intent intent = new Intent(getContext(), NumLikesActivity.class);
-        intent.putExtra("postID", postID);
+        intent.putExtra("ID", postID);
         startActivity(intent);
     }
 }

@@ -136,11 +136,11 @@ public class CommentActivity extends AppCompatActivity {
 
                 if (post.getUserImg() != null && !(post.getUserImg().isEmpty()))
                     Glide.with(getApplicationContext()).load(post.getUserImg())
-                            .placeholder(R.drawable.user_profile_placeholder)
-                            .error(R.drawable.user_profile_placeholder)
+                            .placeholder(R.drawable.ic_baseline_person_24)
+                            .error(R.drawable.ic_baseline_person_24)
                             .into(postProfileHeader);
                 else
-                    postProfileHeader.setImageResource(R.drawable.user_profile_placeholder);
+                    postProfileHeader.setImageResource(R.drawable.ic_baseline_person_24);
                 if (like.contains(user.getUid())) {
                     likeBtn.setImageResource(R.drawable.ic_like);
                 }

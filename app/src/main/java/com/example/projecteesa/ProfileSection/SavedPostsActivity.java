@@ -108,7 +108,7 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
     @Override
     public void onNumLikesClicked(String postID) {
         Intent intent = new Intent(getApplicationContext(), NumLikesActivity.class);
-        intent.putExtra("postID", postID + "");
+        intent.putExtra("ID", postID + "");
         startActivity(intent);
     }
 

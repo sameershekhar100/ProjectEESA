@@ -35,4 +35,11 @@
     <style name="aboutus_style">
         <item name="android:background">@drawable/light_gradient</item>
     </style>
+    <style name="button_style">
+        <item name="android:background">@drawable/black_circle</item>
+    </style>
+    <style name="Bg1">
+        <item name="android:background">#EEEE</item>
+
+    </style>
 </resources>
