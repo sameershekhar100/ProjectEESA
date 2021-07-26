@@ -2,13 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/gradient_finish"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileSection.SavedPostsActivity"
-    style="@style/gradient_finish">
+    tools:context=".ProfileSection.SavedPostsActivity">
+
     <include
         android:id="@+id/toolbar"
-        layout="@layout/main_toolbar"/>
+        layout="@layout/main_toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/savedpost_recycler"
@@ -19,14 +20,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <TextView
-        android:id="@+id/no_post_tv"
+    <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Looks like you haven't saved any posts"
+        app:layout_constraintBottom_toBottomOf="@+id/savedpost_recycler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:visibility="invisible"
+        android:id="@+id/progress_saved"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <TextView
+        android:id="@+id/no_post_tv"
         style="@style/general_text_style"
-        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/comic_sans"
+        android:text="Looks like you haven't saved any posts"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/savedpost_recycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

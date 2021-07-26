@@ -4,32 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/gradient_finish"
+
     tools:context=".MainActivity">
+
     <include
-        layout="@layout/main_toolbar"
-        android:id="@+id/toolbar"/>
+        android:id="@+id/toolbar"
+        layout="@layout/main_toolbar" />
+
     <FrameLayout
+        android:id="@+id/main_frame"
+        style="@style/gradient_finish"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:id="@+id/main_frame"
         android:layout_above="@id/bottom_nav"
-        />
+        android:layout_below="@id/toolbar" />
 
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
+        android:id="@+id/bottom_nav"
+        style="@style/BtmNavBg"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:id="@+id/bottom_nav"
-        android:elevation="20dp"
         android:layout_alignParentBottom="true"
-        app:cnb_menuResource="@menu/bottom_menu"
-        android:background="@drawable/radius_background"
-        app:cnb_radius="18dp"
-        app:cnb_iconSize="25dp"
-        app:cnb_badgeColor="@color/white"
+        android:elevation="20dp"
         android:filterTouchesWhenObscured="true"
-        app:cnb_unselectedColor="#000"
-        />
+        app:cnb_badgeColor="@color/white"
+        app:cnb_iconSize="25dp"
+        app:cnb_menuResource="@menu/bottom_menu"
+        app:cnb_radius="18dp"
+        app:cnb_unselectedColor="#000" />
 
 </RelativeLayout>

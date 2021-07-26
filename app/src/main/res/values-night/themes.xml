@@ -36,6 +36,10 @@
     <style name="button_style">
         <item name="android:background">@drawable/placeholder1</item>
     </style>
+
+    <style name="BtmNavBg">
+        <item name="android:background">@drawable/dark_radius_background</item>
+    </style>
     <style name="Bg1">
         <item name="android:background">@drawable/night_gradient</item>
 

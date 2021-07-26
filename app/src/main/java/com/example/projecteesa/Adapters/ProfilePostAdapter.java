@@ -241,6 +241,10 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
 
 
     }
+    public void setData(ArrayList<Post> posts) {
+        this.posts = posts;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {

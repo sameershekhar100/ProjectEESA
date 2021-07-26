@@ -38,6 +38,9 @@
     <style name="button_style">
         <item name="android:background">@drawable/black_circle</item>
     </style>
+    <style name="BtmNavBg">
+        <item name="android:background">@drawable/radius_background</item>
+    </style>
     <style name="Bg1">
         <item name="android:background">#EEEE</item>
 

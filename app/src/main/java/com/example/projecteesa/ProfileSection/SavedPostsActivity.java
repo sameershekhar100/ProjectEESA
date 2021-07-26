@@ -6,8 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -34,10 +37,14 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
     RecyclerView savedPostsRecycler;
     ArrayList<String> savedPostList;
     ArrayList<Post> postsList = new ArrayList<>();
-    RecyclerView.LayoutManager manager;
+    LinearLayoutManager manager;
     PostAdapter adapter;
     FirebaseFirestore firestore;
+    static boolean b=false;
+    ProgressBar p;
+    int curr,total,scrolledOut;
     private Toolbar toolbar;
+    int i=0,j=1;
     private TextView noSavedPostsTv;
 
     @SuppressLint("WrongThread")
@@ -49,6 +56,7 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
         savedPostsRecycler = findViewById(R.id.savedpost_recycler);
         toolbar = findViewById(R.id.toolbar);
         TextView titleTv = toolbar.findViewById(R.id.titleTv);
+        p=findViewById(R.id.progress_saved);
         titleTv.setText("Saved Posts");
         savedPostList = AccountsUtil.fetchData().getSavedPost();
         noSavedPostsTv = findViewById(R.id.no_post_tv);
@@ -121,7 +129,18 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
             ArrayList<String> list = arrayLists[0];
             adapter = new PostAdapter(postsList, SavedPostsActivity.this, SavedPostsActivity.this);
             savedPostsRecycler.setAdapter(adapter);
-            for (String path : list) {
+//
+            Log.d("inside_thread",list.size()+"");
+            for(;i<list.size();i++,j++)
+             {
+                 if(j>3){
+                     setupPagination();
+
+                     Log.i("Failure:", "Fetch Start");
+
+                     break;
+                 }
+                 String path=list.get(i);
                 firestore.document(path).get().addOnSuccessListener(documentSnapshot -> {
                     Post post = documentSnapshot.toObject(Post.class);
                     if (post != null) {
@@ -134,6 +153,60 @@ public class SavedPostsActivity extends AppCompatActivity implements PostItemCli
 
             }
             return null;
+        }
+    }
+    void setupPagination(){
+
+        savedPostsRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull @NotNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState== AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                    b=true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull @NotNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                curr=manager.getChildCount();
+                total=manager.getItemCount();
+                scrolledOut=manager.findFirstVisibleItemPosition();
+
+                if(b&&(curr+scrolledOut==total)){
+                    b=false;
+                    Log.i("Failure:", b+" "+j+"");
+                   j=0;
+
+
+                    getDataAgain();
+                }
+            }
+        });
+    }
+    void getDataAgain(){
+        p.setVisibility(View.VISIBLE);
+        for(;i<savedPostList.size();i++,j++)
+        {
+            if (j > 3) {
+                break;
+            }
+            String path=savedPostList.get(i);
+            firestore.document(path).get().addOnSuccessListener(documentSnapshot -> {
+                Post post = documentSnapshot.toObject(Post.class);
+                if (post != null) {
+                    postsList.add(post);
+                    adapter.setData(postsList);
+                    adapter.notifyDataSetChanged();
+                    p.setVisibility(View.GONE);
+                }
+            }).addOnFailureListener(e -> {
+                Log.i("Failure:", "could not fetch");
+            });
+
+        }
+        if(postsList.size()==savedPostList.size()){
+            p.setVisibility(View.INVISIBLE);
         }
     }
 }
