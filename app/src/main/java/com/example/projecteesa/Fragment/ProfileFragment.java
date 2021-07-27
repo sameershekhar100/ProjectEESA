@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +45,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 
@@ -62,7 +66,6 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
     ProfilePostAdapter profilePostAdapter;
     Profile profilex;
     static Profile profileData;
-
     private ActivityProgressDialog progressDialog;
     private Context mContext;
     private TextView bioTv;
@@ -71,6 +74,13 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
     private String userUid = "";
     private String currentUserUid = "";
     private String myPostHeaderText = "My Posts";
+    //For pagination
+    static ArrayList<Post> myPostList = new ArrayList<>();
+    static DocumentSnapshot lastsnapshot=null;
+    NestedScrollView nestedScrollView;
+    ProgressBar progressBar;
+
+
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -85,6 +95,18 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        setupView(view);
+//        getPosts();
+        Log.i("Hello:", "Profile fragment");
+
+        fetchData();
+
+        setListeners();
+
+        return view;
+    }
+
+    private void setupView(View view) {
         mContext = getContext();
         fab = view.findViewById(R.id.edit_profile_fab);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -94,7 +116,6 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         doc = db.document("" + userUid);
         progressDialog = new ActivityProgressDialog(mContext);
         progressDialog.setCancelable(false);
-
 
         name = view.findViewById(R.id.name);
         statusTv = view.findViewById(R.id.statusTv);
@@ -107,22 +128,10 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         linkedinBtn = view.findViewById(R.id.linkedinBtn);
         myPosts.setLayoutManager(layoutManager);
         if (!userUid.equals(currentUserUid)) fab.setVisibility(View.GONE);
+        //For pagination
+        nestedScrollView=view.findViewById(R.id.profile_scroll);
+        progressBar=view.findViewById(R.id.profile_progress);
 
-//        getPosts();
-        Log.i("Hello:", "Profile fragment");
-
-        fetchData();
-
-        fab.setOnClickListener(v ->
-        {
-            Intent intent = new Intent(getContext(), EditProfile.class);
-            intent.putExtra("profile", profilex);
-            startActivity(intent);
-        });
-
-        setListeners();
-
-        return view;
     }
 
     private void setListeners() {
@@ -146,6 +155,24 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
             emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
             startActivity(emailIntent);
         });
+        fab.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(getContext(), EditProfile.class);
+            intent.putExtra("profile", profilex);
+            startActivity(intent);
+        });
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY==v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight())
+                {
+                    if(lastsnapshot!=null)
+                    {
+                        fetchMyPosts();
+                    }
+                }
+            }
+        });
     }
 
 
@@ -153,6 +180,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         progressDialog.setTitle("Fetching profile data");
         progressDialog.setMessage("Please wait while we fetch your profile data");
         progressDialog.showDialog();
+
 
         doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -191,35 +219,89 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
     }
 
     void fetchMyPosts() {
-        ArrayList<Post> myPostList = new ArrayList<>();
-        firestore.collection("AllPost")
-                .orderBy("timestamp", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (queryDocumentSnapshots.isEmpty()) {
-                    myPostHeaderTitle.setVisibility(View.GONE);
-                    return;
-                }
-                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    Post post = documentSnapshot.toObject(Post.class);
-                    if (post.getUid().equals(userUid))
+        if(lastsnapshot==null)
+        {
+            firestore.collection("AllPost")
+                    .whereEqualTo("uid",userUid)
+                    .limit(2)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        myPostHeaderTitle.setVisibility(View.GONE);
+                        return;
+                    }
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        Post post = documentSnapshot.toObject(Post.class);
                         myPostList.add(post);
+                    }
+                    if (myPostList.isEmpty()) {
+                        myPostHeaderTitle.setVisibility(View.GONE);
+                        return;
+                    }
+                    int lastSize=queryDocumentSnapshots.size()-1;
+                    if(lastSize>0) {
+                        lastsnapshot = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                    }
+                    else
+                    {
+                        lastsnapshot=null;
+                    }
+                    Toast.makeText(mContext, (lastsnapshot+"").length()+"", Toast.LENGTH_SHORT).show();
+                    profilePostAdapter = new ProfilePostAdapter(myPostList, getContext(), ProfileFragment.this);
+                    myPosts.setAdapter(profilePostAdapter);
                 }
-                if (myPostList.isEmpty()) {
-                    myPostHeaderTitle.setVisibility(View.GONE);
-                    return;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception e) {
+                    Log.i("FirestoreException", e.toString());
                 }
-                Log.e("abc", myPostList.size() + "");
-                profilePostAdapter = new ProfilePostAdapter(myPostList, getContext(), ProfileFragment.this);
-                myPosts.setAdapter(profilePostAdapter);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull @NotNull Exception e) {
-                Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+            });
 
+        }
+        else
+        {
+            progressBar.setVisibility(View.VISIBLE);
+            Log.i("Hello:","next fetch");
+            firestore.collection("AllPost")
+                    .whereEqualTo("uid",userUid)
+                    .limit(2)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .startAfter(lastsnapshot)
+                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        myPostHeaderTitle.setVisibility(View.GONE);
+                        return;
+                    }
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        Post post = documentSnapshot.toObject(Post.class);
+                        myPostList.add(post);
+                    }
+                    if (myPostList.isEmpty()) {
+                        myPostHeaderTitle.setVisibility(View.GONE);
+                        return;
+                    }
+                    int lastSize=queryDocumentSnapshots.size()-1;
+                    if(lastSize>0) {
+                        lastsnapshot = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                    }
+                    else
+                    {
+                        lastsnapshot=null;
+                    }
+                    profilePostAdapter.setData(myPostList);
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception e) {
+                    Log.i("FirestoreException", e.toString());
+                }
+            });
+        }
     }
 
     public static Profile getProfileData() {
