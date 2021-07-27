@@ -62,7 +62,7 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <ImageView
+                <com.zolad.zoominimageview.ZoomInImageView
                     android:id="@+id/post_image1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

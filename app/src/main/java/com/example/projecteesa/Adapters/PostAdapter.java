@@ -20,6 +20,7 @@ import com.example.projecteesa.R;
 import com.example.projecteesa.utils.AccountsUtil;
 import com.example.projecteesa.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
+import com.zolad.zoominimageview.ZoomInImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -175,7 +176,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     }
 
     public class PostHolder extends RecyclerView.ViewHolder {
-        ImageView postImg, postProfileHeader, likeBtn, commentBtn, bookmarkBtn;
+        ZoomInImageView postImg;
+        ImageView  postProfileHeader, likeBtn, commentBtn, bookmarkBtn;
         TextView caption, likes, captionHeader, postHeader, postTime;
         CardView mainCard;
         RelativeLayout postHeaderLayout;

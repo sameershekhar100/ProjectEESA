@@ -45,4 +45,7 @@
         <item name="android:background">#EEEE</item>
 
     </style>
+    <style name="edit_button_style">
+        <item name="android:background">@drawable/edit_btn_background</item>
+    </style>
 </resources>

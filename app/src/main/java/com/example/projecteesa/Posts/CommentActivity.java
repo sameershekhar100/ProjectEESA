@@ -36,6 +36,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.zolad.zoominimageview.ZoomInImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +56,8 @@ public class CommentActivity extends AppCompatActivity {
     DocumentReference postref;
     DocumentReference username;
     String postID;
-    ImageView postImg, postProfileHeader, likeBtn, bookmarkBtn;
+    ZoomInImageView postImg;
+    ImageView  postProfileHeader, likeBtn, bookmarkBtn;
     TextView caption, likes, captionHeader, postHeader, postTime;
     CardView mainCard;
     LinearLayout postHeaderLayout;
