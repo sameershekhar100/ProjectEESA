@@ -88,6 +88,8 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
 
     public ProfileFragment(String uid) {
         userUid = uid;
+        myPostList=new ArrayList<>();
+        lastsnapshot=null;
     }
 
     @Override
@@ -99,7 +101,19 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
 //        getPosts();
         Log.i("Hello:", "Profile fragment");
 
-        fetchData();
+        if(myPostList.size()>0 && myPostList.get(0).getUid().equals(currentUserUid))
+        {
+            profilePostAdapter = new ProfilePostAdapter(myPostList, getContext(), ProfileFragment.this);
+            myPosts.setAdapter(profilePostAdapter);
+            fetchData();
+        }
+        else
+        {
+            myPostList=new ArrayList<>();
+            fetchMyPosts();
+            fetchData();
+        }
+
 
         setListeners();
 
@@ -214,7 +228,6 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
             }
         });
         progressDialog.hideDialog();
-        fetchMyPosts();
 
     }
 
@@ -248,7 +261,6 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
                     {
                         lastsnapshot=null;
                     }
-                    Toast.makeText(mContext, (lastsnapshot+"").length()+"", Toast.LENGTH_SHORT).show();
                     profilePostAdapter = new ProfilePostAdapter(myPostList, getContext(), ProfileFragment.this);
                     myPosts.setAdapter(profilePostAdapter);
                 }
@@ -272,7 +284,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
                     .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if (queryDocumentSnapshots.isEmpty()) {
+                    if (queryDocumentSnapshots.isEmpty() && myPostList.isEmpty()) {
                         myPostHeaderTitle.setVisibility(View.GONE);
                         return;
                     }
