@@ -12,9 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
+import java.util.Date;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,8 +29,6 @@ import com.example.projecteesa.ProfileSection.Profile;
 import com.example.projecteesa.R;
 import com.example.projecteesa.utils.ActivityProgressDialog;
 import com.example.projecteesa.utils.MotionToastUtils;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -40,13 +36,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+
 import java.util.Date;
 
 
@@ -126,6 +119,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         fab = view.findViewById(R.id.edit_profile_fab);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        assert firebaseUser != null;
         currentUserUid = firebaseUser.getUid();
         if (userUid.isEmpty()) userUid = currentUserUid;
         doc = db.document("" + userUid);
@@ -176,15 +170,14 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
             intent.putExtra("profile", profilex);
             startActivity(intent);
         });
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if(scrollY==v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight())
+        nestedScrollView.setOnScrollChangeListener(
+                (NestedScrollView.OnScrollChangeListener)
+                        (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if(scrollY==v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight())
+            {
+                if(lastsnapshot!=null)
                 {
-                    if(lastsnapshot!=null)
-                    {
-                        fetchMyPosts();
-                    }
+                    fetchMyPosts();
                 }
             }
         });
@@ -197,35 +190,33 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         progressDialog.showDialog();
 
 
-        doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                progressDialog.hideDialog();
-                if (documentSnapshot.exists()) {
-                    Profile profile = documentSnapshot.toObject(Profile.class);
-                    name.setText(profile.getName());
-                    if (!currentUserUid.equals(userUid))
-                        myPostHeaderText = profile.getName().split(" ")[0] + " Posts";
-                    myPostHeaderTitle.setText(myPostHeaderText.toUpperCase());
-                    myPostHeaderTitle.setVisibility(View.VISIBLE);
-                    bioTv.setText(profile.getBio());
-                    img = profile.getUserImg();
-                    int passingYear = profile.getPassingYear();
-                    if (passingYear != 0) {
-                        String statusText = "";
-                        Date date = new Date();
-                        int currentYear = date.getYear() + 1900;
-                        if (currentYear > passingYear) statusText += "Alumni ";
-                        else statusText += "Student ";
-                        statusText += profile.getBranch() + " " + passingYear;
-                        statusTv.setText(statusText);
-                    }
-                    if (img != null && !img.isEmpty())
-                        Glide.with(getContext()).load(img).into(imageView);
-                    profilex = profile;
-                    if (userUid.equals(currentUserUid))
-                        profileData = profilex;
+        doc.get().addOnSuccessListener(documentSnapshot -> {
+            progressDialog.hideDialog();
+            if (documentSnapshot.exists()) {
+                Profile profile = documentSnapshot.toObject(Profile.class);
+                assert profile != null;
+                name.setText(profile.getName());
+                if (!currentUserUid.equals(userUid))
+                    myPostHeaderText = profile.getName().split(" ")[0] + " Posts";
+                myPostHeaderTitle.setText(myPostHeaderText.toUpperCase());
+                myPostHeaderTitle.setVisibility(View.VISIBLE);
+                bioTv.setText(profile.getBio());
+                img = profile.getUserImg();
+                int passingYear = profile.getPassingYear();
+                if (passingYear != 0) {
+                    String statusText = "";
+                    Date date = new Date();
+                    int currentYear = date.getYear() + 1900;
+                    if (currentYear > passingYear) statusText += "Alumni ";
+                    else statusText += "Student ";
+                    statusText += profile.getBranch() + " " + passingYear;
+                    statusTv.setText(statusText);
                 }
+                if (img != null && !img.isEmpty())
+                    Glide.with(requireContext()).load(img).into(imageView);
+                profilex = profile;
+                if (userUid.equals(currentUserUid))
+                    profileData = profilex;
             }
         });
         progressDialog.hideDialog();
@@ -239,38 +230,30 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
                     .whereEqualTo("uid",userUid)
                     .limit(2)
                     .orderBy("timestamp", Query.Direction.DESCENDING)
-                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if (queryDocumentSnapshots.isEmpty()) {
-                        myPostHeaderTitle.setVisibility(View.GONE);
-                        return;
-                    }
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        Post post = documentSnapshot.toObject(Post.class);
-                        myPostList.add(post);
-                    }
-                    if (myPostList.isEmpty()) {
-                        myPostHeaderTitle.setVisibility(View.GONE);
-                        return;
-                    }
-                    int lastSize=queryDocumentSnapshots.size()-1;
-                    if(lastSize>0) {
-                        lastsnapshot = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
-                    }
-                    else
-                    {
-                        lastsnapshot=null;
-                    }
-                    profilePostAdapter = new ProfilePostAdapter(myPostList, getContext(), ProfileFragment.this);
-                    myPosts.setAdapter(profilePostAdapter);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull @NotNull Exception e) {
-                    Log.i("FirestoreException", e.toString());
-                }
-            });
+                    .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            myPostHeaderTitle.setVisibility(View.GONE);
+                            return;
+                        }
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Post post = documentSnapshot.toObject(Post.class);
+                            myPostList.add(post);
+                        }
+                        if (myPostList.isEmpty()) {
+                            myPostHeaderTitle.setVisibility(View.GONE);
+                            return;
+                        }
+                        int lastSize=queryDocumentSnapshots.size()-1;
+                        if(lastSize>0) {
+                            lastsnapshot = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                        }
+                        else
+                        {
+                            lastsnapshot=null;
+                        }
+                        profilePostAdapter = new ProfilePostAdapter(myPostList, getContext(), ProfileFragment.this);
+                        myPosts.setAdapter(profilePostAdapter);
+                    }).addOnFailureListener(e -> Log.i("FirestoreException", e.toString()));
 
         }
         else
@@ -282,38 +265,30 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
                     .limit(2)
                     .orderBy("timestamp", Query.Direction.DESCENDING)
                     .startAfter(lastsnapshot)
-                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if (queryDocumentSnapshots.isEmpty() && myPostList.isEmpty()) {
-                        myPostHeaderTitle.setVisibility(View.GONE);
-                        return;
-                    }
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        Post post = documentSnapshot.toObject(Post.class);
-                        myPostList.add(post);
-                    }
-                    if (myPostList.isEmpty()) {
-                        myPostHeaderTitle.setVisibility(View.GONE);
-                        return;
-                    }
-                    int lastSize=queryDocumentSnapshots.size()-1;
-                    if(lastSize>0) {
-                        lastsnapshot = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
-                    }
-                    else
-                    {
-                        lastsnapshot=null;
-                    }
-                    profilePostAdapter.setData(myPostList);
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull @NotNull Exception e) {
-                    Log.i("FirestoreException", e.toString());
-                }
-            });
+                    .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (queryDocumentSnapshots.isEmpty() && myPostList.isEmpty()) {
+                            myPostHeaderTitle.setVisibility(View.GONE);
+                            return;
+                        }
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Post post = documentSnapshot.toObject(Post.class);
+                            myPostList.add(post);
+                        }
+                        if (myPostList.isEmpty()) {
+                            myPostHeaderTitle.setVisibility(View.GONE);
+                            return;
+                        }
+                        int lastSize=queryDocumentSnapshots.size()-1;
+                        if(lastSize>0) {
+                            lastsnapshot = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                        }
+                        else
+                        {
+                            lastsnapshot=null;
+                        }
+                        profilePostAdapter.setData(myPostList);
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }).addOnFailureListener(e -> Log.i("FirestoreException", e.toString()));
         }
     }
 
@@ -326,32 +301,13 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         firestore.collection("AllPost")
                 .document(postID)
                 .update("likes", likes)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.i("Like updated", "!");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull @NotNull Exception e) {
-                Log.i("Failed: ", "to update likes");
-            }
-        });
+                .addOnSuccessListener(unused -> Log.i("Like updated", "!")).addOnFailureListener(e -> Log.i("Failed: ", "to update likes"));
     }
 
     @Override
     public void onBookmarkClicked(ArrayList<String> savedPosts, String uid) {
-        doc.update("savedPost", savedPosts).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.i("SavedPost", "post added!");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull @NotNull Exception e) {
-                Log.i("SavedPost", "Failed!");
-            }
-        });
+        doc.update("savedPost", savedPosts).addOnSuccessListener(unused -> Log.i("SavedPost", "post added!"))
+                .addOnFailureListener(e -> Log.i("SavedPost", "Failed!"));
     }
 
     @Override
