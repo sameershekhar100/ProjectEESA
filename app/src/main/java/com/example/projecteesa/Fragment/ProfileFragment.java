@@ -110,6 +110,7 @@ public class ProfileFragment extends Fragment implements PostItemClicked {
         else
         {
             myPostList=new ArrayList<>();
+            lastsnapshot=null;
             fetchMyPosts();
             fetchData();
         }
