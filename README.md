@@ -1,2 +1,2 @@
 # Sanshray
-## A basic Social Media App
+## A Social Media App for colleges.
