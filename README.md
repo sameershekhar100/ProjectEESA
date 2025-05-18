@@ -1,2 +1,2 @@
 # Sanshray
-A basic Social Media App
+## A basic Social Media App
